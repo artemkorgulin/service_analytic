@@ -3,7 +3,7 @@
 ## DEV ENVS
 
 ```
-API_URL=https://back.dev.sellerexpert.ru
+API_URL=https://back.dev.analyticsplatform.ru
 FRONT_HOST=localhost
 FRONT_PORT=4000
 ENABLE_PROXY=true
@@ -16,7 +16,7 @@ SENTRY_DSN=https://adcc9a7e6a494b65aaa5717c52586668@o1001141.ingest.sentry.io/59
 ## PROD ENVS
 
 ```
-API_URL=https://back.dev.sellerexpert.ru
+API_URL=https://back.dev.analyticsplatform.ru
 FRONT_PORT=4000
 ENABLE_PROXY=true // until CORS will be configured on the backend side
 // TODO add API_URL_SERVER
