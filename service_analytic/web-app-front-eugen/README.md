@@ -25,7 +25,7 @@ ENABLE_PROXY=true // until CORS will be configured on the backend side
 ### Variations of API_URL:
 
 ```
-http://192.168.1.177:81 // local office network
+http://192.168.1.177:81 // local network
 ```
 
 ## Accout with data:
