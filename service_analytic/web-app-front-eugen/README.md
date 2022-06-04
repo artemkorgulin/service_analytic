@@ -26,7 +26,6 @@ ENABLE_PROXY=true // until CORS will be configured on the backend side
 
 ```
 http://192.168.1.177:81 // local office network
-https://back.dev.sellerexpert.ru
 ```
 
 ## Accout with data:
