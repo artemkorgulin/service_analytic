@@ -1,0 +1,219 @@
+@mixin respond-to($name) {
+    $max: map-get($breakpoints, $name);
+    @if $max {
+        @media only screen and (max-width: $max) {
+            @content;
+        }
+    } @else {
+        @content;
+    }
+}
+
+@mixin centerer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* stylelint-disable declaration-no-important */
+@mixin background-color($color_value) {
+    border-color: $color_value !important;
+    background-color: $color_value !important;
+}
+
+@mixin text-color($color_value) {
+    color: $color_value !important;
+    caret-color: $color_value !important;
+}
+
+@mixin transition-default() {
+    &-enter-active,
+    &-leave-active {
+        transition: $primary-transition;
+    }
+
+    &-move {
+        transition: transform 0.6s;
+    }
+}
+
+@mixin hover {
+    @media (hover: hover) {
+        @content;
+    }
+}
+
+@mixin borderLine(
+    $horizontalDirection: true,
+    $after: true,
+    $isPseudoSelectorAfter: true,
+    $color: $base-400
+) {
+    // position: relative;
+    $pseudoSelector: after !default;
+    @if not $isPseudoSelectorAfter {
+        $pseudoSelector: before;
+    }
+    &:#{$pseudoSelector} {
+        content: '';
+        position: absolute;
+        display: block;
+        background-color: $color;
+        @if $horizontalDirection {
+            width: 100%;
+            height: 1px;
+            @if $after {
+                bottom: 0;
+                left: 0;
+            } @else {
+                top: 0;
+                left: 0;
+            }
+        } @else {
+            width: 1px;
+            height: 100%;
+            @if $after {
+                top: 0;
+                right: 0;
+            } @else {
+                top: 0;
+                left: 0;
+            }
+        }
+    }
+}
+
+@mixin transition-delay($count, $delay: 0, $defaultDelay: 0.15) {
+    @for $i from 1 through $count {
+        &:nth-child(#{$i}) {
+            transition-delay: #{($i * $defaultDelay) + $delay}s;
+        }
+    }
+}
+
+@function size($target) {
+    @return ($target / 16) * 1rem;
+}
+
+@mixin hover {
+    @media (hover: hover) {
+        @content;
+    }
+}
+
+@mixin md-max {
+    @media screen and (max-width: 1280px) {
+        @content;
+    }
+}
+
+@mixin table-min {
+    @media screen and (min-width: 992px) {
+        @content;
+    }
+}
+
+@mixin table {
+    @media screen and (max-width: 991px) {
+        @content;
+    }
+}
+
+@mixin phone-large {
+    @media screen and (max-width: 767px) {
+        @content;
+    }
+}
+
+@mixin phone-small {
+    @media screen and (max-width: 480px) {
+        @content;
+    }
+}
+
+@mixin lg() {
+    $max: map-get($breakpoints, lg);
+
+    @media only screen and (max-width: $max) {
+        @content;
+    }
+}
+
+@mixin md() {
+    $max: map-get($breakpoints, md);
+
+    @media only screen and (max-width: $max) {
+        @content;
+    }
+}
+
+@mixin sm() {
+    $max: map-get($breakpoints, sm);
+
+    @media only screen and (max-width: $max) {
+        @content;
+    }
+}
+
+/* stylelint-disable selector-pseudo-element-no-unknown */
+
+@mixin cardShadow() {
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.06);
+}
+
+@mixin cardShadow2() {
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+}
+
+@mixin inter-block-card() {
+    border-radius: 8px;
+    border: 1px solid $border-color;
+}
+
+@mixin subtitle-1 {
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 22px;
+}
+
+@mixin subtitle-2 {
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 22px;
+}
+
+@mixin inner-card-header {
+    margin-bottom: 16px;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+@mixin draw-header {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+@mixin date-subtitle {
+    font-size: 12px;
+    font-weight: bold;
+    color: $neutral-600;
+}
+
+@mixin flex-grid-y {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+@mixin flex-grid-x {
+    display: flex;
+    gap: 16px;
+}
+
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

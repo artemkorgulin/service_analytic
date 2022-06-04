@@ -1,0 +1,10 @@
+version: "3"
+services:
+
+    # Приложение React
+    client:
+        build: ./
+        ports:
+            # {внешний порт}:{порт внутри докера}
+            - "8088:80"
+        container_name: web-app

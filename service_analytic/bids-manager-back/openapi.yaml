@@ -1,0 +1,3677 @@
+openapi: 3.0.0
+servers:
+  - url: 'http://localhost:82'
+    description: Тестовый стенд УС
+    variables: {}
+info:
+  version: 3.0 СЯ
+  title: AnalyticPlatform AdsManagrment
+  description: API проекта Управление ставками
+  termsOfService: ''
+  contact: {}
+  license:
+    name: 'AnalyticPlatform'
+externalDocs:
+  url: 'https://docs.google.com/spreadsheets/d/1ofOjtzCIss5jwOQ1w5YDmpOby1EZqWN7FnuzP28fCcg/edit#gid=0'
+  description: 'Расписание взаимодействия сервиса УС с другими сервисами (ВП, Озон)'
+security:
+  - bearer: []
+  - noauth: []
+paths:
+  /api/v1/get-all-accounts:
+    get:
+      summary: Список доступных аккаунтов для пользователя
+      operationId: get-all-accounts
+      description: Список доступных аккаунтов для пользователя
+      parameters: []
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  - id: 1
+                    created_at: null
+                    updated_at: null
+                    account_name: AnalyticPlatform
+                    perfomance_client_id: 206931-1@advertising.performance.ozon.ru
+                    perfomance_client_secret: >-
+                      b6J7TgOrTH0AuBXaGbwfNHuYv-N5cESXHaz-DuxWsZK49jJ7Miomm41f1YKLy26_YSwWdd5B1A
+                    seller_client_id: '1608'
+                    seller_api_key: 0dae2372-32bb-4128-80da-11d614c957a2
+                    user_id: null
+                    activity: 1
+                    isActive: 1
+                errors: []
+      tags:
+        - Смена аккаунта
+  /api/v1/change-account:
+    post:
+      summary: Изменение аккаунта
+      operationId: change-account
+      description: Изменение аккаунта
+      parameters:
+        - name: accountId
+          in: query
+          required: true
+          style: form
+          schema:
+            type: number
+          description: ID аккаунта
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: []
+                errors: []
+      tags:
+        - Смена аккаунта
+  /api/v1/get-campaigns-list:
+    get:
+      summary: Список рекламных кампаний
+      operationId: get-campaigns-list
+      description: Список рекламных кампаний
+      parameters: []
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/200'
+              example:
+                - id: '273822'
+                  title: синхронизация с ozon 7
+                  state: CAMPAIGN_STATE_INACTIVE
+                  advObjectType: SKU
+                  fromDate: ''
+                  toDate: ''
+                  dailyBudget: '501000000'
+                  placement:
+                    - PLACEMENT_SEARCH_AND_CATEGORY
+                  budget: '0'
+                  createdAt: '2021-06-07T07:44:50.410202Z'
+                  updatedAt: '2021-06-07T07:45:20.759610Z'
+                - id: '273816'
+                  title: Биобьюти - Брендовая полка 07.06
+                  state: CAMPAIGN_STATE_INACTIVE
+                  advObjectType: BRAND_SHELF
+                  fromDate: '2021-06-07'
+                  toDate: '2021-06-14'
+                  dailyBudget: '1000000000'
+                  placement: []
+                  budget: '0'
+                  createdAt: '2021-06-07T07:40:16.226619Z'
+                  updatedAt: '2021-06-07T07:40:16.226619Z'
+                - id: '273807'
+                  title: Продвижение в поиске тест1
+                  state: CAMPAIGN_STATE_RUNNING
+                  advObjectType: SEARCH_PROMO
+                  fromDate: ''
+                  toDate: ''
+                  dailyBudget: '0'
+                  placement: []
+                  budget: '0'
+                  createdAt: '2021-06-07T07:37:20.003405Z'
+                  updatedAt: '2021-06-07T07:37:20.003405Z'
+      tags:
+        - Загрузка данных из Озон
+  /api/v1/check-request-status:
+    get:
+      summary: Получить статус отчета из Озона
+      operationId: check-request-status
+      description: Получить статус отчета из Озона
+      parameters:
+        - name: uuid
+          in: query
+          required: true
+          style: form
+          schema:
+            type: string
+            example: 7f30f662-9a14-410f-a248-af9bfb3695f4
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      tags:
+        - Загрузка данных из Озон
+  /api/v1/get-all-campaigns-list:
+    get:
+      summary: Список всех РК
+      operationId: get-all-campaigns-list
+      description: Список всех РК
+      parameters:
+        - name: title
+          in: query
+          required: false
+          style: form
+          schema:
+            type: string
+            example: Concept
+          description: Поиск подстроки заголовка
+        - name: campaignId
+          in: query
+          required: false
+          style: form
+          schema:
+            type: number
+          description: 'ID РК, которая точно должна попасть в выборку'
+      responses:
+        '200':
+          description: example
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  - id: 247731
+                    name: Concept - Поиск (18.05) (247731)
+                    campaign_status_id: 2
+                  - id: 159861
+                    name: Concept - Все товары - Поиск (25.02) (159861)
+                    campaign_status_id: 6
+                  - id: 144976
+                    name: Concept (Все товары) - Поиск (144976)
+                    campaign_status_id: 6
+                  - id: 130321
+                    name: Concept - Поиск (Фокус товары) (130321)
+                    campaign_status_id: 6
+                  - id: 119700
+                    name: Concept 25.12 - Поиск (119700)
+                    campaign_status_id: 6
+                  - id: 115826
+                    name: Concept - Поиск (115826)
+                    campaign_status_id: 6
+                  - id: 2400
+                    name: '[УСТАРЕЛА] Основная компания 1 (2400)'
+                    campaign_status_id: 6
+                errors: []
+      tags:
+        - Справочники
+  /api/v1/get-all-products-list:
+    get:
+      summary: Список всех товаров
+      operationId: get-all-products-list
+      description: Список всех товаров
+      parameters:
+        - name: title
+          in: query
+          required: false
+          style: form
+          schema:
+            type: string
+            example: Concept
+          description: Поиск подстроки заголовка
+        - name: 'campaigns[]'
+          in: query
+          required: false
+          style: form
+          schema:
+            type: number
+          description: ID РК
+        - name: productId
+          in: query
+          required: false
+          style: form
+          schema:
+            type: number
+          description: 'ID товара, который точно должен попасть в выборку'
+      responses:
+        '200':
+          description: example
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  - id: 4053
+                    name: ' Concept Profy Touch Защитная сыворотка для волос перед окрашиванием, 200 мл (148559953)'
+                  - id: 3938
+                    name: >-
+                      Concept  Кондиционер для объема (Volume Up Conditioner),
+                      300 мл (160926318)
+                  - id: 3949
+                    name: >-
+                      Concept "Защита цвета" Двухфазный спрей для окрашенных
+                      волос, 250 мл (167976299)
+                errors: []
+      tags:
+        - Справочники
+  /api/v1/get-counters-decode:
+    get:
+      summary: Переводы колонок таблиц
+      operationId: get-counters-decode
+      description: Переводы колонок таблиц
+      parameters: []
+      responses:
+        '200':
+          description: example
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                date: Дата
+                shows: Показы
+                clicks: Клики
+                ctr: 'CTR, %'
+                avg_click_price: 'Ср. цена клика, руб'
+                avg_1000_shows_price: 'Ср. цена 1000 показов, руб'
+                cost: 'Расход, руб'
+                orders: Заказы
+                profit: 'Выручка, руб'
+                cpo: 'CPO, руб'
+                acos: 'ACoS, %'
+                popularity: Популярность
+                purchased_shows: 'Выкупленных показов, %'
+                campaign_name: Название кампании
+                campaign_status_name: Статус
+                campaign_page_type_name: Место размещения
+                start_date: Дата начала
+                end_date: Дата завершения
+                daily_budget: 'Дневной бюджет, руб'
+                product_name: Название товара
+                status_name: Статус
+                keyword_name: Ключевое слово
+                category_name: Категория
+                group_name: Группа
+                price: 'Цена, руб'
+                bid: Ставка
+                campaign_id: Рекламная кампания
+                strategy_status_id: Статус стратегии
+                threshold: 'Пороговое значение, %'
+                step: Шаг ставки
+                activation_date: Дата активации
+                change_date: Дата последнего изменения
+                days_since_last_change: Дней с момента изменения
+                avg_shows: Показы (ср. за 7 дней)
+                avg_popularity: Популярность (ср. за 7 дней)
+                avg_purchased_shows: 'Выкупленных показов (ср. за 7 дней),%'
+                vr: 'VR, %'
+                horizon: 'Горизонт оценки, дней'
+                fcpo: 'fСРО, руб'
+                tcpo: 'tСРО, руб'
+                kvcr: 'Конверсия по показам, %'
+      tags:
+        - Справочники
+  /api/v1/get-all-campaigns-statuses-list:
+    get:
+      summary: Статусы рекламных кампаний
+      description: Статусы рекламных кампаний
+      operationId: get-all-campaigns-statuses-list
+      parameters: []
+      responses:
+        '200':
+          description: example
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  - id: 1
+                    name: Активна
+                  - id: 2
+                    name: Неактивна
+                  - id: 3
+                    name: Запланирована
+                  - id: 4
+                    name: Приостановлена
+                  - id: 5
+                    name: Черновик
+                  - id: 6
+                    name: Архив
+                errors: []
+      tags:
+        - Справочники
+  /api/v1/get-all-statuses-list:
+    get:
+      summary: Статусы сущностей
+      description: 'Статусы сущностей товар в РК, ключевик в РК, минус-слово в РК, группа'
+      operationId: get-all-statuses-list
+      parameters: []
+      responses:
+        '200':
+          description: example
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  - id: 1
+                    name: Активно
+                  - id: 2
+                    name: Не активно
+                  - id: 3
+                    name: В архиве
+                  - id: 4
+                    name: Удален в Ozon
+                errors: []
+      tags:
+        - Справочники
+  /api/v1/get-all-strategies-types:
+    get:
+      summary: Справочник типов стратегий
+      description: Все типы стратегий (для селекта)
+      operationId: get-all-strategies-types
+      parameters: []
+      responses:
+        '200':
+          description: example
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/200'
+              example:
+                - id: 1
+                  name: Оптимальное количество показов
+                  behavior: shows
+                - id: 2
+                  name: Оптимизация по CPO
+                  behavior: cpo
+      tags:
+        - Справочники
+  /api/v1/get-all-strategies-statuses:
+    get:
+      summary: Справочник статусов стратегий
+      description: Все статусы стратегий (для селекта)
+      operationId: get-all-strategies-statuses
+      parameters: []
+      responses:
+        '200':
+          description: example
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/200'
+              example:
+                - id: 1
+                  name: Активна
+                - id: 2
+                  name: Неактивна
+      tags:
+        - Справочники
+  /api/v1/get-all-groups-list:
+    get:
+      summary: Список групп
+      operationId: get-all-groups-list
+      description: 'Список групп РК, входящих в стратегию, для селекта на странице Стратегий'
+      parameters:
+        - name: title
+          in: query
+          required: false
+          style: form
+          schema:
+            type: number
+          description: Подстрока названия группы
+      responses:
+        '200':
+          description: example
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  - id: 378
+                    name: '79292'
+                errors: []
+      tags:
+        - Справочники
+  /api/v1/get-analytics-list-front:
+    get:
+      summary: Отчет со страницы Аналитика
+      operationId: get-analytics-list-front
+      parameters:
+        - $ref: '#/components/parameters/from'
+        - $ref: '#/components/parameters/to'
+        - $ref: '#/components/parameters/campaigns'
+        - $ref: '#/components/parameters/products'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/page'
+      responses:
+        '200':
+          description: example
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  campaigns:
+                    current_page: 1
+                    data:
+                      - date: 31.05.2021
+                        popularity: 224 955
+                        shows: 7 781
+                        purchased_shows: '3,46'
+                        clicks: '169'
+                        ctr: '2,17'
+                        avg_1000_shows_price: '528,71'
+                        avg_click_price: '24,34'
+                        cost: '4 113,93'
+                        orders: '5'
+                        profit: '3 868,00'
+                        cpo: '822,79'
+                        acos: '1,06'
+                      - date: 30.05.2021
+                        popularity: 240 234
+                        shows: 7 864
+                        purchased_shows: '3,27'
+                        clicks: '130'
+                        ctr: '1,65'
+                        avg_1000_shows_price: '476,54'
+                        avg_click_price: '28,83'
+                        cost: '3 747,54'
+                        orders: '1'
+                        profit: '600,00'
+                        cpo: '3 747,54'
+                        acos: '6,25'
+                      - date: 29.05.2021
+                        popularity: 207 532
+                        shows: 7 044
+                        purchased_shows: '3,39'
+                        clicks: '122'
+                        ctr: '1,73'
+                        avg_1000_shows_price: '479,38'
+                        avg_click_price: '27,68'
+                        cost: '3 376,75'
+                        orders: '7'
+                        profit: '4 579,00'
+                        cpo: '482,39'
+                        acos: '0,74'
+                    first_page_url: >-
+                      http://test-uscity.itech-test.ru/backend/api/v1/get-analytics-list-front?page=1
+                    from: 1
+                    last_page: 4
+                    last_page_url: >-
+                      http://test-uscity.itech-test.ru/backend/api/v1/get-analytics-list-front?page=4
+                    next_page_url: >-
+                      http://test-uscity.itech-test.ru/backend/api/v1/get-analytics-list-front?page=2
+                    path: >-
+                      http://test-uscity.itech-test.ru/backend/api/v1/get-analytics-list-front
+                    per_page: '10'
+                    prev_page_url: null
+                    to: 10
+                    total: 31
+                    counters:
+                      popularity: 5 331 819
+                      shows: 178 295
+                      purchased_shows: '3,34'
+                      clicks: 2 595
+                      ctr: '1,46'
+                      avg_1000_shows_price: '501,44'
+                      avg_click_price: '34,45'
+                      cost: '89 404,33'
+                      orders: '61'
+                      profit: '33 107,99'
+                      cpo: '1 465,64'
+                      acos: '2,70'
+                  xlsLink: >-
+                    http://test-uscity.itech-test.ru/backend/api/v1/get-analytics-report?from=2021-05-01&to=2021-05-31&per_page=10&page=1
+                errors: []
+      tags:
+        - Аналитика
+  /api/v1/get-analytics-report:
+    get:
+      summary: Отчет со страницы Аналитика (в XLS)
+      operationId: get-analytics-report
+      parameters:
+        - $ref: '#/components/parameters/from'
+        - $ref: '#/components/parameters/to'
+        - $ref: '#/components/parameters/campaigns'
+        - $ref: '#/components/parameters/products'
+      responses:
+        '200':
+          description: example
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  xlsLink: >-
+                    http://test-uscity.itech-test.ru/backend/storage/xls/2021-06-07/AnalyticsReport_2021-05-01_2020-05-31_1623067016.xlsx
+                  xlsName: AnalyticsReport_2021-05-01_2020-05-31_1623067016.xlsx
+                errors: []
+      tags:
+        - Аналитика
+  /api/v1/get-campaigns-list-front:
+    get:
+      summary: Отчет со страницы Ставки. Уровень рекламных кампаний
+      operationId: get-campaigns-list-front
+      parameters:
+        - $ref: '#/components/parameters/from'
+        - $ref: '#/components/parameters/to'
+        - $ref: '#/components/parameters/campaigns'
+        - $ref: '#/components/parameters/statuses'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/page'
+      responses:
+        '200':
+          description: example
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  campaigns:
+                    current_page: 1
+                    data:
+                      - campaign_id: 268559
+                        campaign_ozon_id: 268559
+                        campaign_name: Биобьюти - Поиск (03.06)
+                        campaign_start_date: null
+                        campaign_end_date: null
+                        campaign_page_type_name: Поиск
+                        campaign_status_id: 1
+                        campaign_status_name: Активна
+                        daily_budget: 900
+                        strategy_id: null
+                        strategy_type_id: null
+                        strategy_name: null
+                        strategy_behavior: null
+                        strategy_status_id: null
+                        strategy_status_name: null
+                        strategy_days_since_last_change: null
+                        campaign_days_before_the_end: 0
+                        popularity: '0'
+                        shows: '0'
+                        purchased_shows: '0'
+                        clicks: '0'
+                        ctr: '0,00'
+                        avg_1000_shows_price: '0,00'
+                        avg_click_price: '0,00'
+                        cost: '0,00'
+                        orders: '0'
+                        profit: '0,00'
+                        cpo: '0,00'
+                        acos: '0,00'
+                      - campaign_id: 261631
+                        campaign_ozon_id: 261631
+                        campaign_name: Cil-Glamour - Поиск (28.05-н.в.)
+                        campaign_start_date: 28.05.2021
+                        campaign_end_date: 24.06.2021
+                        campaign_page_type_name: Поиск
+                        campaign_status_id: 1
+                        campaign_status_name: Активна
+                        daily_budget: 2400
+                        strategy_id: null
+                        strategy_type_id: null
+                        strategy_name: null
+                        strategy_behavior: null
+                        strategy_status_id: null
+                        strategy_status_name: null
+                        strategy_days_since_last_change: null
+                        campaign_days_before_the_end: 17
+                        popularity: '0'
+                        shows: '15'
+                        purchased_shows: '0'
+                        clicks: '0'
+                        ctr: '0,00'
+                        avg_1000_shows_price: '35,33'
+                        avg_click_price: '0,00'
+                        cost: '0,53'
+                        orders: '0'
+                        profit: '0,00'
+                        cpo: '0,00'
+                        acos: '0,00'
+                      - campaign_id: 260370
+                        campaign_ozon_id: 260370
+                        campaign_name: Nollam Lab - Поиск - Шампуни (26.05) - 2
+                        campaign_start_date: null
+                        campaign_end_date: null
+                        campaign_page_type_name: Поиск
+                        campaign_status_id: 1
+                        campaign_status_name: Активна
+                        daily_budget: 2000
+                        strategy_id: null
+                        strategy_type_id: null
+                        strategy_name: null
+                        strategy_behavior: null
+                        strategy_status_id: null
+                        strategy_status_name: null
+                        strategy_days_since_last_change: null
+                        campaign_days_before_the_end: 0
+                        popularity: '0'
+                        shows: 1 355
+                        purchased_shows: '0'
+                        clicks: '41'
+                        ctr: '3,03'
+                        avg_1000_shows_price: '450,00'
+                        avg_click_price: '14,87'
+                        cost: '609,75'
+                        orders: '3'
+                        profit: '2 277,00'
+                        cpo: '203,25'
+                        acos: '0,27'
+                    first_page_url: >-
+                      http://test-uscity.itech-test.ru/backend/api/v1/get-campaigns-list-front?page=1
+                    from: 1
+                    last_page: 1
+                    last_page_url: >-
+                      http://test-uscity.itech-test.ru/backend/api/v1/get-campaigns-list-front?page=1
+                    next_page_url: null
+                    path: >-
+                      http://test-uscity.itech-test.ru/backend/api/v1/get-campaigns-list-front
+                    per_page: 15
+                    prev_page_url: null
+                    to: 9
+                    total: 9
+                    counters:
+                      popularity: 312 007
+                      shows: 20 065
+                      purchased_shows: '6,43'
+                      clicks: '348'
+                      ctr: '1,73'
+                      avg_1000_shows_price: '370,07'
+                      avg_click_price: '21,34'
+                      cost: '7 425,43'
+                      orders: '19'
+                      profit: '11 079,00'
+                      cpo: '390,81'
+                      acos: '0,67'
+                  xlsLink: >-
+                    http://test-uscity.itech-test.ru/backend/api/v1/get-campaigns-statistic-report?from=2021-05-01&to=2021-05-31&statuses%5B0%5D=1
+      tags:
+        - Ставки
+  /api/v1/get-campaigns-statistic-report:
+    get:
+      summary: Отчет со страницы Ставки. Уровень рекламных кампаний (в XLS)
+      operationId: get-campaigns-statistic-report
+      parameters:
+        - $ref: '#/components/parameters/from'
+        - $ref: '#/components/parameters/to'
+        - $ref: '#/components/parameters/campaigns'
+        - $ref: '#/components/parameters/statuses'
+      responses:
+        '200':
+          description: example
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  xlsLink: >-
+                    http://test-uscity.itech-test.ru/backend/storage/xls/2021-06-07/CampaignsReport_2021-05-01_2021-05-31_1623067304.xlsx
+                  xlsName: CampaignsReport_2021-05-01_2021-05-31_1623067304.xlsx
+                errors: []
+      tags:
+        - Ставки
+  /api/v1/get-products-list-front:
+    get:
+      summary: Отчет со страницы Ставки. Уровень товаров
+      operationId: get-products-list-front
+      parameters:
+        - $ref: '#/components/parameters/from'
+        - $ref: '#/components/parameters/to'
+        - $ref: '#/components/parameters/campaigns'
+        - $ref: '#/components/parameters/groups'
+        - $ref: '#/components/parameters/products'
+        - $ref: '#/components/parameters/statuses'
+        - $ref: '#/components/parameters/price_from'
+        - $ref: '#/components/parameters/price_to'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/page'
+      responses:
+        '200':
+          description: example
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  campaigns:
+                    '268559': Биобьюти - Поиск (03.06) (268559)
+                  campaignNames: Биобьюти - Поиск (03.06) (268559)
+                  products:
+                    current_page: 1
+                    data:
+                      - id: 38072
+                        product_id: null
+                        product_name: null
+                        sku: null
+                        status_id: null
+                        status_name: null
+                        category_id: null
+                        category_name: null
+                        price: null
+                        campaign_id: 268559
+                        group_id: 430
+                        group_name: '83456'
+                        products_count: 2
+                        popularity: '0'
+                        shows: '0'
+                        purchased_shows: '0'
+                        clicks: '0'
+                        ctr: '0,00'
+                        avg_1000_shows_price: '0,00'
+                        avg_click_price: '0,00'
+                        cost: '0,00'
+                        orders: '0'
+                        profit: '0,00'
+                        cpo: '0,00'
+                        acos: '0,00'
+                      - id: 38060
+                        product_id: null
+                        product_name: null
+                        sku: null
+                        status_id: null
+                        status_name: null
+                        category_id: null
+                        category_name: null
+                        price: null
+                        campaign_id: 268559
+                        group_id: 429
+                        group_name: '83423'
+                        products_count: 2
+                        popularity: '0'
+                        shows: '0'
+                        purchased_shows: '0'
+                        clicks: '0'
+                        ctr: '0,00'
+                        avg_1000_shows_price: '0,00'
+                        avg_click_price: '0,00'
+                        cost: '0,00'
+                        orders: '0'
+                        profit: '0,00'
+                        cpo: '0,00'
+                        acos: '0,00'
+                      - id: 38069
+                        product_id: 37695
+                        product_name: MineraLife Гель для умывания Минеральный 80 мл
+                        sku: '166093842'
+                        status_id: 1
+                        status_name: Активно
+                        category_id: 7162
+                        category_name: Средство для умывания
+                        price: '661.00'
+                        campaign_id: 268559
+                        group_id: null
+                        group_name: null
+                        products_count: 1
+                        popularity: '0'
+                        shows: '0'
+                        purchased_shows: '0'
+                        clicks: '0'
+                        ctr: '0,00'
+                        avg_1000_shows_price: '0,00'
+                        avg_click_price: '0,00'
+                        cost: '0,00'
+                        orders: '0'
+                        profit: '0,00'
+                        cpo: '0,00'
+                        acos: '0,00'
+                    first_page_url: >-
+                      http://test-uscity.itech-test.ru/backend/api/v1/get-products-list-front?page=1
+                    from: 1
+                    last_page: 1
+                    last_page_url: >-
+                      http://test-uscity.itech-test.ru/backend/api/v1/get-products-list-front?page=1
+                    next_page_url: null
+                    path: >-
+                      http://test-uscity.itech-test.ru/backend/api/v1/get-products-list-front
+                    per_page: '10'
+                    prev_page_url: null
+                    to: 5
+                    total: 5
+                    counters:
+                      popularity: '0'
+                      shows: '0'
+                      purchased_shows: '0'
+                      clicks: '0'
+                      ctr: '0,00'
+                      avg_1000_shows_price: '0,00'
+                      avg_click_price: '0,00'
+                      cost: '0,00'
+                      orders: '0'
+                      profit: '0,00'
+                      cpo: '0,00'
+                      acos: '0,00'
+                  xlsLink: >-
+                    http://test-uscity.itech-test.ru/backend/api/v1/get-products-statistic-report?from=2021-05-01&to=2021-05-31&campaigns%5B0%5D=268559&per_page=10&page=1
+                errors: []
+      tags:
+        - Ставки
+  /api/v1/get-products-statistic-report:
+    get:
+      summary: Отчет со страницы Ставки. Уровень товаров (в XLS)
+      operationId: get-products-statistic-report
+      parameters:
+        - $ref: '#/components/parameters/from'
+        - $ref: '#/components/parameters/to'
+        - $ref: '#/components/parameters/campaigns'
+        - $ref: '#/components/parameters/groups'
+        - $ref: '#/components/parameters/products'
+        - $ref: '#/components/parameters/statuses'
+        - $ref: '#/components/parameters/price_from'
+        - $ref: '#/components/parameters/price_to'
+      responses:
+        '200':
+          description: example
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  xlsLink: >-
+                    http://test-uscity.itech-test.ru/backend/storage/xls/2021-06-07/ProductsReport_2021-05-01_2021-05-31_268559_1623067519.xlsx
+                  xlsName: ProductsReport_2021-05-01_2021-05-31_268559_1623067519.xlsx
+                errors: []
+      tags:
+        - Ставки
+  /api/v1/v1/get-keywords-list:
+    get:
+      summary: Отчет со страницы Ставки. Уровень ключевых слов
+      operationId: get-keywords-list
+      parameters:
+        - $ref: '#/components/parameters/from'
+        - $ref: '#/components/parameters/to'
+        - $ref: '#/components/parameters/campaigns'
+        - $ref: '#/components/parameters/products'
+        - $ref: '#/components/parameters/statuses'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/page'
+      responses:
+        '200':
+          description: example
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  campaigns:
+                    '238983': Evi Professional - Поиск (07.05) (238983)
+                  campaignNames: Evi Professional - Поиск (07.05) (238983)
+                  products:
+                    '38020': >-
+                      EVI professional Маска Кератиновое выпрямление для
+                      непослушных волос, 300 мл
+                  productNames: EVI professional Маска Кератиновое выпрямление для н...
+                  keywords:
+                    current_page: 1
+                    data:
+                      - id: 144096
+                        keyword_id: 201
+                        keyword_name: маска для волос
+                        sku: '259769643'
+                        price: '573.00'
+                        status_id: 2
+                        status_name: Не активно
+                        strategy_id: null
+                        bid: 350
+                        keyword: маска для волос
+                        popularity: 121 155
+                        shows: '176'
+                        purchased_shows: '0,15'
+                        clicks: '4'
+                        ctr: '2,27'
+                        avg_1000_shows_price: '219,89'
+                        avg_click_price: '9,68'
+                        cost: '38,70'
+                        orders: '0'
+                        profit: '0,00'
+                        cpo: '0,00'
+                        acos: '0,00'
+                      - id: 144528
+                        keyword_id: 1508
+                        keyword_name: маски для волос
+                        sku: '259769643'
+                        price: '573.00'
+                        status_id: 2
+                        status_name: Не активно
+                        strategy_id: null
+                        bid: 350
+                        keyword: маски для волос
+                        popularity: 4 390
+                        shows: '0'
+                        purchased_shows: '0'
+                        clicks: '0'
+                        ctr: '0,00'
+                        avg_1000_shows_price: '0,00'
+                        avg_click_price: '0,00'
+                        cost: '0,00'
+                        orders: '0'
+                        profit: '0,00'
+                        cpo: '0,00'
+                        acos: '0,00'
+                      - id: 144064
+                        keyword_id: 2430
+                        keyword_name: восстанавливающая маска для волос
+                        sku: '259769643'
+                        price: '573.00'
+                        status_id: 2
+                        status_name: Не активно
+                        strategy_id: null
+                        bid: 500
+                        keyword: восстанавливающая маска для волос
+                        popularity: '536'
+                        shows: '0'
+                        purchased_shows: '0'
+                        clicks: '0'
+                        ctr: '0,00'
+                        avg_1000_shows_price: '0,00'
+                        avg_click_price: '0,00'
+                        cost: '0,00'
+                        orders: '0'
+                        profit: '0,00'
+                        cpo: '0,00'
+                        acos: '0,00'
+                    first_page_url: >-
+                      http://test-uscity.itech-test.ru/backend/api/v1/get-keywords-list?page=1
+                    from: 1
+                    last_page: 4
+                    last_page_url: >-
+                      http://test-uscity.itech-test.ru/backend/api/v1/get-keywords-list?page=4
+                    next_page_url: >-
+                      http://test-uscity.itech-test.ru/backend/api/v1/get-keywords-list?page=2
+                    path: >-
+                      http://test-uscity.itech-test.ru/backend/api/v1/get-keywords-list
+                    per_page: '10'
+                    prev_page_url: null
+                    to: 10
+                    total: 35
+                    counters:
+                      popularity: 157 466
+                      shows: '324'
+                      purchased_shows: '0,21'
+                      clicks: '4'
+                      ctr: '1,23'
+                      avg_1000_shows_price: '309,41'
+                      avg_click_price: '25,06'
+                      cost: '100,25'
+                      orders: '0'
+                      profit: '0,00'
+                      cpo: '0,00'
+                      acos: '0,00'
+                  xlsLink: >-
+                    http://test-uscity.itech-test.ru/backend/api/v1/get-keywords-statistic-report?from=2021-05-01&to=2021-05-31&campaigns%5B0%5D=238983&products%5B0%5D=38020&per_page=10&page=1
+                errors: []
+      tags:
+        - Ставки
+  /api/v1/get-keywords-statistic-report:
+    get:
+      summary: Отчет со страницы Ставки. Уровень ключевых слов (в XLS)
+      operationId: get-keywords-statistic-report
+      parameters:
+        - $ref: '#/components/parameters/from'
+        - $ref: '#/components/parameters/to'
+        - $ref: '#/components/parameters/campaigns'
+        - $ref: '#/components/parameters/products'
+        - $ref: '#/components/parameters/statuses'
+      responses:
+        '200':
+          description: example
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  xlsLink: >-
+                    http://test-uscity.itech-test.ru/backend/storage/xls/2021-06-07/KeywordsReport_2021-05-01_2021-05-31_38020_1623067913.xlsx
+                  xlsName: KeywordsReport_2021-05-01_2021-05-31_38020_1623067913.xlsx
+                errors: []
+      tags:
+        - Ставки
+  /api/v1/get-strategies-list:
+    get:
+      summary: Список типов стратегий (названий)
+      description: Получение списка типов стратегий (названий)
+      operationId: get-strategies-list
+      parameters:
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/page'
+      responses:
+        '200':
+          description: example
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  strategies:
+                    current_page: 1
+                    data:
+                      - id: 1
+                        name: Оптимальное количество показов
+                        behavior: shows
+                        strategies_all: 1
+                        strategies_active: 1
+                      - id: 2
+                        name: Оптимизация по CPO
+                        behavior: cpo
+                        strategies_all: 1
+                        strategies_active: 0
+                    first_page_url: >-
+                      http://test-uscity.itech-test.ru/backend/api/v1/get-strategies-list?page=1
+                    from: 1
+                    last_page: 1
+                    last_page_url: >-
+                      http://test-uscity.itech-test.ru/backend/api/v1/get-strategies-list?page=1
+                    next_page_url: null
+                    path: >-
+                      http://test-uscity.itech-test.ru/backend/api/v1/get-strategies-list
+                    per_page: 15
+                    prev_page_url: null
+                    to: 2
+                    total: 2
+                errors: []
+      tags:
+        - Стратегии
+  /api/v1/get-strategy-campaigns-list:
+    get:
+      summary: Список РК, к которым применена стратегия
+      description: "Получение списка рекламных кампаний данного аккаунта, к которым применена стратегия.
+                    Возможно включение сортировки."
+      operationId: get-strategy-campaigns-list
+      parameters:
+        - $ref: '#/components/parameters/strategyTypeId'
+        - name: sortBy
+          in: query
+          required: false
+          style: form
+          schema:
+            type: string
+            example: strategy_status_id
+          description: 'Сортировка, поле (не обязательное, по-умолчанию: статус)'
+        - name: sortDir
+          in: query
+          required: false
+          style: form
+          schema:
+            type: string
+            example: asc
+          description: 'Сортировка, направление (не обязательное, по-умолчанию: по возрастанию)'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/page'
+      responses:
+        '200':
+          description: 'example'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  strategyId: 1
+                  strategyName: Оптимальное количество показов
+                  strategyBehavior: shows
+                  campaigns:
+                    current_page: 1
+                    data:
+                      - strategy_shows_id: 81
+                        id: 154
+                        campaign_id: 236649
+                        updated_at: '2021-05-25T10:48:30.000000Z'
+                        campaign_name: Repharm - Гели (Поиск) 05.05
+                        strategy_status_id: 1
+                        strategy_status_name: Активна
+                        threshold: 0.8
+                        step: 5
+                        activation_date: 25.05.2021
+                        change_date: 25.05.2021
+                        days_since_last_change: 14
+                    first_page_url: 'http://test-uscity.itech-test.ru/backend/api/v1/get-strategy-campaigns-list?page=1'
+                    from: 1
+                    last_page: 1
+                    last_page_url: 'http://test-uscity.itech-test.ru/backend/api/v1/get-strategy-campaigns-list?page=1'
+                    next_page_url: null
+                    path: 'http://test-uscity.itech-test.ru/backend/api/v1/get-strategy-campaigns-list'
+                    per_page: 15
+                    prev_page_url: null
+                    to: 1
+                    total: 1
+                errors: []
+      tags:
+        - Стратегии
+  /api/v1/get-strategy-campaign-history:
+    get:
+      summary: Статистика по стратегии, примененной к РК
+      description: 'Статистика по стратегии стратегии, примененной к рекламной кампании'
+      operationId: get-strategy-campaign-history
+      parameters:
+        - $ref: '#/components/parameters/strategyId'
+        - name: from
+          in: query
+          required: false
+          description: Дата от
+          style: form
+          schema:
+            type: string
+            example: '2021-03-01'
+        - name: to
+          in: query
+          required: false
+          description: Дата до
+          style: form
+          schema:
+            type: string
+            example: '2021-03-31'
+        - $ref: '#/components/parameters/group'
+        - $ref: '#/components/parameters/keywordIds'
+        - name: sort
+          in: query
+          required: false
+          description: Сортировка
+          style: form
+          schema:
+            type: string
+            example: 'desc'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/page'
+      responses:
+        '200':
+          description: 'example'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                errors: []
+                data:
+                  strategyTypeId: 2
+                  strategyId: 111
+                  strategyName: Оптимизация по CPO
+                  strategyBehavior: cpo
+                  campaignId: 110053
+                  campaignName: Тест для ITech 2
+                  campaignBudget: 500
+                  strategyLastChangedDate: 27.03.2021
+                  strategyThreshold1: 50
+                  strategyThreshold2: 100
+                  strategyThreshold3: 150
+                  strategyTcpo: 100
+                  strategyVr: 15
+                  dashboard:
+                    shows: '0'
+                    kvcr: '0,00'
+                    clicks: '0'
+                    ctr: '0,00'
+                    avg_click_price: '0,00'
+                    avg_1000_shows_price: '0,00'
+                    cost: '0,00'
+                    orders: '0'
+                    profit: '0,00'
+                    fcpo: '0,00'
+                    acos: '0,00'
+                  history:
+                    current_page: 1
+                    data:
+                      - keyword_name: женские сапоги
+                        keyword_status_id: 2
+                        status_name: Не активно
+                        group_name: null
+                        ozon_id: 47277
+                        group_id: 106
+                        id: 12970
+                        sku: '147699403'
+                        shows: '0'
+                        kvcr: '0,00'
+                        clicks: '0'
+                        ctr: '0,00'
+                        avg_click_price: '0,00'
+                        avg_1000_shows_price: '0,00'
+                        cost: '0,00'
+                        orders: '0'
+                        profit: '0,00'
+                        fcpo: '0,00'
+                        acos: '0,00'
+                        sku_url: 'https://www.ozon.ru/context/detail/id/147699403'
+                      - keyword_name: лак для ногтей
+                        keyword_status_id: 2
+                        status_name: Не активно
+                        group_name: null
+                        ozon_id: null
+                        group_id: null
+                        id: 62223
+                        sku: '147189845'
+                        shows: '0'
+                        kvcr: '0,00'
+                        clicks: '0'
+                        ctr: '0,00'
+                        avg_click_price: '0,00'
+                        avg_1000_shows_price: '0,00'
+                        cost: '0,00'
+                        orders: '0'
+                        profit: '0,00'
+                        fcpo: '0,00'
+                        acos: '0,00'
+                        sku_url: 'https://www.ozon.ru/context/detail/id/147189845'
+                    first_page_url: 'http://test-uscity.itech-test.ru/backend/api/v1/get-strategy-campaign-history?page=1'
+                    from: 1
+                    last_page: 1
+                    last_page_url: 'http://test-uscity.itech-test.ru/backend/api/v1/get-strategy-campaign-history?page=1'
+                    next_page_url: null
+                    path: 'http://test-uscity.itech-test.ru/backend/api/v1/get-strategy-campaign-history'
+                    per_page: 15
+                    prev_page_url: null
+                    to: 2
+                    total: 2
+      tags:
+        - Стратегии
+  /api/v1/get-strategy-campaign-history-xls:
+    get:
+      summary: Статистика по стратегии стратегии, примененной к рекламной кампании (в XLS)
+      description: 'Статистика по стратегии стратегии, примененной к рекламной кампании (в XLS)'
+      operationId: get-strategy-campaign-history-xls
+      parameters:
+        - $ref: '#/components/parameters/strategyId'
+        - name: from
+          in: query
+          required: false
+          description: Дата от
+          style: form
+          schema:
+            type: string
+            example: '2021-03-01'
+        - name: to
+          in: query
+          required: false
+          description: Дата до
+          style: form
+          schema:
+            type: string
+            example: '2021-03-31'
+        - $ref: '#/components/parameters/group'
+        - $ref: '#/components/parameters/keywordIds'
+        - name: sort
+          in: query
+          required: false
+          description: Сортировка
+          style: form
+          schema:
+            type: string
+            example: 'desc'
+      responses:
+        '200':
+          description: 'example'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  xlsLink: 'http://test-uscity.itech-test.ru/backend/storage/xls/2021-06-08/StrategyReport_111_1623142491.xlsx'
+                  xlsName: StrategyReport_111_1623142491.xlsx
+                errors: []
+      tags:
+        - Стратегии
+  /api/v1/get-campaigns-list-for-strategy:
+    get:
+      summary: Список РК, которые еще не входят в стратегию
+      description: "Список РК, которые еще не входят в стратегию"
+      operationId: get-campaigns-list-for-strategy
+      parameters:
+        - $ref: '#/components/parameters/strategyTypeId'
+      responses:
+        '200':
+          description: 'example'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  - id: 268559
+                    name: Биобьюти - Поиск (03.06)
+                  - id: 261631
+                    name: Cil-Glamour - Поиск (28.05-н.в.)
+                  - id: 260370
+                    name: Nollam Lab - Поиск - Шампуни (26.05) - 2
+                  - id: 260367
+                    name: Nollam Lab - Поиск (27.05) - Кремы - 2
+                  - id: 259334
+                    name: Nollam Lab - Поиск (27.05) - Кремы
+                  - id: 257893
+                    name: Nollam Lab - Поиск - Шампуни (26.05)
+                  - id: 257795
+                    name: Nollam Lab - Поиск - Патчи (26.05)
+                  - id: 229313
+                    name: Naturfoods - Поиск (27.04)
+                  - id: 229051
+                    name: Botanica -  Поиск (27.04)
+                errors: []
+      tags:
+        - Стратегии
+  /api/v1/get-keywords-list-for-strategy:
+    get:
+      summary: Список ключевиков для фильтра в стратегии
+      description: "Список ключевиков для фильтра в стратегии"
+      operationId: get-keywords-list-for-strategy
+      parameters:
+        - $ref: '#/components/parameters/strategyId'
+        - $ref: '#/components/parameters/group'
+        - $ref: '#/components/parameters/keywordTitle'
+      responses:
+        '200':
+          description: 'example'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  - id: 140126
+                    name: гель для душа
+                    sku: '148509642'
+                    group_name: null
+                  - id: 140127
+                    name: гель для душа 200
+                    sku: '148509642'
+                    group_name: null
+                  - id: 140128
+                    name: гель для душа 250
+                    sku: '148509642'
+                    group_name: null
+                errors: []
+      tags:
+        - Стратегии
+  /api/v1/get-count-company-for-strategy-cpo:
+    get:
+      summary: Метод для получения кол-ва компаний, к которым может быть применена стратегия CPO
+      description: Метод для получения кол-ва компаний, к которым может быть применена стратегия CPO
+      operationId: get-count-company-for-strategy-cpo
+      parameters: []
+      responses:
+        '200':
+          description: 'example'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                errors: []
+                count: 0
+      tags:
+        - Стратегии
+  /api/v1/add-campaign-to-strategy:
+    post:
+      summary: Добавление стратегии к РК
+      operationId: add-campaign-to-strategy
+      parameters:
+        - $ref: '#/components/parameters/strategyTypeId'
+        - $ref: '#/components/parameters/campaignId'
+        - name: action
+          in: query
+          required: false
+          style: form
+          schema:
+            type: string
+            example: force
+          description: 'необязательный параметр, для принудительного применения стратегии'
+      responses:
+        '200':
+          description: 'example'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              examples:
+                success:
+                  value:
+                    success: true
+                    errors: []
+                    data:
+                      notify:
+                        - Рекламная кампания успешно добавлена
+                error:
+                  value:
+                    success: false
+                    data: []
+                    errors:
+                      - 'Стратегия в данный момент не может быть рассчитана, т.к. недостаточно накопленной статистики'
+      tags:
+        - Изменение стратегии
+  /api/v1/update-strategy-status:
+    post:
+      summary: Обновить статус стратегий
+      description: Обновить статус стратегии (или стратегий)
+      operationId: update-strategy-status
+      parameters:
+        - $ref: '#/components/parameters/strategyIds'
+        - name: statusId
+          in: query
+          required: true
+          style: form
+          schema:
+            type: number
+            example: 1
+          description: ID статуса стратегии (см. get-all-strategies-statuses)
+      responses:
+        '200':
+          description: 'example'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  updatedRows: 1
+                errors: []
+      tags:
+        - Изменение стратегии
+  /api/v1/update-strategy-threshold:
+    post:
+      summary: Обновить пороговое значение стратегий
+      description: Обновить пороговое значение стратегии (или стратегий)
+      operationId: update-strategy-threshold
+      parameters:
+        - $ref: '#/components/parameters/strategyIds'
+        - name: threshold
+          in: query
+          required: true
+          style: form
+          schema:
+            type: number
+            example: 0.75
+          description: Пороговое значение (коэффициент)
+      responses:
+        '200':
+          description: 'example'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  updatedRows: 1
+                errors: []
+      tags:
+        - Изменение стратегии
+  /api/v1/update-strategy-step:
+    post:
+      summary: Обновить шаг стратегий
+      description: Обновить шаг стратегии (или стратегий)
+      operationId: update-strategy-step
+      parameters:
+        - $ref: '#/components/parameters/strategyIds'
+        - name: step
+          in: query
+          required: true
+          style: form
+          schema:
+            type: number
+            example: 10
+          description: Шаг
+      responses:
+        '200':
+          description: 'example'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  updatedRows: 1
+                errors: []
+      tags:
+        - Изменение стратегии
+  /api/v1/update-strategy-tcpo:
+    post:
+      summary: Обновить параметр tCPO стратегий
+      description: Метод для массового редактирования значения tCPO в стратегии CPO
+      operationId: update-strategy-tcpo
+      parameters:
+        - $ref: '#/components/parameters/strategyIds'
+        - name: tcpo
+          in: query
+          required: true
+          style: form
+          schema:
+            type: number
+            example: 110
+          description: tCPO
+      responses:
+        '200':
+          description: 'example'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  updatedRows: 1
+                errors: []
+      tags:
+        - Изменение стратегии
+  /api/v1/update-strategy-cpo:
+    post:
+      summary: Обновление параметров в стратегии CPO
+      description: Обновление параметров в стратегии CPO
+      operationId: update-strategy-cpo
+      parameters:
+        - $ref: '#/components/parameters/strategyId'
+        - $ref: '#/components/parameters/campaignId'
+        - $ref: '#/components/parameters/dailyBudget'
+        - name: threshold1
+          in: query
+          required: true
+          style: form
+          schema:
+            type: number
+          description: Порог принятия решения (p1)
+        - name: threshold2
+          in: query
+          required: true
+          style: form
+          schema:
+            type: number
+          description: Порог принятия решения (p2)
+        - name: threshold3
+          in: query
+          required: true
+          style: form
+          schema:
+            type: number
+          description: Порог принятия решения (p3)
+        - name: tcpo
+          in: query
+          required: true
+          style: form
+          schema:
+            type: number
+          description: tCPO
+        - name: vr
+          in: query
+          required: true
+          style: form
+          schema:
+            type: number
+          description: VR
+      responses:
+        '200':
+          description: 'example'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                errors: []
+      tags:
+        - Изменение стратегии
+  /api/v1/delete-strategy:
+    delete:
+      summary: Удаление стратегии
+      description: Удаление стратегии
+      operationId: delete-strategy
+      parameters:
+        - $ref: '#/components/parameters/strategyId'
+      responses:
+        '200':
+          description: 'example'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                errors: []
+      tags:
+        - Изменение стратегии
+  /api/v1/update-campaign-status:
+    get:
+      summary: Обновление статуса РК
+      operationId: update-campaign-status
+      parameters:
+        - $ref: '#/components/parameters/campaignIds'
+        - $ref: '#/components/parameters/status'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  - id: '275617'
+                    title: синхронизация с ozon 8
+                    state: CAMPAIGN_STATE_RUNNING
+                    advObjectType: SKU
+                    fromDate: ''
+                    toDate: ''
+                    dailyBudget: '500000000'
+                    placement:
+                      - PLACEMENT_SEARCH_AND_CATEGORY
+                    budget: '0'
+                    createdAt: '2021-06-08T11:17:36.135491Z'
+                    updatedAt: '2021-06-08T11:22:27.615902Z'
+                errors: []
+      tags:
+        - Изменения данных
+  /api/v1/update-campaign-budget:
+    get:
+      summary: Обновление бюджета РК
+      operationId: update-campaign-budget
+      parameters:
+        - $ref: '#/components/parameters/campaignIds'
+        - $ref: '#/components/parameters/dailyBudget'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  - campaignId: '275617'
+                errors: []
+      tags:
+        - Изменения данных
+  /api/v1/update-keyword-bet:
+    get:
+      summary: Обновление ставки ключевого слова
+      operationId: update-keyword-bet
+      parameters:
+        - $ref: '#/components/parameters/keywordIds'
+        - $ref: '#/components/parameters/bid'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  '463':
+                    group_id: '84605'
+                errors: []
+      tags:
+        - Изменения данных
+  /api/v1/update-keyword-status:
+    get:
+      summary: Обновление статуса ключевого слова
+      operationId: update-keyword-status
+      parameters:
+        - $ref: '#/components/parameters/keywordIds'
+        - $ref: '#/components/parameters/status'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  '463':
+                    group_id: '84605'
+                errors: []
+      tags:
+        - Изменения данных
+  /api/v1/bids/campaign/product/status/update:
+    post:
+      summary: Изменить статус товара
+      operationId: bids/campaign/product/status/update
+      parameters:
+        - $ref: '#/components/parameters/campaign_product_id'
+        - $ref: '#/components/parameters/status_id'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+      tags:
+        - Изменения данных
+  /api/v1/campaign/statuses:
+    get:
+      summary: Список статусов РК
+      operationId: campaign/statuses
+      parameters: []
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  - id: 1
+                    code: RUNNING
+                    ozon_code: CAMPAIGN_STATE_RUNNING
+                    name: Активна
+                    sort: 10
+                  - id: 2
+                    code: INACTIVE
+                    ozon_code: CAMPAIGN_STATE_INACTIVE
+                    name: Неактивна
+                    sort: 20
+                  - id: 3
+                    code: PLANNED
+                    ozon_code: CAMPAIGN_STATE_PLANNED
+                    name: Запланирована
+                    sort: 30
+                  - id: 4
+                    code: STOPPED
+                    ozon_code: CAMPAIGN_STATE_STOPPED
+                    name: Приостановлена
+                    sort: 40
+                  - id: 5
+                    code: DRAFT
+                    ozon_code: ''
+                    name: Черновик
+                    sort: 50
+                  - id: 6
+                    code: ARCHIVED
+                    ozon_code: CAMPAIGN_STATE_ARCHIVED
+                    name: Архив
+                    sort: 60
+                errors: []
+      tags:
+        - Рекламные кампании
+        - Справочники
+  /api/v1/campaign/payments:
+    get:
+      summary: Список типов платежей РК
+      operationId: campaign/payments
+      parameters: []
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  - id: 1
+                    name: Показы
+                    is_active: 1
+                  - id: 2
+                    name: Клики
+                    is_active: 1
+                errors: []
+      tags:
+        - Рекламные кампании
+        - Справочники
+  /api/v1/campaign/placements:
+    get:
+      summary: Список мест размещения РК
+      operationId: campaign/placements
+      parameters: []
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  - id: 1
+                    code: 'PLACEMENT_PDP '
+                    description: Карточка товара
+                  - id: 2
+                    code: PLACEMENT_SEARCH_AND_CATEGORY
+                    description: Поиск
+                errors: []
+      tags:
+        - Рекламные кампании
+        - Справочники
+  /api/v1/campaign/store:
+    post:
+      summary: Создать РК
+      operationId: campaign/store
+      parameters:
+        - $ref: '#/components/parameters/account_id'
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/placement_id'
+        - $ref: '#/components/parameters/payment_type_id'
+        - $ref: '#/components/parameters/start_date'
+        - $ref: '#/components/parameters/end_date'
+        - $ref: '#/components/parameters/budget'
+      responses:
+        '400':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+              example:
+                success: false
+                data: []
+                errors:
+                  - name:
+                      - "Поле Имя обязательно для заполнения."
+
+                  - placement_id:
+                      - "Поле placement id обязательно для заполнения."
+
+                  - payment_type_id:
+                      - "Поле payment type id обязательно для заполнения."
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  campaign_id: 276721
+                errors: []
+      tags:
+        - Рекламные кампании
+  /api/v1/campaign/show:
+    get:
+      summary: Получить РК
+      operationId: campaign/show
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  id: 276721
+                  ozon_id: null
+                  name: "Черновая РК 2"
+                  account_id: 2
+                  campaign_status_id: 5
+                  created_at: "2021-06-09T09:27:53.000000Z"
+                  updated_at: "2021-06-09T09:27:53.000000Z"
+                  budget: 0
+                  type: null
+                  type_id: 1
+                  station_type: null
+                  page_type_id: 1
+                  payment_type_id: 1
+                  placement_id: 2
+                  start_date: null
+                  end_date: null
+                  last_ozon_sync: null
+                  ozon_data_date: null
+                  last_vp_sync: null
+                  vp_data_date: null
+                  user_id: 3
+                errors: [ ]
+        '400':
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+              example:
+                success: false
+                data: [ ]
+                errors:
+                  - id:
+                      - "Выбранное значение для id некорректно."
+      tags:
+        - Рекламные кампании
+  /api/v1/campaign/<campaign_id>/update:
+    post:
+      summary: Изменить РК
+      operationId: campaign/update
+      parameters:
+        - $ref: '#/components/parameters/account_id'
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/placement_id'
+        - $ref: '#/components/parameters/payment_type_id'
+        - $ref: '#/components/parameters/start_date'
+        - $ref: '#/components/parameters/end_date'
+        - $ref: '#/components/parameters/budget'
+      responses:
+        '400':
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+              example:
+                success: false
+                data: [ ]
+                errors:
+                  - budget:
+                      - "Поле budget обязательно для заполнения."
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: []
+                errors: [ ]
+      tags:
+        - Рекламные кампании
+  /api/v1/campaign/copy:
+    post:
+      summary: Скопировать РК
+      operationId: campaign/copy
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: [ ]
+                errors: [ ]
+        '400':
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+              example:
+                success: false
+                data: [ ]
+                errors:
+                  - id:
+                      - "Выбранное значение для id некорректно."
+      tags:
+        - Рекламные кампании
+  /api/v1/products:
+    get:
+      summary: Найти товар
+      operationId: products
+      parameters:
+        - $ref: '#/components/parameters/starts_with'
+      responses:
+        '200':
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: [
+                  {
+                    id: 41751,
+                    name: "Краска для бровей и ресниц Fiona, с кистью для окраски, цвет: коричневый",
+                    sku: "148561820",
+                    category_name: "Средство для окрашивания бровей и ресниц"
+                  },
+                  {
+                    id: 41751,
+                    name: "Краска для бровей и ресниц Fiona, с кистью для окраски, цвет: коричневый",
+                    sku: "148561820",
+                    category_name: "Средство для окрашивания бровей и ресниц"
+                  }
+                ]
+                errors: [ ]
+      tags:
+        - Поиск
+  /api/v1/products/multisearch:
+    get:
+      summary: Найти товары по массиву OZON ID
+      operationId: products/multisearch
+      parameters:
+        - $ref: '#/components/parameters/products_skus'
+      responses:
+        '200':
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: [
+                    products: [
+                      {
+                        id: 53034,
+                        created_at: "2021-05-21T12:16:51.000000Z",
+                        updated_at: "2021-06-09T09:21:52.000000Z",
+                        name: "Concept Стойкая крем-краска для волос Permanent color cream PROFY Touch 12.77 Экстрасветлый интенсивно-бежевый, 60 мл",
+                        sku: "227753890",
+                        product_id: 53268225,
+                        offer_id: "1512-33118",
+                        category_id: 7235,
+                        product_status_id: 3,
+                        price: "195.00",
+                        visible: 1,
+                        account_id: 1
+                      },
+                    ]
+                ]
+                errors: [ ]
+      tags:
+        - Поиск
+  /api/v1/campaign/products:
+    get:
+      summary: Получить товары РК
+      operationId: campaign/products
+      parameters:
+        - $ref: '#/components/parameters/campaign_id'
+      responses:
+        '200':
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: [
+                    "campaign_product_list": [
+                      {
+                        "id": 38202,
+                        "group_id": 473,
+                        "name": "Шампунь для волос L'Cosmetics Provence Кипарис Дюпре, тонизирующий, для мужчин, 250 мл",
+                        "product_id": 40377,
+                        "sku": "148559602",
+                        "created_at": "2021-06-09T10:22:46.000000Z",
+                        "category_name": "Жидкий шампунь для волос женский",
+                        "stop_words_count": 0,
+                        "keywords_count": 0
+                      },
+                    ]
+                ]
+                errors: [ ]
+        '400':
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+              example:
+                success: false
+                data: [ ]
+                errors:
+                  - id:
+                      - "Выбранное значение для id некорректно."
+      tags:
+        - Получение
+  /api/v1/campaign/groups/show:
+    get:
+      summary: Получить группу
+      operationId: campaign/groups/show
+      parameters:
+        - name: id
+          in: query
+          required: true
+          description: ID группы
+          style: form
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: [
+                    "group": {
+                      "id": 1,
+                      "created_at": "2021-01-25T14:42:05.000000Z",
+                      "updated_at": "2021-01-25T14:42:05.000000Z",
+                      "name": "Лосьон для тела",
+                      "campaign_id": 125627,
+                      "ozon_id": 44912,
+                      "status_id": 1
+                    }
+                ]
+                errors: [ ]
+        '400':
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+              example:
+                success: false
+                data: [ ]
+                errors:
+                  - id:
+                      - "Выбранное значение для id некорректно."
+      tags:
+        - Получение
+  /api/v1/campaign/<campaign_id>/groups:
+    get:
+      summary: Получить список групп для рекламной компании
+      operationId: campaign/groups
+      responses:
+        '200':
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: [
+                    "groupList": [
+                      {
+                        "id": 1,
+                        "created_at": "2021-01-25T14:42:05.000000Z",
+                        "updated_at": "2021-01-25T14:42:05.000000Z",
+                        "name": "Лосьон для тела",
+                        "campaign_id": 125627,
+                        "ozon_id": 44912,
+                        "status_id": 1
+                      },
+                      {
+                        "id": 2,
+                        "created_at": "2021-01-25T14:42:06.000000Z",
+                        "updated_at": "2021-01-25T14:42:06.000000Z",
+                        "name": "Крем для лица",
+                        "campaign_id": 125627,
+                        "ozon_id": 44899,
+                        "status_id": 1
+                      },
+                      {
+                        "id": 3,
+                        "created_at": "2021-01-25T14:42:06.000000Z",
+                        "updated_at": "2021-01-25T14:42:06.000000Z",
+                        "name": "Маски для лица",
+                        "campaign_id": 125627,
+                        "ozon_id": 44898,
+                        "status_id": 1
+                      },
+                     ]
+                ]
+                errors: [ ]
+        '404':
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+              example:
+                error:
+                  - http_code
+                      - "404"
+                  - code
+                      - 0
+                  - message
+                    - "Не найдена запись с идентификатором {campaign_id}"
+                  - advanced
+                      - "[]"
+      tags:
+        - Получение
+  /api/v1/campaign/products/<campaign_id>/update:
+    post:
+      summary: Добавить товары в РК по OZON ID
+      operationId: campaign/products/<campaign_id>/update
+      parameters:
+        - $ref: '#/components/parameters/with_group[0][group][id]'
+        - $ref: '#/components/parameters/with_group[0][group][name]'
+        - $ref: '#/components/parameters/with_group[0][products][0][id]'
+        - $ref: '#/components/parameters/with_group[0][products][0][sku]'
+        - $ref: '#/components/parameters/without_group[products][0][sku]'
+        - $ref: '#/components/parameters/with_group[0][products][1][id]'
+        - $ref: '#/components/parameters/with_group[0][products][1][sku]'
+        - $ref: '#/components/parameters/without_group[products][0][id]'
+        - $ref: '#/components/parameters/with_group[1][group][name]'
+        - $ref: '#/components/parameters/with_group[1][group][id]'
+      responses:
+        '200':
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: [
+                    missedSku: [
+                        "22",
+                        "227752244"
+                    ],
+                    missedGroups: [ ]
+                ]
+                errors: [ ]
+      tags:
+        - Сохранение
+  /api/v1/campaign/groups/store:
+    post:
+      summary: Создание группы товаров в РК
+      operationId: campaign/groups/store
+      parameters:
+        - $ref: '#/components/parameters/campaign_id'
+        - name: name
+          in: query
+          required: true
+          description: Название группы
+          style: form
+          schema:
+            type: string
+            example: Черновая группа товаров 2
+        - $ref: '#/components/parameters/products'
+      responses:
+        '200':
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: [
+                    group_id: 476,
+                    missedProducts: [
+                        "28662",
+                        "28661",
+                        "1"
+                    ]
+                ]
+                errors: [ ]
+      tags:
+        - Сохранение
+  /api/v1/campaign/keywords:
+    get:
+      summary: Получить ключевые слова РК
+      operationId: campaign/keywords
+      parameters:
+        - $ref: '#/components/parameters/campaign_id'
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: [
+                  {
+                    "keyword_id": 238,
+                    "id": 145925,
+                    "name": "мыло жидкое",
+                    "status_id": 2,
+                    "campaign_product_id": 38197,
+                    "group_id": 472,
+                    "bid": 35,
+                    "popularity": 1120
+                  },
+                  {
+                    "keyword_id": 238,
+                    "id": 145926,
+                    "name": "мыло жидкое",
+                    "status_id": 1,
+                    "campaign_product_id": 38199,
+                    "group_id": 472,
+                    "bid": 35,
+                    "popularity": 1120
+                  },
+                  {
+                    "keyword_id": 238,
+                    "id": 145924,
+                    "name": "мыло жидкое",
+                    "status_id": 1,
+                    "campaign_product_id": 38196,
+                    "group_id": 472,
+                    "bid": 35,
+                    "popularity": 1120
+                  }
+                ]
+                errors: [ ]
+      tags:
+        - Ключевые слова
+  /api/v1/keywords:
+    get:
+      summary: 'Получить ключевые слова, начинающиеся со строки starts_with'
+      operationId: 'keywords'
+      parameters:
+        - $ref: '#/components/parameters/starts_with'
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: [
+                  {
+                    "id": 1830,
+                    "name": "патчи для глаз",
+                    "popularity": "15428"
+                  },
+                  {
+                    "id": 1696,
+                    "name": "патчи",
+                    "popularity": "12664"
+                  },
+                  {
+                    "id": 3677,
+                    "name": "пастила без сахара",
+                    "popularity": "6162"
+                  },
+                ]
+                errors: [ ]
+      tags:
+        - Ключевые слова
+  /api/v1/campaign/<campaign_id>/keywords/update:
+    post:
+      summary: Добавить ключевые слова к товарам и группам РК
+      operationId: campaign/<campaign_id>/keywords/update
+      parameters:
+        - $ref: '#/components/parameters/items[0][id]'
+        - $ref: '#/components/parameters/items[0][name]'
+        - $ref: '#/components/parameters/items[0][status_id]'
+        - $ref: '#/components/parameters/items[0][bid]'
+        - $ref: '#/components/parameters/items[0][campaign_product_ids][0]'
+        - $ref: '#/components/parameters/items[0][campaign_product_ids][1]'
+        - $ref: '#/components/parameters/items[0][campaign_group_ids][0]'
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: {
+                  "missedProductKeywords": [ ]
+                }
+                errors: [ ]
+      tags:
+        - Ключевые слова
+  /api/v1/keywords/store:
+    post:
+      summary: Создать ключевое слово
+      operationId: keywords/store
+      parameters:
+        - name: name
+          in: query
+          required: true
+          description: Название ключевого слова
+          style: form
+          schema:
+            type: string
+            example: bood
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: {
+                  "keyword_id": 15906
+                }
+                errors: [ ]
+      tags:
+        - Ключевые слова
+  /api/v1/campaign/stopwords:
+    get:
+      summary: Получить минус-слова РК
+      operationId: campaign/stopwords
+      parameters:
+        - name: campaign_id
+          in: query
+          required: true
+          style: form
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: [
+                  {
+                    "stop_word_id": 238,
+                    "id": 145925,
+                    "name": "мыло жидкое",
+                    "status_id": 2,
+                    "campaign_product_id": 38197,
+                    "group_id": 472,
+                  }
+                ]
+                errors: [ ]
+      tags:
+        - Минус-слова
+  /api/v1/stopwords:
+    get:
+      summary: 'Получить минус-слова, начинающиеся со строки starts_with'
+      operationId: stopwords
+      parameters:
+        - $ref: '#/components/parameters/starts_with'
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: [
+                  {
+                    "id": 2582,
+                    "name": "под"
+                  },
+                  {
+                    "id": 1025,
+                    "name": "подарок"
+                  },
+                  {
+                    "id": 362,
+                    "name": "подарочный"
+                  },
+                ]
+                errors: [ ]
+      tags:
+        - Минус-слова
+  /api/v1/campaign/<campaign_id>/stopwords/update:
+    post:
+      summary: Добавить минус-слова к товарам и группам РК
+      operationId: campaign/<campaign_id>/stopwords/update
+      parameters:
+        - name: 'items[0][id]'
+          in: query
+          required: true
+          style: form
+          schema:
+            type: number
+        - name: 'items[0][name]'
+          in: query
+          required: true
+          style: form
+          schema:
+            type: string
+            example: лосьон для тела
+        - name: 'items[0][campaign_product_ids][0]'
+          in: query
+          required: true
+          style: form
+          schema:
+            type: number
+        - name: 'items[0][campaign_group_ids][0]'
+          in: query
+          required: true
+          style: form
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: {
+                  "missedProductKeywords": [ ],
+                }
+                errors: [ ]
+      tags:
+        - Минус-слова
+  /api/v1/campaign/<campaign_id>/store-ozon:
+    post:
+      summary: Отправить РК в озон
+      operationId: campaign/<campaign_id>/store-ozon
+      parameters:
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/placement_id'
+        - $ref: '#/components/parameters/payment_type_id'
+        - $ref: '#/components/parameters/start_date'
+        - $ref: '#/components/parameters/end_date'
+        - $ref: '#/components/parameters/budget'
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: []
+                errors: [ ]
+      tags:
+        - OZON
+  /api/v1/autoselect/results:
+    post:
+      summary: Отфильтровать результаты автоподбора
+      operationId: autoselect/results
+      parameters:
+        - $ref: '#/components/parameters/autoselect_parameter_id'
+        - $ref: '#/components/parameters/order[field]'
+        - $ref: '#/components/parameters/order[direction]'
+        - $ref: '#/components/parameters/filter[0][column]'
+        - $ref: '#/components/parameters/filter[0][operation]'
+        - $ref: '#/components/parameters/filter[0][value]'
+        - $ref: '#/components/parameters/filter[1][column]'
+        - $ref: '#/components/parameters/filter[1][operation]'
+        - $ref: '#/components/parameters/filter[1][value]'
+        - $ref: '#/components/parameters/filter[2][column]'
+        - $ref: '#/components/parameters/filter[2][operation]'
+        - $ref: '#/components/parameters/filter[2][value]'
+        - $ref: '#/components/parameters/filter[3][column]'
+        - $ref: '#/components/parameters/filter[3][operation]'
+        - $ref: '#/components/parameters/filter[3][value]'
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: {
+                  "campaign_product_list": [
+                    {
+                      "category_name": "Краска для волос женская",
+                      "created_at": "2021-06-09T10:09:40.000000Z",
+                      "product_id": 3,
+                      "group_id": 414,
+                      "id": 24221,
+                      "keywords_count": 0,
+                      "name": "Крем-краска для волос PROOF 60мл 10.32 светлый блондин бежевый Sofiprofi 7378",
+                      "sku": "148468502",
+                      "stop_words_count": 0,
+                    },
+                  ]
+                }
+                errors: [ ]
+      tags:
+        - Автоподбор
+  /api/v1/autoselect/results/sheet:
+    post:
+      summary: Скачать XLS с результатми
+      operationId: autoselect/results/sheet
+      parameters:
+        - $ref: '#/components/parameters/campaign_id'
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: {
+                  "xlsLink": "http://master-uscity.itech-test.ru/backend/storage/xls/autoselect/2021-06-09/1623243090_autoselect_results.xlsx",
+                  "xlsName": "autoselect_results.xlsx"
+                }
+                errors: [ ]
+      tags:
+        - Автоподбор
+  /api/v1/autoselect/run:
+    post:
+      summary: Запустить автоподбор
+      operationId: autoselect/run
+      parameters:
+        - $ref: '#/components/parameters/campaign_id'
+      responses:
+        '200':
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: {
+                  "campaign_product_list": [
+                    {
+                      "category_name": "Краска для волос женская",
+                      "created_at": "2021-06-09T10:09:40.000000Z",
+                      "product_id": 3,
+                      "group_id": 414,
+                      "id": 24221,
+                      "keywords_count": 0,
+                      "name": "Крем-краска для волос PROOF 60мл 10.32 светлый блондин бежевый Sofiprofi 7378",
+                      "sku": "148468502",
+                      "stop_words_count": 0,
+                    },
+                  ]
+                }
+                errors: [ ]
+      tags:
+        - Автоподбор
+  /api/v1/autoselect/keywords/template:
+    get:
+      summary: Получить шаблон загрузки ключевых и минус слов
+      operationId: autoselect/keywords/template
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: {
+                  xlsLink: "http://master-uscity.itech-test.ru/backend/storage/xls/keyword_upload_template.xlsx",
+                  xlsName: "keyword_upload_template.xlsx"
+                }
+                errors: [ ]
+      tags:
+        - Автоподбор
+  /api/v1/words/upload:
+    post:
+      summary: Загрузить ключевые и минус-слова из XLS
+      operationId: words/upload
+      parameters:
+        - $ref: '#/components/parameters/campaign_product_id'
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: []
+                errors: [ ]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+            example:
+              - key: words_xls
+                type: file
+                src: 'path_to/keyword_upload_template.xlsx'
+      tags:
+        - Автоподбор
+  /api/v1/autoselect/words/save:
+    post:
+      summary: Загрузить слова из автоподбора
+      operationId: autoselect/words/save
+      parameters:
+        - $ref: '#/components/parameters/campaign_id'
+        - $ref: '#/components/parameters/keywords'
+      responses:
+        '200':
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: [ ]
+                errors: [ ]
+      tags:
+        - Автоподбор
+  /api/v1/categories:
+    get:
+      summary: Список категорий
+      operationId: Списоккатегорий
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: [
+                  {
+                    "id": 1,
+                    "name": "Автомобили"
+                  }
+                ]
+                errors: [ ]
+      tags:
+        - Автоподбор
+  /api/v1/check-products-campaigns:
+    post:
+      summary: Проверка участия товаров в РК
+      operationId: check-products-campaigns
+      description: Проверка участия товаров в РК (для сервиса Виртуальный помощник)
+      parameters:
+        - name: clients
+          in: query
+          description: SKU товаров клиентов
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                perfomance_client_id:
+                  description: Ozon Perfomance Client ID клиента
+                  type: string
+                skus:
+                  description: SKU товаров
+                  type: array
+                  items:
+                    type: number
+                  example: [148468500, 250941563, 245376040, 123456789]
+        - $ref: '#/components/parameters/Assistant-Token'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data:
+                  206931-1@advertising.performance.ozon.ru:
+                    '123456789': 0
+                    '148468500': 1
+                    '245376040': 0
+                    '250941563': 0
+                errors: []
+        '422':
+          description: error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+              example:
+                success: false
+                data:
+                  route:
+                    middleware:
+                      - api
+                      - assistant
+                    uses: App\Http\Controllers\Api\ApiController@checkProductsCampaigns
+                    controller: App\Http\Controllers\Api\ApiController@checkProductsCampaigns
+                    namespace: App\Http\Controllers
+                    prefix: api
+                    where: []
+                errors:
+                  message: Токен приложения не соответствует токену Виртуального помощника Ozon
+      tags:
+        - Виртуальный помощник
+components:
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+    noauth:
+      type: http
+      scheme: noauth
+  schemas:
+    '200':
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: 'Успешно или нет выполнился запрос'
+          default: true
+        data:
+          type: object
+          items: {}
+        errors:
+          type: array
+          items:
+            type: string
+    '201':
+      type: object
+      properties:
+        data:
+          type: object
+          properties: {}
+    '202':
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: 'Успешно или нет выполнился запрос'
+          default: true
+    '400':
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            http_code:
+              type: integer
+              description: 'Код ответа HTTP'
+              default: 400
+            service:
+              type: string
+              description: 'Код сервиса'
+              default: bids_manager
+            title:
+              type: string
+              description: 'Ошибка'
+            message:
+              type: string
+              description: 'Некорректный запрос'
+    '403':
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            http_code:
+              type: integer
+              description: 'Код ответа HTTP'
+              default: 403
+            service:
+              type: string
+              description: 'Код сервиса'
+              default: bids_manager
+            title:
+              type: string
+              description: 'Ошибка'
+            message:
+              type: string
+              description: 'Описание ошибки'
+    '422':
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            http_code:
+              type: integer
+              description: 'Код ответа HTTP'
+              default: 403
+            service:
+              type: string
+              description: 'Код сервиса'
+              default: bids_manager
+            title:
+              type: string
+              description: 'Ошибка'
+            message:
+              type: string
+              description: 'Описание ошибки'
+  parameters:
+    from:
+      name: from
+      in: query
+      required: true
+      style: form
+      schema:
+        type: string
+        example: '2021-05-01'
+      description: Дата от
+    to:
+      name: to
+      in: query
+      required: true
+      style: form
+      schema:
+        type: string
+        example: '2021-05-31'
+      description: Дата до
+    campaigns:
+      name: 'campaigns[]'
+      in: query
+      required: false
+      style: form
+      schema:
+        type: array
+        items:
+          type: integer
+        example: [ 260370 ]
+      description: ID РК (множ.)
+    products:
+      name: 'products[]'
+      in: query
+      required: false
+      style: form
+      schema:
+        type: array
+        items:
+          type: integer
+        example: [ 38017 ]
+      description: ID товаров (множ.)
+    groups:
+      name: 'groups[]'
+      in: query
+      required: false
+      style: form
+      schema:
+        type: array
+        items:
+          type: integer
+        example: [389]
+      description: ID групп (множ.)
+    statuses:
+      name: 'statuses[]'
+      in: query
+      required: false
+      style: form
+      schema:
+        type: array
+        items:
+          type: integer
+        example: [1]
+      description: ID статусов (множ.)
+    price_from:
+      name: price_from
+      in: query
+      required: false
+      style: form
+      schema:
+        type: number
+      description: Цена от
+    price_to:
+      name: price_to
+      in: query
+      required: false
+      style: form
+      schema:
+        type: number
+      description: Цена до
+    per_page:
+      name: per_page
+      in: query
+      required: false
+      style: form
+      schema:
+        type: integer
+      description: Количество элементов на странице
+    page:
+      name: page
+      in: query
+      required: false
+      style: form
+      schema:
+        type: integer
+      description: Номер страницы
+    strategyTypeId:
+      name: strategyTypeId
+      in: query
+      required: true
+      style: form
+      schema:
+        type: integer
+      description: ID типа стратегии
+    strategyId:
+      name: strategyId
+      in: query
+      required: true
+      style: form
+      schema:
+        type: integer
+      description: ID стратегии
+    strategyIds:
+      name: 'strategyId[]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: array
+        items:
+          type: integer
+        example: [156]
+      description: ID стратегии (множ.)
+    group:
+      name: group
+      in: query
+      required: false
+      description: ID группы или признак "without" - без группы
+      style: form
+      schema:
+        type: string
+      examples:
+        wihoutGroup:
+          value: without
+        withGroup:
+          value: 378
+    keywordTitle:
+      name: keywordTitle
+      in: query
+      required: false
+      description: Подстрока названия ключевика
+      style: form
+      schema:
+        type: string
+        example: гель
+    keywordIds:
+      name: 'keywordId[]'
+      in: query
+      required: false
+      description: ID ключевых слов
+      schema:
+        type: array
+        items:
+          type: integer
+        example: [145656]
+      style: form
+      explode: true
+    campaignId:
+      name: campaignId
+      in: query
+      required: true
+      description: ID РК
+      style: form
+      schema:
+        type: integer
+    campaignIds:
+      name: 'campaignId[]'
+      in: query
+      required: true
+      description: ID РК
+      style: form
+      schema:
+        type: array
+        items:
+          type: integer
+        example: [275426]
+    status:
+      name: status
+      in: query
+      required: true
+      description: ID статуса
+      style: form
+      schema:
+        type: integer
+    dailyBudget:
+      name: dailyBudget
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+      description: Дневной бюджет
+    bid:
+      name: bid
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+      description: Ставка ключевого слова
+    campaign_id:
+      name: campaign_id
+      in: query
+      required: true
+      description: ID РК
+      style: form
+      schema:
+        type: integer
+    campaign_product_id:
+      name: campaign_product_id
+      in: query
+      required: true
+      style: form
+      schema:
+        type: integer
+      description: ID товара в РК
+    status_id:
+      name: status_id
+      in: query
+      required: true
+      style: form
+      schema:
+        type: integer
+      description: ID статуса
+    account_id:
+      name: account_id
+      in: query
+      required: true
+      description: ID аккаунта
+      style: form
+      schema:
+        type: integer
+        example: 1
+    name:
+      name: name
+      in: query
+      required: true
+      description: Название РК
+      style: form
+      schema:
+        type: string
+        example: Черновая РК
+    placement_id:
+      name: placement_id
+      in: query
+      required: true
+      description: ID места размещения
+      style: form
+      schema:
+        type: number
+        example: 1
+    payment_type_id:
+      name: payment_type_id
+      in: query
+      required: true
+      description: ID типа оплаты
+      style: form
+      schema:
+        type: number
+        example: 1
+    start_date:
+      name: start_date
+      in: query
+      required: true
+      description: Дата начала действия РК
+      style: form
+      schema:
+        type: string
+        example: '2021-02-26'
+    end_date:
+      name: end_date
+      in: query
+      required: true
+      description: Дата окончания действия РК
+      style: form
+      schema:
+        type: string
+        example: '2021-02-28'
+    budget:
+      name: budget
+      in: query
+      required: true
+      description: Дневной бюджет
+      style: form
+      schema:
+        type: number
+    created_at:
+      name: created_at
+      in: query
+      required: true
+      style: form
+      schema:
+        type: string
+        example: '2021-02-05 16:52:53'
+    id:
+      name: id
+      in: query
+      required: true
+      description: ID РК
+      style: form
+      schema:
+        type: number
+    starts_with:
+      name: starts_with
+      in: query
+      required: true
+      description: Название начинается с
+      style: form
+      schema:
+        type: string
+        example: крас
+    products_skus:
+      name: 'products_sku[]'
+      in: query
+      required: true
+      description: SKU товаров (множ.)
+      style: form
+      schema:
+        type: array
+        items:
+          type: number
+        example: [ 148468500 ]
+    'with_group[0][group][id]':
+      name: 'with_group[0][group][id]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+    'with_group[0][group][name]':
+      name: 'with_group[0][group][name]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: string
+        example: Черновик
+    'with_group[0][products][0][id]':
+      name: 'with_group[0][products][0][id]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+    'with_group[0][products][0][sku]':
+      name: 'with_group[0][products][0][sku]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+    'without_group[products][0][sku]':
+      name: 'without_group[products][0][sku]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+    'with_group[0][products][1][id]':
+      name: 'with_group[0][products][1][id]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+    'with_group[0][products][1][sku]':
+      name: 'with_group[0][products][1][sku]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+    'without_group[products][0][id]':
+      name: 'without_group[products][0][id]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+    'with_group[1][group][name]':
+      name: 'with_group[1][group][name]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+    'with_group[1][group][id]':
+      name: 'with_group[1][group][id]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+    'products[0]':
+      name: 'products[0]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+    'products[1]':
+      name: 'products[1]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+    'products[2]':
+      name: 'products[2]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+    'items[0][id]':
+      name: 'items[0][id]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+    'items[0][name]':
+      name: 'items[0][name]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: string
+        example: лосьон для тела
+    'items[0][status_id]':
+      name: 'items[0][status_id]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+    'items[0][bid]':
+      name: 'items[0][bid]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+    'items[0][campaign_product_ids][0]':
+      name: 'items[0][campaign_product_ids][0]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+    'items[0][campaign_product_ids][1]':
+      name: 'items[0][campaign_product_ids][1]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+    'items[0][campaign_group_ids][0]':
+      name: 'items[0][campaign_group_ids][0]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+    autoselect_parameter_id:
+      name: autoselect_parameter_id
+      in: query
+      required: true
+      description: ID параметров автоподбора
+      style: form
+      schema:
+        type: number
+    'order[field]':
+      name: 'order[field]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: string
+        example: popularity
+    'order[direction]':
+      name: 'order[direction]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: string
+        example: desc
+    'filter[0][column]':
+      name: 'filter[0][column]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: string
+        example: popularity
+    'filter[0][operation]':
+      name: 'filter[0][operation]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: string
+        example: '!='
+    'filter[0][value]':
+      name: 'filter[0][value]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+    'filter[1][column]':
+      name: 'filter[1][column]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: string
+        example: popularity
+    'filter[1][operation]':
+      name: 'filter[1][operation]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: string
+        example: <
+    'filter[1][value]':
+      name: 'filter[1][value]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+    'filter[2][column]':
+      name: 'filter[2][column]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: string
+        example: category_popularity
+    'filter[2][operation]':
+      name: 'filter[2][operation]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: string
+        example: '>'
+    'filter[2][value]':
+      name: 'filter[2][value]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+    'filter[3][column]':
+      name: 'filter[3][column]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: string
+        example: category_popularity
+    'filter[3][operation]':
+      name: 'filter[3][operation]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: string
+        example: <
+    'filter[3][value]':
+      name: 'filter[3][value]'
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+    keyword:
+      name: keyword
+      in: query
+      required: true
+      style: form
+      schema:
+        type: string
+        example: крем
+    category_id:
+      name: category_id
+      in: query
+      required: true
+      style: form
+      schema:
+        type: number
+    keywords:
+      name: 'keywords[]'
+      in: query
+      required: true
+      description: Ключевые слова
+      style: form
+      schema:
+        type: string
+        example: Тестовое слово
+    Superapp-Token:
+      name: Superapp-Token
+      in: header
+      required: true
+      description: Токен сервиса Объединяющий интерфейс
+      style: simple
+      schema:
+        type: string
+        example: 5HknXegluJWQdovy8waUGac9x6b656Dg2JZ3s3OpKSWyZXBc7mwkHyJ9wmPtBJn7
+    user_name:
+      name: name
+      in: query
+      required: true
+      description: Имя пользователя
+      style: form
+      schema:
+        type: string
+        example: New User
+    email:
+      name: email
+      in: query
+      required: true
+      description: E-mail
+      style: form
+      schema:
+        type: string
+        example: superapp@itech-group.ru
+    password:
+      name: password
+      in: query
+      required: true
+      description: Пароль
+      style: form
+      schema:
+        type: string
+        example: superapp
+    perfomance_client_id:
+      name: perfomance_client_id
+      in: query
+      required: true
+      description: Client Id Ozon Perfomance
+      style: form
+      schema:
+        type: string
+        example: 206931-1@advertising.performance.ozon.ru
+    perfomance_client_secret:
+      name: perfomance_client_secret
+      in: query
+      required: true
+      description: Client Secret Ozon Perfomance
+      style: form
+      schema:
+        type: string
+        example: b6J7TgOrTH0AuBXaGbwfNHuYv-N5cESXHaz-DuxWsZK49jJ7Miomm41f1YKLy26_YSwWdd5B1A
+    seller_client_id:
+      name: seller_client_id
+      in: query
+      required: true
+      description: Client Id Ozon Seller
+      style: form
+      schema:
+        type: number
+    seller_api_key:
+      name: seller_api_key
+      in: query
+      required: true
+      description: Api Key Ozon Seller
+      style: form
+      schema:
+        type: string
+        example: 0dae2372-32bb-4128-80da-11d614c957a2
+    Assistant-Token:
+      name: Assistant-Token
+      in: header
+      required: true
+      description: Токен сервиса Виртуальный помощник
+      style: simple
+      schema:
+        type: string
+        example: otArGhithCatVityotEuthifkuryicVelAbdavCeGhicOakMow

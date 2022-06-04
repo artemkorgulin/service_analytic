@@ -1,0 +1,149 @@
+#image: tiangolo/docker-with-compose
+
+#services:
+#  - docker:19.03.12-dind
+
+stages:
+    - build
+    # - test
+    - release
+    - deploy
+
+#variables:
+#  CI_REGISTRY: registry.gitlab.korgulin.ru
+#  CI_REGISTRY_USER: $CI_REGISTRY_USER
+#  CI_REGISTRY_PASSWORD: $CI_REGISTRY_PASSWORD
+
+.before_script_docker_login: &before_script_docker_login echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+
+.before_script_configure_ssh: &before_script_configure_ssh |
+    which ssh-agent || ( apk --update add openssh-client )
+    eval $(ssh-agent -s)
+    echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    mkdir -p ~/.ssh
+    chmod 700 ~/.ssh
+    ssh-keyscan "$DEPLOY_HOST" >> ~/.ssh/known_hosts
+    chmod 644 ~/.ssh/known_hosts
+    [[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+
+before_script:
+    - *before_script_docker_login
+
+build-frontend:
+    stage: build
+    variables:
+        ENABLE_PROXY: "true"
+    script:
+        - cp .env-${CI_COMMIT_REF_NAME} .env || cp .env.example .env
+        - source .env
+        - TAG=${CI_COMMIT_REF_NAME} docker-compose pull frontend || true
+        - TAG=${CI_COMMIT_SHA} docker-compose build frontend
+#        - TAG=${CI_COMMIT_SHA} CACHE_FROM_TAG=${CI_COMMIT_REF_NAME} docker-compose build frontend
+        - TAG=${CI_COMMIT_SHA} docker-compose push frontend
+    only:
+      - dev
+      - test
+      - master
+      - demo
+    tags:
+      - frontend
+      - shell
+
+release-frontend:
+    stage: release
+    only:
+      - dev
+      - test
+      - master
+      - demo
+    tags:
+        - frontend
+    script:
+        - TAG=${CI_COMMIT_SHA} docker-compose pull frontend
+        - docker tag ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA} ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}
+        - TAG=${CI_COMMIT_REF_NAME} docker-compose push frontend
+
+deploy-demo:
+    stage: deploy
+    only:
+        - demo
+    tags:
+      - frontend
+    environment:
+        name: ${CI_COMMIT_REF_NAME}
+        url: $SITE_URL
+    variables:
+        SSH_PRIVATE_KEY: $SSH_PRIVATE_KEY_DEMO
+        DEPLOY_USER: $DEPLOY_USER_DEMO
+        DEPLOY_HOST: $DEPLOY_HOST_DEMO
+        DOCKER_HOST: ssh://${DEPLOY_USER_DEMO}@${DEPLOY_HOST_DEMO}
+    before_script:
+ #       - *before_script_configure_ssh
+        - *before_script_docker_login
+    script:
+        - TAG=${CI_COMMIT_REF_NAME} docker-compose pull
+        - TAG=${CI_COMMIT_REF_NAME} docker-compose up --remove-orphans -d
+
+deploy-prod:
+    stage: deploy
+    only:
+        - master
+    tags:
+      - frontend
+    environment:
+        name: ${CI_COMMIT_REF_NAME}
+        url: $SITE_URL
+    variables:
+        SSH_PRIVATE_KEY: $SSH_PRIVATE_KEY_PROD
+        DEPLOY_USER: $DEPLOY_USER_PROD
+        DEPLOY_HOST: $DEPLOY_HOST_PROD
+        DOCKER_HOST: ssh://${DEPLOY_USER_PROD}@${DEPLOY_HOST_PROD}
+    before_script:
+ #       - *before_script_configure_ssh
+        - *before_script_docker_login
+    script:
+        - TAG=${CI_COMMIT_REF_NAME} docker-compose pull
+        - TAG=${CI_COMMIT_REF_NAME} docker-compose up --remove-orphans -d
+    when: manual
+
+deploy-dev:
+    stage: deploy
+    only:
+        - dev
+    tags:
+      - frontend
+    environment:
+        name: ${CI_COMMIT_REF_NAME}
+        url: $SITE_URL
+    variables:
+        SSH_PRIVATE_KEY: $SSH_PRIVATE_KEY_DEV
+        DEPLOY_USER: $DEPLOY_USER_DEV
+        DEPLOY_HOST: $DEPLOY_HOST_DEV
+        DOCKER_HOST: ssh://${DEPLOY_USER_DEV}@${DEPLOY_HOST_DEV}
+    before_script:
+#        - *before_script_configure_ssh
+        - *before_script_docker_login
+    script:
+        - TAG=${CI_COMMIT_REF_NAME} docker-compose pull
+        - TAG=${CI_COMMIT_REF_NAME} docker-compose up --remove-orphans -d
+
+deploy-test:
+    stage: deploy
+    only:
+        - test
+    tags:
+        - frontend
+    environment:
+        name: ${CI_COMMIT_REF_NAME}
+        url: $SITE_URL
+    variables:
+        SSH_PRIVATE_KEY: $SSH_PRIVATE_KEY_TEST
+        DEPLOY_USER: $DEPLOY_USER_TEST
+        DEPLOY_HOST: $DEPLOY_HOST_TEST
+        DOCKER_HOST: ssh://${DEPLOY_USER_TEST}@${DEPLOY_HOST_TEST}
+    before_script:
+#        - *before_script_configure_ssh
+        - *before_script_docker_login
+    script:
+        - TAG=${CI_COMMIT_REF_NAME} docker-compose pull
+        - TAG=${CI_COMMIT_REF_NAME} docker-compose up --remove-orphans -d

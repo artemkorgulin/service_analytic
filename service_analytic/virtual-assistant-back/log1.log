@@ -1,0 +1,283 @@
+Array
+(
+    [0] => App\Models\WbTemporaryProduct Object
+        (
+            [fillable] => Array
+                (
+                    [0] => user_id
+                    [1] => account_id
+                    [2] => account_client_id
+                    [3] => card_id
+                    [4] => imt_id
+                    [5] => card_user_id
+                    [6] => supplier_id
+                    [7] => imt_supplier_id
+                    [8] => title
+                    [9] => brand
+                    [10] => barcodes
+                    [11] => nmid
+                    [12] => sku
+                    [13] => image
+                    [14] => price
+                    [15] => object
+                    [16] => parent
+                    [17] => country_production
+                    [18] => supplier_vendor_code
+                    [19] => data
+                    [20] => nomenclatures
+                    [21] => url
+                    [22] => quantity
+                    [23] => created_at
+                    [24] => updated_at
+                )
+
+            [hidden:protected] => Array
+                (
+                    [0] => created_at
+                    [1] => updated_at
+                    [2] => deleted_at
+                )
+
+            [casts:protected] => Array
+                (
+                    [data] => object
+                    [nomenclatures] => object
+                    [barcodes] => object
+                    [deleted_at] => datetime
+                )
+
+            [connection:protected] => mysql
+            [table:protected] => wb_temporary_products
+            [primaryKey:protected] => id
+            [keyType:protected] => int
+            [incrementing] => 1
+            [with:protected] => Array
+                (
+                )
+
+            [withCount:protected] => Array
+                (
+                )
+
+            [preventsLazyLoading] => 
+            [perPage:protected] => 15
+            [exists] => 1
+            [wasRecentlyCreated] => 
+            [escapeWhenCastingToString:protected] => 
+            [attributes:protected] => Array
+                (
+                    [id] => 557669
+                    [title] => Салфетка для уборки
+                    [sku] => 27749848
+                    [barcode] => ["2002590365000", "4627196370678"]
+                    [brand] => IVA
+                    [nmid] => 27749848
+                    [url] => https://www.wildberries.ru/catalog/27749848/detail.aspx
+                    [image] => https://img1.wbstatic.net/big/new/27740000/27749848-1.jpg
+                    [quantity] => 4
+                )
+
+            [original:protected] => Array
+                (
+                    [id] => 557669
+                    [title] => Салфетка для уборки
+                    [sku] => 27749848
+                    [barcode] => ["2002590365000", "4627196370678"]
+                    [brand] => IVA
+                    [nmid] => 27749848
+                    [url] => https://www.wildberries.ru/catalog/27749848/detail.aspx
+                    [image] => https://img1.wbstatic.net/big/new/27740000/27749848-1.jpg
+                    [quantity] => 1
+                )
+
+            [changes:protected] => Array
+                (
+                )
+
+            [classCastCache:protected] => Array
+                (
+                )
+
+            [attributeCastCache:protected] => Array
+                (
+                )
+
+            [dates:protected] => Array
+                (
+                )
+
+            [dateFormat:protected] => 
+            [appends:protected] => Array
+                (
+                )
+
+            [dispatchesEvents:protected] => Array
+                (
+                )
+
+            [observables:protected] => Array
+                (
+                )
+
+            [relations:protected] => Array
+                (
+                )
+
+            [touches:protected] => Array
+                (
+                )
+
+            [timestamps] => 1
+            [visible:protected] => Array
+                (
+                )
+
+            [guarded:protected] => Array
+                (
+                    [0] => *
+                )
+
+            [forceDeleting:protected] => 
+        )
+
+    [1] => App\Models\WbTemporaryProduct Object
+        (
+            [fillable] => Array
+                (
+                    [0] => user_id
+                    [1] => account_id
+                    [2] => account_client_id
+                    [3] => card_id
+                    [4] => imt_id
+                    [5] => card_user_id
+                    [6] => supplier_id
+                    [7] => imt_supplier_id
+                    [8] => title
+                    [9] => brand
+                    [10] => barcodes
+                    [11] => nmid
+                    [12] => sku
+                    [13] => image
+                    [14] => price
+                    [15] => object
+                    [16] => parent
+                    [17] => country_production
+                    [18] => supplier_vendor_code
+                    [19] => data
+                    [20] => nomenclatures
+                    [21] => url
+                    [22] => quantity
+                    [23] => created_at
+                    [24] => updated_at
+                )
+
+            [hidden:protected] => Array
+                (
+                    [0] => created_at
+                    [1] => updated_at
+                    [2] => deleted_at
+                )
+
+            [casts:protected] => Array
+                (
+                    [data] => object
+                    [nomenclatures] => object
+                    [barcodes] => object
+                    [deleted_at] => datetime
+                )
+
+            [connection:protected] => mysql
+            [table:protected] => wb_temporary_products
+            [primaryKey:protected] => id
+            [keyType:protected] => int
+            [incrementing] => 1
+            [with:protected] => Array
+                (
+                )
+
+            [withCount:protected] => Array
+                (
+                )
+
+            [preventsLazyLoading] => 
+            [perPage:protected] => 15
+            [exists] => 1
+            [wasRecentlyCreated] => 
+            [escapeWhenCastingToString:protected] => 
+            [attributes:protected] => Array
+                (
+                    [id] => 557670
+                    [title] => Салфетка для уборки
+                    [sku] => 27749941
+                    [barcode] => ["2002590421003"]
+                    [brand] => IVA
+                    [nmid] => 27749941
+                    [url] => https://www.wildberries.ru/catalog/27749941/detail.aspx
+                    [image] => 0
+                    [quantity] => 4
+                )
+
+            [original:protected] => Array
+                (
+                    [id] => 557670
+                    [title] => Салфетка для уборки
+                    [sku] => 27749941
+                    [barcode] => ["2002590421003"]
+                    [brand] => IVA
+                    [nmid] => 27749941
+                    [url] => https://www.wildberries.ru/catalog/27749941/detail.aspx
+                    [image] => 0
+                    [quantity] => 1
+                )
+
+            [changes:protected] => Array
+                (
+                )
+
+            [classCastCache:protected] => Array
+                (
+                )
+
+            [attributeCastCache:protected] => Array
+                (
+                )
+
+            [dates:protected] => Array
+                (
+                )
+
+            [dateFormat:protected] => 
+            [appends:protected] => Array
+                (
+                )
+
+            [dispatchesEvents:protected] => Array
+                (
+                )
+
+            [observables:protected] => Array
+                (
+                )
+
+            [relations:protected] => Array
+                (
+                )
+
+            [touches:protected] => Array
+                (
+                )
+
+            [timestamps] => 1
+            [visible:protected] => Array
+                (
+                )
+
+            [guarded:protected] => Array
+                (
+                    [0] => *
+                )
+
+            [forceDeleting:protected] => 
+        )
+
+)

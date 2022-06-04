@@ -1,0 +1,101 @@
+$white: #fff;
+$black: #2f3640;
+$base-100: #f9f9f9 !default;
+$base-400: #e9edf2 !default;
+$base-500: #c8cfd9 !default;
+$base-600: #a6afbd !default;
+$base-700: #7e8793 !default;
+$base-800: #505965 !default;
+$base-900: #2f3640 !default;
+$primary-500: #710bff !default;
+$background-2: #f1f1f4;
+$violet: #a46fe8;
+$secondaryGreen: #20c274;
+
+$box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06) !default;
+
+$border-radius-sm: 8px;
+$border-radius-lg: 24px;
+
+$primary-transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+
+$breakpoints: (
+    xs: 412px,
+    sm: 768px,
+    md: 1024px,
+    lg: 1440px,
+    xl: 1920px,
+);
+
+$transition: (
+    'fast-out-slow-in': cubic-bezier(0.4, 0, 0.2, 1),
+    'linear-out-slow-in': cubic-bezier(0, 0, 0.2, 1),
+    'fast-out-linear-in': cubic-bezier(0.4, 0, 1, 1),
+    'ease-in-out': cubic-bezier(0.4, 0, 0.6, 1),
+    'fast-in-fast-out': cubic-bezier(0.25, 0.8, 0.25, 1),
+    'swing': cubic-bezier(0.25, 0.8, 0.5, 1),
+);
+
+$header-h: 64px;
+
+$gap: 32px;
+
+$success: #20c274;
+$error: #ff3981;
+$accent: $primary-500;
+
+$page-gap: 16px;
+
+$color-main-font: #2f3640;
+$color-white-font: #fff;
+
+$color-main-background: #f9f9f9;
+$color-light-background: #fff;
+
+$color-ozon-primary: #0259ff;
+$color-ozon-primary-800: #0048d0;
+$color-ozon-primary-100: #94b9ff;
+$color-purple-primary: #710bff;
+$color-purple-primary-700: #5b11c2;
+$color-purple-primary-shadow: #b499dc;
+
+$color-graph-blue: #5774dd;
+
+$color-purple-dark: #6610dc;
+$color-purple-extra-light: #f5edff;
+
+$color-pink-secondary: #ff0b99;
+$color-pink-dark: #ff3981;
+
+$color-red-secondary: #ff3981;
+$color-red-dark: #e42d70;
+
+$color-green-secondary: #20c274;
+
+$color-gray-dark: #7e8793;
+$color-gray-dark-800: #505965;
+
+$color-gray-light: #e9edf2;
+$color-gray-light-100: #a6afbd;
+$color-gray-light-200: #eefbf4;
+$color-gray-light-300: #e7e8e9;
+$color-gray-extra-light: #fafafc;
+$color-gray-blue-light: #c8cfd9;
+$background-light: #ebeaf1;
+
+$color-yellow-bright: #fff176;
+
+$gradient-color: radial-gradient(
+        70.83% 274.93% at 118.58% 170.54%,
+        #d150ff 0%,
+        rgba(167, 103, 255, 0) 100%
+    ),
+    radial-gradient(145.69% 666.01% at 6.08% -48.21%, #5350ff 0%, rgba(167, 103, 255, 0) 100%),
+    linear-gradient(0deg, #710bff, #710bff);
+
+$transition-fast: 0.25s;
+$transition-middle: 0.5s;
+
+$popup-out-bezier: cubic-bezier(0.47, 0.04, 0.5, -0.6);
+$popup-in-bezier: cubic-bezier(0.25, 0.74, 0.22, 0.99);
+$inner-radius: 8px;

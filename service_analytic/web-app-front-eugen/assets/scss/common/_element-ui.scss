@@ -1,0 +1,63 @@
+.el-input__inner {
+    border-radius: 8px;
+    border-color: $base-500;
+    color: $base-900;
+    font-weight: 700;
+
+    &:active,
+    &:focus {
+        border-color: $primary-500;
+    }
+}
+
+.el-date-editor {
+    font-weight: 700;
+
+    .el-range-input {
+        color: $base-900;
+    }
+
+    .el-range__close-icon {
+        color: $primary-500;
+    }
+
+    &--daterange.el-input__inner {
+        width: 250px;
+    }
+
+    &.is-active,
+    &.is-active:hover {
+        border-color: $primary-500;
+    }
+}
+
+.el-date-table td.end-date span,
+.el-date-table td.start-date span {
+    background-color: $primary-500;
+}
+
+.el-date-table td.today span {
+    color: $primary-500;
+}
+
+.el-date-table td.available:hover,
+.el-date-table td span:hover,
+.el-date-range-picker__header [class*='arrow-left']:hover,
+.el-date-range-picker__header [class*='arrow-right']:hover,
+.el-select-dropdown__item.selected {
+    color: $primary-500;
+}
+
+.el-date-table td.end-date span:hover,
+.el-date-table td.start-date span:hover {
+    color: #fff;
+}
+
+.el-select .el-input.is-focus .el-input__inner,
+.el-select .el-input__inner:focus {
+    border-color: $primary-500;
+}
+
+.el-select .el-input .el-select__caret {
+    color: $base-900;
+}

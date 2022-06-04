@@ -1,0 +1,93 @@
+version: '3.8'
+
+services:
+  #Nginx Service
+  nginx-event-master:
+    build:
+      context: docker/nginx
+    restart: unless-stopped
+    hostname: host.docker.internal
+    environment:
+      TZ: Europe/Moscow
+    volumes:
+      - .:/var/www
+      - ./.data/nginx/logs:/var/log/nginx
+    depends_on:
+      - octane-event-master
+    links:
+      - octane-event-master
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - 127.0.0.1:84:80
+    networks:
+      - web-app-back_app-network
+
+  # Redis service
+  redis-event-master:
+    image: redis:6.2.5
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD}"]
+    restart: unless-stopped
+    environment:
+      TZ: Europe/Moscow
+    volumes:
+      - .data/redis-data:/data
+    networks:
+      - web-app-back_app-network
+
+  octane-event-master:
+    build: docker/octane
+    environment:
+      DISABLE_DEFAULT_SERVER: 1
+      TZ: Europe/Moscow
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+      - ./docker/octane/php.ini:/usr/local/etc/php/php.ini
+      - .data/app/logs:/var/www/storage/logs
+    ports:
+      - 8084:8084
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - web-app-back_app-network
+
+  # Laravel queue service
+  queue-event-master:
+    build: docker/queue
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME:
+      SERVICE_TAGS: dev
+      TZ: Europe/Moscow
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+      - ./docker/queue/php.ini:/usr/local/etc/php/php.ini
+      - .data/app/logs:/var/www/storage/logs
+    depends_on:
+      - redis-event-master
+    networks:
+      - web-app-back_app-network
+
+  # Laravel node service
+  node-event-master:
+    build: docker/node
+    restart: unless-stopped
+    ports:
+      - 127.0.0.1:6001:6001
+    environment:
+      TZ: Europe/Moscow
+    volumes:
+      - ./node:/var/www
+    depends_on:
+      - redis-event-master
+    networks:
+      - web-app-back_app-network
+
+#Docker Networks
+networks:
+  web-app-back_app-network:
+    external: true
+

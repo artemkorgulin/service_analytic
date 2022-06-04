@@ -1,0 +1,263 @@
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.3s linear;
+}
+
+.fade-enter,
+.fade-leave-active {
+    opacity: 0;
+}
+
+.fade-move {
+    transition: transform 1s;
+}
+
+.fade-list {
+    &-enter-active,
+    &-leave-active {
+        transition: opacity 0.3s linear;
+    }
+
+    &-enter,
+    &-leave-active {
+        opacity: 0;
+    }
+
+    &-move {
+        transition: transform 0.3s;
+    }
+}
+
+.fade-fast-enter-active,
+.fade-fast-leave-active {
+    transition: opacity 0.2s linear;
+}
+
+.fade-fast-enter,
+.fade-fast-leave-active {
+    opacity: 0;
+}
+
+.right-appear-enter-active,
+.right-appear-leave-active {
+    transition: transform 0.3s linear, opacity 0.3s linear;
+}
+
+.right-appear-enter,
+.right-appear-leave-active {
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+.right-appear-short-enter,
+.right-appear-short-leave-active {
+    opacity: 0;
+    transform: translateX(30%);
+}
+
+.right-appear-short-enter-active,
+.right-appear-short-leave-active {
+    transition: transform 0.2s linear, opacity 0.2s linear;
+}
+
+.left-appear-enter-active,
+.left-appear-leave-active {
+    transition: transform 0.3s linear, opacity 0.3s linear;
+}
+
+.left-appear-enter,
+.left-appear-leave-active {
+    opacity: 0;
+    transform: translateX(-100%);
+}
+
+.appear-enter-active,
+.appear-leave-active {
+    transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+}
+
+.appear-enter,
+.appear-leave-active {
+    opacity: 0;
+    transform: translateY(64px);
+}
+
+// .overlay-enter,
+// .overlay-leave {
+//     opacity: 0;
+// }
+
+// .overlay-enter-active {
+//     transition: opacity 1s $popup-in-bezier;
+// }
+
+// .overlay-leave-active {
+//     transition: opacity .3s $popup-out-bezier;
+// }
+
+.list-enter-active,
+.list-leave-active {
+    transition: all 1s;
+}
+
+.list-enter,
+.list-leave-to {
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.message-transition {
+    @include transition-default();
+
+    &-enter,
+    &-leave-to {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+
+    &-leave,
+    &-leave-active {
+        position: absolute;
+    }
+}
+
+.tab-transition {
+    &-enter {
+        transform: translate(100%, 0);
+    }
+
+    &-leave,
+    &-leave-active {
+        position: absolute;
+        top: 0;
+    }
+
+    &-leave-to {
+        position: absolute;
+        transform: translate(-100%, 0);
+    }
+}
+
+.tab-reverse-transition {
+    &-enter {
+        transform: translate(-100%, 0);
+    }
+
+    &-leave,
+    &-leave-to {
+        position: absolute;
+        top: 0;
+        transform: translate(100%, 0);
+    }
+}
+
+.scale-transition {
+    @include transition-default();
+
+    &-enter,
+    &-leave,
+    &-leave-to {
+        opacity: 0;
+        transform: scale(0);
+    }
+}
+
+.fade__bottom-enter-active,
+.fade__bottom-leave-active {
+    transition: 0.35s linear;
+}
+
+.fade__bottom-enter,
+.fade__bottom-leave-to {
+    opacity: 0;
+    transform: translateY(50px);
+}
+
+.fade__bottom__fast-enter-active,
+.fade__bottom__fast-leave-active {
+    transition: 0.2s linear;
+}
+
+.fade__bottom__fast-enter,
+.fade__bottom__fast-leave-to {
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.fade__scale-enter-active,
+.fade__scale-leave-active {
+    transition: 0.25s linear;
+}
+
+.fade__scale-enter,
+.fade__scale-leave-to {
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.list-complete-item {
+    transition: all 0.35s;
+}
+
+.list-complete-enter,
+.list-complete-leave-to {
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.list-complete-leave-active {
+    position: absolute;
+}
+
+.fade__slow-enter-active,
+.fade__slow-leave-active {
+    transition: opacity 0.75s ease;
+}
+
+.fade__slow-enter,
+.fade__slow-leave-to {
+    position: absolute;
+    opacity: 0;
+}
+
+.drawer-enter-active {
+    transition-timing-function: $popup-in-bezier;
+
+    .drawer-close,
+    .drawer-overlay,
+    .drawer-body {
+        transition-timing-function: $popup-in-bezier;
+    }
+}
+
+.drawer-enter-leave-active {
+    transition-duration: 1s;
+    transition-timing-function: $popup-out-bezier;
+
+    .drawer-close,
+    .drawer-overlay,
+    .drawer-body {
+        transition-timing-function: $popup-out-bezier;
+    }
+}
+
+.drawer-body {
+    transform: translate3d(0, 0, 0);
+    transition: transform 1s $popup-in-bezier;
+}
+
+.drawer-enter,
+.drawer-leave-to {
+    transition-duration: 1s;
+
+    .drawer-close,
+    .drawer-overlay {
+        opacity: 0;
+        transition: opacity 1s;
+    }
+
+    .drawer-body {
+        transform: translate3d(110%, 0, 0);
+        transition: transform 1s;
+    }
+}

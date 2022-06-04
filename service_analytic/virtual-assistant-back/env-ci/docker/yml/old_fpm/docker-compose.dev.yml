@@ -1,0 +1,71 @@
+version: '3.8'
+services:
+  #PHP-FPM Service
+  php-fpm:
+    build: docker/php
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME:
+      SERVICE_TAGS: dev
+      TZ: Europe/Moscow
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+      - .data/php/socket:/socket
+      - .data/app/logs:/var/www/storage/logs
+      - .data/parser:/var/parser
+    depends_on:
+      - redis-va
+    networks:
+      - web-app-back_app-network
+
+  #Nginx Service
+  nginx-va:
+    build: docker/nginx
+    restart: unless-stopped
+    environment:
+      TZ: Europe/Moscow
+    volumes:
+      - .:/var/www
+      - .data/nginx/logs:/var/log/nginx
+      - ./.data/php/socket:/socket
+    depends_on:
+      - php-fpm
+    ports:
+      - 127.0.0.1:83:80
+    networks:
+      - web-app-back_app-network
+
+  redis-va:
+    image: redis:6.2.5
+    command: [ "redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD}" ]
+    environment:
+      TZ: Europe/Moscow
+    restart: unless-stopped
+    volumes:
+      - .data/redis-data:/redis
+    networks:
+      - web-app-back_app-network
+
+  # Laravel queue service
+  queue-va:
+    build: ./docker/queue
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME:
+      SERVICE_TAGS: dev
+      TZ: Europe/Moscow
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+      - ./docker/queue/local.ini:/usr/local/etc/php/php.ini
+    networks:
+      - web-app-back_app-network
+
+#Docker Networks
+networks:
+  web-app-back_app-network:
+    external: true
+

@@ -1,0 +1,91 @@
+version: '3.8'
+
+services:
+  #PHP-FPM Service
+  php-fpm:
+    build:
+      context: docker/php
+    restart: unless-stopped
+    tty: true
+    working_dir: /var/www
+    environment:
+      TZ: Europe/Moscow
+    volumes:
+      - .:/var/www
+      - ./docker/php/local.ini:/usr/local/etc/php/php.ini
+      - ./.data/php/socket:/socket
+      - .data/app/logs:/var/www/storage/logs
+    depends_on:
+      - db-bids
+      - redis-bids
+    networks:
+      - web-app-back_app-network
+
+  #Nginx Service
+  nginx-bids:
+    build:
+      context: docker/nginx
+    restart: unless-stopped
+    hostname: host.docker.internal
+    environment:
+      TZ: Europe/Moscow
+    volumes:
+      - .:/var/www
+      - ./.data/nginx/logs:/var/log/nginx
+      - ./.data/php/socket:/socket
+    depends_on:
+      - php-fpm
+    ports:
+      - 127.0.0.1:82:80
+    networks:
+      - web-app-back_app-network
+
+  #MySQL Service
+  db-bids:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password --innodb_buffer_pool_size=2048M --sort_buffer_size=2M
+    environment:
+      TZ: Europe/Moscow
+    ports:
+      - 127.0.0.1:3309:3306
+    volumes:
+      - .data/mysql-data:/var/lib/mysql
+    networks:
+      - web-app-back_app-network
+
+  # Redis service
+  redis-bids:
+    image: redis:6.2.5
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD}"]
+    environment:
+      TZ: Europe/Moscow
+    restart: unless-stopped
+    volumes:
+      - .data/redis-data:/data
+    networks:
+      - web-app-back_app-network
+
+  # Laravel queue service
+  queue-bids:
+    build: docker/queue
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME:
+      SERVICE_TAGS: dev
+      TZ: Europe/Moscow
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+      - ./docker/queue/local.ini:/usr/local/etc/php/php.ini
+    depends_on:
+      - php-fpm
+      - db-bids
+      - redis-bids
+    networks:
+      - web-app-back_app-network
+
+#Docker Networks
+networks:
+  web-app-back_app-network:
+    external: true

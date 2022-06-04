@@ -1,0 +1,440 @@
+{
+    "info": {
+        "_postman_id": "4ed6e69b-c6f4-4465-ac11-efbd67a511ee",
+        "name": "company",
+        "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "sign-in",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                            "const response = pm.response.json();",
+                            "pm.globals.set(\"user\", response.user);"
+                        ]
+                    }
+                }
+            ],
+            "id": "4b4ccf7f-8817-46ac-93d5-a72f4f89cda0",
+            "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "urlencoded",
+                    "urlencoded": [
+                        {
+                            "key": "email",
+                            "value": "werwolf@mail.ru",
+                            "type": "text"
+                        },
+                        {
+                            "key": "password",
+                            "value": "12345678",
+                            "type": "text"
+                        }
+                    ]
+                },
+                "url": {
+                    "raw": "http://127.0.0.1:81/api/v1/sign-in",
+                    "protocol": "http",
+                    "host": ["127", "0", "0", "1"],
+                    "port": "81",
+                    "path": ["api", "v1", "sign-in"],
+                    "query": [
+                        {
+                            "key": "email",
+                            "value": "werwolf@mail.ru",
+                            "disabled": true
+                        },
+                        {
+                            "key": "password",
+                            "value": "12345678",
+                            "disabled": true
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "comany.index",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "59407b11-65cf-4620-accd-d40640e66ff0",
+                        "exec": [""],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "id": "77355d1e-6534-44b9-9a13-bf91a92eeb2c",
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{user}}",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "urlencoded",
+                    "urlencoded": [
+                        {
+                            "key": "email",
+                            "value": "werwolf@mail.ru",
+                            "type": "text",
+                            "disabled": true
+                        },
+                        {
+                            "key": "password",
+                            "value": "12345678",
+                            "type": "text",
+                            "disabled": true
+                        }
+                    ]
+                },
+                "url": {
+                    "raw": "http://127.0.0.1:81/api/v1/company",
+                    "protocol": "http",
+                    "host": ["127", "0", "0", "1"],
+                    "port": "81",
+                    "path": ["api", "v1", "company"],
+                    "query": [
+                        {
+                            "key": "email",
+                            "value": "werwolf@mail.ru",
+                            "disabled": true
+                        },
+                        {
+                            "key": "password",
+                            "value": "12345678",
+                            "disabled": true
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "comany.store",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "59407b11-65cf-4620-accd-d40640e66ff0",
+                        "exec": [""],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "id": "36302664-5943-4bdf-ab03-9821a2986c3b",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{user}}",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "urlencoded",
+                    "urlencoded": [
+                        {
+                            "key": "name",
+                            "value": "ООО тест",
+                            "type": "text"
+                        },
+                        {
+                            "key": "inn",
+                            "value": "1234567891",
+                            "type": "text"
+                        },
+                        {
+                            "key": "kpp",
+                            "value": "123456789",
+                            "type": "text"
+                        },
+                        {
+                            "key": "ogrn",
+                            "value": "1234567891234",
+                            "type": "text"
+                        },
+                        {
+                            "key": "address",
+                            "value": "dfsfsdfdsfds",
+                            "type": "text"
+                        }
+                    ]
+                },
+                "url": {
+                    "raw": "http://127.0.0.1:81/api/v1/company",
+                    "protocol": "http",
+                    "host": ["127", "0", "0", "1"],
+                    "port": "81",
+                    "path": ["api", "v1", "company"],
+                    "query": [
+                        {
+                            "key": "email",
+                            "value": "werwolf@mail.ru",
+                            "disabled": true
+                        },
+                        {
+                            "key": "password",
+                            "value": "12345678",
+                            "disabled": true
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "comany.update",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "59407b11-65cf-4620-accd-d40640e66ff0",
+                        "exec": [""],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "id": "98b3f0af-5403-4d8d-8949-ea63e4f0d33f",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{user}}",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "urlencoded",
+                    "urlencoded": [
+                        {
+                            "key": "name",
+                            "value": "ООО тест3",
+                            "type": "text"
+                        },
+                        {
+                            "key": "inn",
+                            "value": "1234567891",
+                            "type": "text",
+                            "disabled": true
+                        },
+                        {
+                            "key": "kpp",
+                            "value": "123456789",
+                            "type": "text",
+                            "disabled": true
+                        },
+                        {
+                            "key": "ogrn",
+                            "value": "1234567891244",
+                            "type": "text",
+                            "disabled": true
+                        },
+                        {
+                            "key": "address",
+                            "value": "dfsfsdfdsfds",
+                            "type": "text",
+                            "disabled": true
+                        }
+                    ]
+                },
+                "url": {
+                    "raw": "http://127.0.0.1:81/api/v1/company/3",
+                    "protocol": "http",
+                    "host": ["127", "0", "0", "1"],
+                    "port": "81",
+                    "path": ["api", "v1", "company", "3"],
+                    "query": [
+                        {
+                            "key": "email",
+                            "value": "werwolf@mail.ru",
+                            "disabled": true
+                        },
+                        {
+                            "key": "password",
+                            "value": "12345678",
+                            "disabled": true
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "comany.delete",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "59407b11-65cf-4620-accd-d40640e66ff0",
+                        "exec": [""],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "id": "8c3f1825-7501-4f08-8411-4694951a9ea8",
+            "request": {
+                "method": "DELETE",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{user}}",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "urlencoded",
+                    "urlencoded": [
+                        {
+                            "key": "name",
+                            "value": "ООО тест4",
+                            "type": "text",
+                            "disabled": true
+                        },
+                        {
+                            "key": "inn",
+                            "value": "1234567891",
+                            "type": "text"
+                        },
+                        {
+                            "key": "kpp",
+                            "value": "123456789",
+                            "type": "text",
+                            "disabled": true
+                        },
+                        {
+                            "key": "ogrn",
+                            "value": "1234567891244",
+                            "type": "text",
+                            "disabled": true
+                        },
+                        {
+                            "key": "address",
+                            "value": "dfsfsdfdsfds",
+                            "type": "text",
+                            "disabled": true
+                        }
+                    ]
+                },
+                "url": {
+                    "raw": "http://127.0.0.1:81/api/v1/company/3",
+                    "protocol": "http",
+                    "host": ["127", "0", "0", "1"],
+                    "port": "81",
+                    "path": ["api", "v1", "company", "3"],
+                    "query": [
+                        {
+                            "key": "email",
+                            "value": "werwolf@mail.ru",
+                            "disabled": true
+                        },
+                        {
+                            "key": "password",
+                            "value": "12345678",
+                            "disabled": true
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "comany.show",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "id": "59407b11-65cf-4620-accd-d40640e66ff0",
+                        "exec": [""],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "id": "d379054a-daad-4538-9916-2ed4b9b4b311",
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{user}}",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "urlencoded",
+                    "urlencoded": [
+                        {
+                            "key": "name",
+                            "value": "ООО тест3",
+                            "type": "text",
+                            "disabled": true
+                        },
+                        {
+                            "key": "inn",
+                            "value": "1234567891",
+                            "type": "text",
+                            "disabled": true
+                        },
+                        {
+                            "key": "kpp",
+                            "value": "123456789",
+                            "type": "text",
+                            "disabled": true
+                        },
+                        {
+                            "key": "ogrn",
+                            "value": "1234567891244",
+                            "type": "text",
+                            "disabled": true
+                        },
+                        {
+                            "key": "address",
+                            "value": "dfsfsdfdsfds",
+                            "type": "text",
+                            "disabled": true
+                        }
+                    ]
+                },
+                "url": {
+                    "raw": "http://127.0.0.1:81/api/v1/company/3",
+                    "protocol": "http",
+                    "host": ["127", "0", "0", "1"],
+                    "port": "81",
+                    "path": ["api", "v1", "company", "3"],
+                    "query": [
+                        {
+                            "key": "email",
+                            "value": "werwolf@mail.ru",
+                            "disabled": true
+                        },
+                        {
+                            "key": "password",
+                            "value": "12345678",
+                            "disabled": true
+                        }
+                    ]
+                }
+            },
+            "response": []
+        }
+    ]
+}

@@ -1,0 +1,150 @@
+// Ref: https://github.com/nuxt-community/vuetify-module#customvariables
+
+$border-color: #e9edf2;
+$inner-border-color: #c8cfd9;
+$neutral-600: #a6afbd;
+$primary-color: #710bff;
+$selected-item-color: #f7f1ff;
+$heading-font-family: 'Manrope';
+$body-font-family: 'Manrope';
+$badge-height: 16px;
+$badge-min-width: 16px;
+$badge-padding: 3px 4px;
+$badge-font-size: 10px;
+$dialog-border-radius: 24px;
+$btn-border-radius: 8px;
+$min-border-radius: 8px;
+$btn-font-sizes: (
+    'x-small': var(--btn-font-size, 10px),
+    'small': var(--btn-font-size, 12px),
+    'default': var(--btn-font-size, 16px),
+    'large': var(--btn-font-size, 16px),
+    'x-large': var(--btn-font-size, 16px),
+);
+$btn-text-transform: var(--btn-text-transform, none);
+$btn-letter-spacing: inherit;
+$btn-sizes: (
+    'default': 40,
+    'large': 48,
+);
+$btn-font-weight: var(--btn-font-weight, 700);
+$btn-toggle-dense-btn-padding: 0 12px;
+$picker-font-size: 16px;
+$date-picker-table-height: 254px;
+$date-picker-table-padding: 0 12px 12px;
+$headings: (
+    'h1': (
+        'size': var(--h1-size, 48px),
+        'line-height': var(--h1-line-height, inherit),
+        'letter-spacing': var(--h1-letter-spacing, inherit),
+    ),
+    'h2': (
+        'size': var(--h2-size, 36px),
+        'line-height': var(--h2-line-height, inherit),
+        'letter-spacing': var(--h2-letter-spacing, inherit),
+    ),
+    'h3': (
+        'size': var(--h3-size, 28px),
+        'line-height': var(--h3-line-height, inherit),
+        'letter-spacing': var(--h3-letter-spacing, inherit),
+    ),
+    'h4': (
+        'size': var(--h4-size, 24px),
+        'line-height': var(--h4-line-height, inherit),
+        'letter-spacing': var(--h4-letter-spacing, inherit),
+    ),
+    'h5': (
+        'size': var(--h5-size, 20px),
+        'line-height': var(--h5-line-height, inherit),
+        'letter-spacing': var(--h5-letter-spacing, inherit),
+    ),
+    'h6': (
+        'size': var(--h6-size, 18px),
+        'line-height': var(--h6-line-height, inherit),
+        'letter-spacing': var(--h6-letter-spacing, inherit),
+    ),
+    'subtitle-1': (
+        'size': var(--subtitle-1-size, 16px),
+        'line-height': var(--subtitle-1-line-height, inherit),
+        'letter-spacing': var(--subtitle-1-letter-spacing, inherit),
+    ),
+    'subtitle-2': (
+        'size': var(--subtitle-2-size, 16px),
+        'line-height': var(--subtitle-2-line-height, inherit),
+        'letter-spacing': var(--subtitle-2-letter-spacing, inherit),
+    ),
+    'body-1': (
+        'size': var(--body-1-size, 16px),
+        'line-height': var(--body-1-line-height, inherit),
+        'letter-spacing': var(--body-1-letter-spacing, inherit),
+    ),
+    'body-2': (
+        'size': var(--body-2-size-size, 16px),
+        'line-height': var(--body-2-line-height, inherit),
+        'letter-spacing': var(--body-2-letter-spacing, inherit),
+    ),
+    'button': (
+        'size': var(--button-size-size, 16px),
+        'line-height': var(--button-line-height, inherit),
+        'letter-spacing': var(--button-letter-spacing, inherit),
+    ),
+    'caption': (
+        'size': var(--caption-size-size, 16px),
+        'line-height': var(--caption-line-height, inherit),
+        'letter-spacing': var(--caption-letter-spacing, inherit),
+    ),
+    'overline': (
+        'size': var(--size-overline-size, 16px),
+        'line-height': var(--overline-line-height, inherit),
+        'letter-spacing': var(--overline-letter-spacing, inherit),
+    ),
+);
+$border-radius-root: 8px;
+$menu-content-border-radius: 16px;
+
+$list-item-dense-title-font-size: var(--list-item-title-font-size, 16px);
+$list-item-title-font-size: var(--list-item-title-font-size, 16px);
+$list-dense-subheader-font-size: var(--list-dense-subheader-font-size, 14px);
+$list-item-dense-title-line-height: var(--list-item-dense-title-line-height, 16px);
+$list-item-action-icon-margin: var(--list-item-action-icon-margin, 16px);
+$list-item-action-margin: var(--list-item-action-margin, 8px 0);
+$list-dense-icon-height: var(--list-dense-icon-height, 16px);
+$list-item-dense-title-font-weight: var(--list-item-font-weight, 400);
+$list-dense-min-height: var(--list-dense-min-height, 40px);
+
+$text-field-filled-full-width-outlined-single-line-slot-min-height: var(
+    --text-field-filled-full-width-outlined-single-line-slot-min-height,
+    40px
+);
+$text-field-outlined-prepend-append-margin-top: var(
+    --text-field-outlined-prepend-append-margin-top,
+    8px
+);
+$text-field-outlined-dense-label-position-x: var(
+    --text-field-outlined-dense-label-position-x,
+    10px
+);
+$text-field-dense-label-active-transform: var(
+    --text-field-dense-label-active-transform,
+    translateY(-10px) scale(0.75)
+);
+$text-field-label-active-transform: var(
+    --text-field-label-active-transform,
+    translateY(-18px) scale(0.75)
+);
+$text-field-outlined-dense-label-position-y: var(
+    --text-field-outlined-dense-label-position-y,
+    -16px
+);
+$text-field-details-margin-bottom: var(--text-field-details-margin-bottom, 8px);
+// $text-field-enclosed-details-padding: var(--text-field-enclosed-details-padding, 0);//0 0 0 12px
+$input-max-height: var(--input-max-height, 100%);
+$input-font-size: var(--input-font-size, 16px);
+$input-label-height: var(--input-label-height, 20px);
+$label-font-size: var(--label-font-size, 14px);
+$select-outlined-dense-selections-padding-top: var(
+    --select-outlined-dense-selections-padding-top,
+    4px 0
+);
+
+$label-min-height: var(--label-min-height, 8px);

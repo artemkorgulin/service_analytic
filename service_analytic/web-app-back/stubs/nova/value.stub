@@ -1,0 +1,42 @@
+<?php
+
+namespace {{ namespace }};
+
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Metrics\Value;
+
+class {{ class }} extends Value
+{
+
+    use \App\Nova\Metrics\MetricsCacheTrait;
+    use \App\Nova\Metrics\MetricsRangesTrait;
+
+    /**
+     * Default range key
+     *
+     * @var string
+     */
+    public $selectedRangeKey = 'ALL';
+
+    /**
+     * Calculate the value of the metric.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @return mixed
+     */
+    public function calculate(NovaRequest $request)
+    {
+        return $this->count($request, Model::class);
+    }
+
+
+    /**
+     * Get the URI key for the metric.
+     *
+     * @return string
+     */
+    public function uriKey()
+    {
+        return 'uri-key';
+    }
+}

@@ -1,0 +1,115 @@
+version: '3.8'
+
+services:
+  #PHP-FPM Service
+  php-fpm:
+    build:
+      context: docker/php
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME:
+      SERVICE_TAGS: dev
+      TZ: Europe/Moscow
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+      - ./docker/php/local.ini:/usr/local/etc/php/php.ini
+      - ./docker/php/socket:/socket
+    depends_on:
+      - db-event-master
+      - redis-event-master
+    networks:
+      - web-app-back_app-network
+
+  #Nginx Service
+  nginx-event-master:
+    image: nginx:alpine
+    restart: unless-stopped
+    environment:
+      TZ: Europe/Moscow
+    hostname: host.docker.internal
+    volumes:
+      - .:/var/www
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - .data/nginx/logs:/var/log/nginx
+      - ./docker/php/socket:/socket
+    depends_on:
+      - php-fpm
+    ports:
+      - "84:80"
+      - "445:443"
+    networks:
+      - web-app-back_app-network
+  #MySQL Service
+  db-event-master:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: event-master
+      MYSQL_ROOT_PASSWORD: root
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+      TZ: Europe/Moscow
+    ports:
+      - 3310:3306
+    volumes:
+      - .data/mysql-data:/var/lib/mysql
+      - ./docker/mysql/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - web-app-back_app-network
+
+  # Redis service
+  redis-event-master:
+    image: redis:6.2.5-alpine
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD}"]
+    environment:
+      TZ: Europe/Moscow
+    restart: unless-stopped
+    ports:
+      - 6380:6379
+    volumes:
+      - .data/redis-data:/redis
+    networks:
+      - web-app-back_app-network
+
+  # Laravel queue service
+  queue-event-master:
+    build: docker/queue
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME:
+      SERVICE_TAGS: dev
+      TZ: Europe/Moscow
+    volumes:
+      - .:/var/www
+      - ./docker/queue/local.ini:/usr/local/etc/php/php.ini
+    depends_on:
+      - db-event-master
+      - redis-event-master
+    networks:
+      - web-app-back_app-network
+
+  # Laravel node service
+  node-event-master:
+    build: docker/node
+    restart: unless-stopped
+    ports:
+      - 6001:6001
+    volumes:
+      - .:/var/www
+    depends_on:
+      - db-event-master
+      - redis-event-master
+    networks:
+      - web-app-back_app-network
+
+#Docker Networks
+networks:
+  web-app-back_app-network:
+    external: true
+volumes:
+  dbdata:
+    driver: local

@@ -1,0 +1,246 @@
+{
+"permissions": [
+	{
+		"name" : "user.create",
+		"guard_name" : "admin",
+        "admin": 1,
+        "manager": 0,
+        "user": 0,
+        "low_user": 0
+	},
+	{
+		"name" : "user.edit",
+		"guard_name" : "admin",
+        "admin": 1,
+        "manager": 0,
+        "user": 0,
+        "low_user": 0
+	},
+	{
+		"name" : "user.show",
+		"guard_name" : "admin",
+        "admin": 1,
+        "manager": 1,
+        "user": 0,
+        "low_user": 0
+	},
+	{
+		"name" : "user.disable",
+		"guard_name" : "admin",
+        "admin": 1,
+        "manager": 0,
+        "user": 0,
+        "low_user": 0
+	},
+	{
+		"name" : "user.delete",
+		"guard_name" : "admin",
+        "admin": 1,
+        "manager": 0,
+        "user": 0,
+        "low_user": 0
+	},
+	{
+		"name" : "user.pass",
+		"guard_name" : "admin",
+        "admin": 1,
+        "manager": 0,
+        "user": 0,
+        "low_user": 0
+	},
+	{
+		"name" : "user.balance",
+		"guard_name" : "admin",
+        "admin": 1,
+        "manager": 1,
+        "user": 0,
+        "low_user": 0
+	},
+	{
+		"name" : "user.pay",
+		"guard_name" : "admin",
+        "admin": 1,
+        "manager": 1,
+        "user": 0,
+        "low_user": 0
+	},
+	{
+		"name" : "user.report",
+		"guard_name" : "admin",
+        "admin": 1,
+        "manager": 1,
+        "user": 1,
+        "low_user": 1
+	},
+	{
+		"name" : "guide.show",
+		"guard_name" : "admin",
+        "admin": 1,
+        "manager": 1,
+        "user": 0,
+        "low_user": 0
+	},
+	{
+		"name" : "good.view",
+		"guard_name" : "admin",
+        "admin": 1,
+        "manager": 1,
+        "user": 1,
+        "low_user": 1
+	},
+	{
+		"name" : "good.edit",
+		"guard_name" : "admin",
+        "admin": 1,
+        "manager": 1,
+        "user": 1,
+        "low_user": 0
+	},
+	{
+		"name" : "analyzer.add",
+		"guard_name" : "admin",
+        "admin": 1,
+        "manager": 0,
+        "user": 0,
+        "low_user": 0
+	},
+    {
+        "name" : "analyzer.show",
+        "guard_name" : "admin",
+        "admin": 1,
+        "manager": 1,
+        "user": 1,
+        "low_user": 1
+    },
+	{
+		"name" : "analyzer.delete",
+		"guard_name" : "admin",
+        "admin": 1,
+        "manager": 0,
+        "user": 0,
+        "low_user": 0
+	},
+	{
+		"name" : "good.brand.edit",
+		"guard_name" : "admin",
+        "admin": 1,
+        "manager": 0,
+        "user": 0,
+        "low_user": 0
+	},
+	{
+		"name" : "good.brand.view",
+		"guard_name" : "admin",
+        "admin": 1,
+        "manager": 1,
+        "user": 0,
+        "low_user": 0
+	},
+	{
+		"name" : "good.specification.view",
+		"guard_name" : "admin",
+        "admin": 1,
+        "manager": 1,
+        "user": 1,
+        "low_user": 0
+	},
+	{
+		"name" : "good.specification.edit",
+		"guard_name" : "admin",
+        "admin": 1,
+        "manager": 0,
+        "user": 1,
+        "low_user": 0
+	},
+	{
+		"name" : "tariff.edit",
+		"guard_name" : "admin",
+        "admin": 1,
+        "manager": 0,
+        "user": 0,
+        "low_user": 0
+	},
+	{
+		"name" : "tariff.show",
+		"guard_name" : "admin",
+        "admin": 1,
+        "manager": 1,
+        "user": 0,
+        "low_user": 0
+	},
+	{
+		"name" : "tariff.add",
+		"guard_name" : "admin",
+        "admin": 1,
+        "manager": 0,
+        "user": 0,
+        "low_user": 0
+	},
+	{
+		"name" : "note.option",
+		"guard_name" : "admin",
+        "admin": 1,
+        "user": 1,
+        "low_user": 0
+	},
+	{
+		"name" : "note.user",
+		"guard_name" : "admin",
+        "admin": 1,
+        "manager": 0,
+        "user": 1,
+        "low_user": 0
+	},
+	{
+		"name" : "log.view",
+		"guard_name" : "admin",
+        "admin": 1,
+        "manager": 0,
+        "user": 0,
+        "low_user": 0
+	},
+	{
+		"name" : "promotion.view",
+		"guard_name" : "admin",
+        "admin": 0,
+        "manager": 1,
+        "user": 1,
+        "low_user": 0
+	},
+	{
+		"name" : "promotion.edit",
+		"guard_name" : "admin",
+        "admin": 0,
+        "manager": 1,
+        "user": 1,
+        "low_user": 0
+	},
+	{
+		"name" : "good.delete",
+		"guard_name" : "admin",
+        "admin": 1,
+        "manager": 1,
+        "user": 1,
+        "low_user": 0
+	}
+],
+    "roles": [
+        {
+            "name" : "admin",
+            "guard_name" : "admin"
+        },
+        {
+            "name" : "manager",
+            "guard_name" : "admin"
+        },
+        {
+            "name" : "user",
+            "guard_name" : "admin"
+        },
+        {
+            "name" : "low_user",
+            "guard_name" : "admin"
+        }
+    ]
+
+}

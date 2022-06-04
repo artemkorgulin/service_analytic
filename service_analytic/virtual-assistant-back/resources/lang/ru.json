@@ -1,0 +1,6 @@
+{
+    "Delete test product from command line": "Удаление тестовых продуктов из командной строки",
+    "Can't find any user account! Please try to relogin!": "Не могу найти ни одного аккаунта для этого пользователя! Попробуйте добавить аккаунт или перезайти!",
+    "Product for :account is loading": "Продукты загружаются для аккаунта :account",
+    "Get directory list and data": "Получаем данные по списку справочников"
+}

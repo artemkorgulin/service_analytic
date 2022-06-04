@@ -1,0 +1,11 @@
+{
+  "Account not found": "Аккаунт не найден",
+  "Authorization failed": "Авторизация не удалась",
+  "Can't get access to user account": "Нет доступа к аккаунту",
+  "Task load items for new account add to queue": "Загрузка товаров для нового аккаунта добавлена в очередь",
+
+  "order.period.1": "1 месяц",
+  "order.period.3": "3 месяца",
+  "order.period.6": "6 месяцев",
+  "order.period.12": "12 месяцев"
+}

@@ -1,0 +1,6 @@
+{
+    "testFiles": "**/*.spec.js",
+    "componentFolder": "components",
+    "baseUrl": "http://localhost:4000",
+    "pluginsFile": "cypress/plugins/index.js"
+}

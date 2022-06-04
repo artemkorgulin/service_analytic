@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  #PHP-FPM Service
+  php-fpm:
+    build:
+      context: docker/php
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME:
+      SERVICE_TAGS: dev
+      TZ: Europe/Moscow
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+      - ./docker/php/local.ini:/usr/local/etc/php/php.ini
+      - ./docker/php/socket:/socket
+    depends_on:
+      - redis-analytics
+    networks:
+      - web-app-back_app-network
+
+  #Nginx Service
+  nginx-analytics:
+    image: nginx:alpine
+    restart: unless-stopped
+    hostname: host.docker.internal
+    environment:
+      TZ: Europe/Moscow
+    volumes:
+      - .:/var/www
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - .data/nginx/logs:/var/log/nginx
+      - ./docker/php/socket:/socket
+    depends_on:
+      - php-fpm
+    ports:
+      - "85:80"
+      - "446:443"
+    networks:
+      - web-app-back_app-network
+
+  # Redis service
+  redis-analytics:
+    image: redis:6.2.5-alpine
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD}"]
+    environment:
+      TZ: Europe/Moscow
+    restart: unless-stopped
+    ports:
+      - 6381:6379
+    volumes:
+      - .data/redis-data:/redis
+    networks:
+      - web-app-back_app-network
+
+  # Laravel queue service
+  queue-analytics:
+    build: docker/queue
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME:
+      SERVICE_TAGS: dev
+      TZ: Europe/Moscow
+    volumes:
+      - .:/var/www
+      - ./docker/queue/local.ini:/usr/local/etc/php/php.ini
+    depends_on:
+      - redis-analytics
+    networks:
+      - web-app-back_app-network
+
+#Docker Networks
+networks:
+  web-app-back_app-network:
+    external: true
+volumes:
+  dbdata:
+    driver: local

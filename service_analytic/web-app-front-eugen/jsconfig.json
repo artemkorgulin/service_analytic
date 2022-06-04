@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "~/*": ["./*"],
+            "@/*": ["./*"],
+            "~~/*": ["./*"],
+            "@@/*": ["./*"],
+            "~use/*": ["./assets/js/use/*"],
+            "~directives/*": ["./assets/js/directives/*"],
+            "~utils/*": ["./assets/js/utils/*"],
+            "~mixins/*": ["./assets/js/mixins/*"]
+        }
+    },
+    "exclude": ["node_modules", ".nuxt", "dist"]
+}

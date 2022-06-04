@@ -1,0 +1,194 @@
+<template>
+    <VDialog v-model="isShow" content-class="modal-adm-request" :class="$style.modal">
+        <VCard :class="$style.wrapper">
+            <div :class="$style.closeBtnWrapper">
+                <VBtn
+                    icon
+                    outlined
+                    color="base-900"
+                    class="rounded"
+                    :class="$style.btn"
+                    @click="handleClose"
+                >
+                    <SvgIcon name="outlined/close" />
+                </VBtn>
+            </div>
+            <VFadeTransition mode="out-in" appear>
+                <VProgressCircular
+                    v-if="isLoading"
+                    key="loading"
+                    :class="$style.loading"
+                    indeterminate
+                    size="75"
+                    color="accent"
+                />
+                <div v-else-if="!isSuccess" key="common" :class="$style.inner">
+                    <VImg :class="$style.img" src="/images/marketplace-add.png" contain></VImg>
+                    <div :class="$style.textWrapper">
+                        <h2 :class="$style.heading">Не получается создать аккаунт?</h2>
+                        <div :class="$style.subheading">
+                            Оставьте заявку и мы свяжемся с вами в течение 24 часов
+                        </div>
+                    </div>
+                    <div class="full-width-wrap">
+                        <VBtn color="accent" large block @click="handleConfirm">
+                            Оставить заявку
+                        </VBtn>
+                    </div>
+                </div>
+                <div v-else key="success" :class="$style.inner">
+                    <VImg :class="$style.img" src="/images/check.svg" contain></VImg>
+                    <div :class="$style.textWrapper">
+                        <h2 :class="$style.heading">Заявка отправлена!</h2>
+                        <div :class="$style.subheading">
+                            Мы постараемся связаться с вами
+                            <br />
+                            в течение 24 часов.
+                        </div>
+                    </div>
+                    <div class="full-width-wrap">
+                        <VBtn outlined large block @click="handleClose">Отлично</VBtn>
+                    </div>
+                </div>
+            </VFadeTransition>
+        </VCard>
+    </VDialog>
+</template>
+
+<script>
+    import { mapState, mapMutations } from 'vuex';
+    export default {
+        name: 'ModalTheMarketplaceAdd',
+        data() {
+            return {
+                isLoading: false,
+                isSuccess: false,
+            };
+        },
+        computed: {
+            ...mapState({
+                isModalShow: state => state.modal.isModalShow,
+            }),
+            isShow: {
+                get() {
+                    return this.isModalShow;
+                },
+                set(value) {
+                    this.setModal(value);
+                },
+            },
+        },
+        methods: {
+            ...mapMutations('modal', ['setModal']),
+            async handleConfirm() {
+                this.isLoading = true;
+                try {
+                    const { success, errors } = await this.$axios.$get(
+                        '/api/v1/send-mail?type=add_account'
+                    );
+
+                    if (!success) {
+                        throw new Error(errors || 'err');
+                    }
+                    this.isLoading = false;
+                    this.isSuccess = true;
+                } catch (error) {
+                    this.isLoading = false;
+                    this.isSuccess = false;
+                }
+            },
+            handleClose() {
+                this.isSuccess = false;
+                this.setModal(false);
+            },
+        },
+    };
+</script>
+<style lang="scss" module>
+    :global(.modal-adm-request) {
+        max-width: 560px;
+    }
+
+    .wrapper {
+        position: relative;
+        min-height: 369px;
+    }
+
+    .loading {
+        @include centerer;
+    }
+
+    .inner {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        min-height: inherit;
+        padding: 24px;
+        flex-direction: column;
+    }
+
+    .closeBtnWrapper {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+
+        .closeBtn {
+            width: 32px;
+            height: 32px;
+        }
+    }
+
+    .img {
+        height: 156px;
+        max-height: 156px;
+        margin-top: 4px;
+        margin-bottom: 16px;
+    }
+
+    .heading {
+        @extend %text-h4;
+
+        margin-bottom: 16px;
+        text-align: center;
+    }
+
+    .subheading {
+        margin-right: auto;
+        margin-left: auto;
+        text-align: center;
+        font-size: 16px;
+        line-height: 150%;
+    }
+
+    .textWrapper {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex: 1;
+        width: 100%;
+        flex-direction: column;
+        margin-bottom: 24px;
+    }
+
+    .btn {
+        border-color: $base-400 !important;
+
+        &:before {
+            background-color: transparent !important;
+        }
+
+        &:hover {
+            color: $primary-500 !important;
+
+            &:before,
+            &:focus {
+                background-color: transparent !important;
+            }
+        }
+    }
+
+    .modal {
+        z-index: 500;
+    }
+</style>

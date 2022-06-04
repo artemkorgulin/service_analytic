@@ -1,0 +1,196 @@
+stages:
+  - deploy
+
+.before_script_prepare_env: &before_script_prepare_env
+  - mkdir docker
+  - cp -rf env-ci/docker/base/* docker/
+  - cp -rf env-ci/docker/$ENV_NAME/* docker/ || true
+  - cp -f env-ci/docker/yml/docker-compose.$ENV_NAME.yml docker-compose.yml
+
+  - cp -f env-ci/env/.env-$ENV_NAME .env
+
+  - sed -i s/^APP_KEY=$/APP_KEY=$APP_KEY/ .env
+  - sed -i s/^DB_PASSWORD=$/DB_PASSWORD=$DB_PASSWORD/ .env
+  - sed -i s/^DB_PASSWORD=$/VA_DB_PASSWORD=$DB_PASSWORD/ .env
+  - sed -i s/^DB_PASSWORD=$/WAB_DB_PASSWORD=$DB_PASSWORD/ .env
+  - sed -i s/^EVENT_MASTER_TOKEN=$/EVENT_MASTER_TOKEN=$EVENT_MASTER_TOKEN/ .env
+  - sed -i s/^GOD_USER_NAME=$/GOD_USER_NAME=$GOD_USER_NAME/ .env
+  - sed -i s/^GOD_USER_PASSWORD=$/GOD_USER_PASSWORD=$GOD_USER_PASSWORD/ .env
+  - sed -i s/^JWT_SECRET=$/JWT_SECRET=$JWT_SECRET/ .env
+  - sed -i s/^OZON_SELLER_SERVICE_API_KEY=$/OZON_SELLER_SERVICE_API_KEY=$OZON_SELLER_SERVICE_API_KEY/ .env
+  - sed -i s/^OZON_SELLER_SERVICE_CLIENT_ID=$/OZON_SELLER_SERVICE_CLIENT_ID=$OZON_SELLER_SERVICE_CLIENT_ID/ .env
+  - sed -i s/^REDIS_PASSWORD=$/REDIS_PASSWORD=$REDIS_PASSWORD/ .env
+  - sed -i s/^WEB_APP_TOKEN=$/WEB_APP_TOKEN=$WEB_APP_TOKEN/ .env
+  - sed -i s/^SENTRY_LARAVEL_DSN=$/SENTRY_LARAVEL_DSN=$SENTRY_LARAVEL_DSN/ .env
+
+deploy-dev:
+  stage: deploy
+  environment: develop
+  tags:
+    - dev
+  only:
+    - develop
+  variables:
+    ENV_NAME: dev
+    ENV_SUFFIX: _DEV
+    APP_KEY: $APP_KEY_DEV
+    DB_PASSWORD: $DB_PASSWORD_DEV
+    EVENT_MASTER_TOKEN: $EVENT_MASTER_TOKEN_DEV
+    GOD_USER_NAME: $GOD_USER_NAME_DEV
+    GOD_USER_PASSWORD: $GOD_USER_PASSWORD_DEV
+    JWT_SECRET: $JWT_SECRET_DEV
+    OZON_SELLER_SERVICE_API_KEY: $OZON_SELLER_SERVICE_API_KEY_DEV
+    OZON_SELLER_SERVICE_CLIENT_ID: $OZON_SELLER_SERVICE_CLIENT_ID_DEV
+    REDIS_PASSWORD: $REDIS_PASSWORD_DEV
+    WEB_APP_TOKEN: $WEB_APP_TOKEN_DEV
+    SENTRY_LARAVEL_DSN: $SENTRY_LARAVEL_DSN_DEV
+
+
+    DEPLOY_PATH: "/var/www/containers/bids-manager-back"
+
+  before_script:
+    - *before_script_prepare_env
+
+  script:
+    #build
+    - composer --no-interaction --no-progress install
+    - docker-compose build
+
+    #deploy
+    - sudo rsync -rlog --delete --exclude=/.data --exclude=/env-ci --exclude=/.git --usermap=*:1000 --groupmap=*:1000 ./ $DEPLOY_PATH/
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml  up -d
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-bids ./clear_cache.sh
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml restart octane-bids
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -u 0 -T octane-bids service cron start
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-bids php artisan migrate --force
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-bids php artisan horizon:publish
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T queue-bids php artisan horizon:terminate
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml restart queue-bids
+
+
+deploy-test:
+  stage: deploy
+  environment: testing
+  tags:
+    - test
+  only:
+    - test
+  variables:
+    ENV_NAME: test
+    ENV_SUFFIX: _TEST
+    APP_KEY: $APP_KEY_TEST
+    DB_PASSWORD: $DB_PASSWORD_TEST
+    EVENT_MASTER_TOKEN: $EVENT_MASTER_TOKEN_TEST
+    GOD_USER_NAME: $GOD_USER_NAME_TEST
+    GOD_USER_PASSWORD: $GOD_USER_PASSWORD_TEST
+    JWT_SECRET: $JWT_SECRET_TEST
+    OZON_SELLER_SERVICE_API_KEY: $OZON_SELLER_SERVICE_API_KEY_TEST
+    OZON_SELLER_SERVICE_CLIENT_ID: $OZON_SELLER_SERVICE_CLIENT_ID_TEST
+    REDIS_PASSWORD: $REDIS_PASSWORD_TEST
+    WEB_APP_TOKEN: $WEB_APP_TOKEN_TEST
+    SENTRY_LARAVEL_DSN: $SENTRY_LARAVEL_DSN_TEST
+
+    DEPLOY_PATH: "/var/www/containers/bids-manager-back"
+
+  before_script:
+    - *before_script_prepare_env
+
+  script:
+    # build
+    - composer --no-interaction --no-progress install
+    - docker-compose build
+
+    #deploy
+    - sudo rsync -rlog --delete --exclude=/.data --exclude=/env-ci --exclude=/.git --usermap=*:1000 --groupmap=*:1000 ./ $DEPLOY_PATH/
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml up -d
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-bids ./clear_cache.sh
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml restart octane-bids
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -u 0 -T octane-bids service cron start
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-bids php artisan migrate --force
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-bids php artisan horizon:publish
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T queue-bids php artisan horizon:terminate
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml restart queue-bids
+
+deploy-prod:
+  stage: deploy
+  environment: production
+  tags:
+    - prod
+  only:
+    - master
+  variables:
+    ENV_NAME: prod
+    ENV_SUFFIX: _PROD
+    APP_KEY: $APP_KEY_PROD
+    DB_PASSWORD: $DB_PASSWORD_PROD
+    EVENT_MASTER_TOKEN: $EVENT_MASTER_TOKEN_PROD
+    GOD_USER_NAME: $GOD_USER_NAME_PROD
+    GOD_USER_PASSWORD: $GOD_USER_PASSWORD_PROD
+    JWT_SECRET: $JWT_SECRET_PROD
+    OZON_SELLER_SERVICE_API_KEY: $OZON_SELLER_SERVICE_API_KEY_PROD
+    OZON_SELLER_SERVICE_CLIENT_ID: $OZON_SELLER_SERVICE_CLIENT_ID_PROD
+    REDIS_PASSWORD: $REDIS_PASSWORD_PROD
+    WEB_APP_TOKEN: $WEB_APP_TOKEN_PROD
+    SENTRY_LARAVEL_DSN: $SENTRY_LARAVEL_DSN_PROD
+
+    DEPLOY_PATH: "/var/www/containers/bids-manager-back"
+  before_script:
+    - *before_script_prepare_env
+
+  script:
+    # build
+    - composer --no-interaction --no-progress install
+    - docker-compose build
+
+    #deploy
+    - sudo rsync -rlog --delete --exclude=/.data --exclude=/env-ci --exclude=/.git --usermap=*:1000 --groupmap=*:1000 ./ $DEPLOY_PATH/
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml up -d
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-bids ./clear_cache.sh
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml restart octane-bids
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -u 0 -T octane-bids service cron start
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-bids php artisan migrate --force
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-bids php artisan horizon:publish
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T queue-bids php artisan horizon:terminate
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml restart queue-bids
+
+deploy-demo:
+  stage: deploy
+  environment: demo
+  tags:
+    - demo
+  only:
+    - demo
+  variables:
+    ENV_NAME: demo
+    ENV_SUFFIX: _DEMO
+    APP_KEY: $APP_KEY_DEMO
+    DB_PASSWORD: $DB_PASSWORD_DEMO
+    EVENT_MASTER_TOKEN: $EVENT_MASTER_TOKEN_DEMO
+    GOD_USER_NAME: $GOD_USER_NAME_DEMO
+    GOD_USER_PASSWORD: $GOD_USER_PASSWORD_DEMO
+    JWT_SECRET: $JWT_SECRET_DEMO
+    OZON_SELLER_SERVICE_API_KEY: $OZON_SELLER_SERVICE_API_KEY_DEMO
+    OZON_SELLER_SERVICE_CLIENT_ID: $OZON_SELLER_SERVICE_CLIENT_ID_DEMO
+    REDIS_PASSWORD: $REDIS_PASSWORD_DEMO
+    WEB_APP_TOKEN: $WEB_APP_TOKEN_DEMO
+    SENTRY_LARAVEL_DSN: $SENTRY_LARAVEL_DSN_DEMO
+
+    DEPLOY_PATH: "/var/www/containers/bids-manager-back"
+  before_script:
+    - *before_script_prepare_env
+
+  script:
+    # build
+    - composer --no-interaction --no-progress install
+    - docker-compose build
+
+    #deploy
+    - sudo rsync -rlog --delete --exclude=/.data --exclude=/env-ci --exclude=/.git --usermap=*:1000 --groupmap=*:1000 ./ $DEPLOY_PATH/
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml up -d
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-bids ./clear_cache.sh
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml restart octane-bids
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -u 0 -T octane-bids service cron start
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-bids php artisan migrate --force
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-bids php artisan horizon:publish
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T queue-bids php artisan horizon:terminate
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml restart queue-bids

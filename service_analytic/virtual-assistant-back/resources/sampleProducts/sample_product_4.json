@@ -1,0 +1,746 @@
+{
+    "data": {
+        "is_sample": true,
+        "id": 4,
+        "name": "Чехол (для Apple iPhone XS Max, Color, черный) Vipe VPIPXSMAXCOLBLK",
+        "bread_crumbs": "Электроника - Чехол - Чехол для смартфона",
+        "web_category_name": "Информация о категории товара недоступна",
+        "rating": 0,
+        "reviews": 0,
+        "photos": 1,
+        "photo_url": "http:\/\/nowatermark.ozone.ru\/s3\/multimedia-z\/6008477927.jpg",
+        "url": "https:\/\/www.ozon.ru\/context\/detail\/id\/148623336",
+        "price": "381.00",
+        "status": "Проверен",
+        "updated": "2021-04-29T08:34:29.000000Z",
+        "characteristics": {
+            "306122": {
+                "id": 306122,
+                "external_id": 85,
+                "name": "Бренд",
+                "value": "",
+                "options": [
+                    {
+                        "id": 4622269,
+                        "value": "Vipe"
+                    }
+                ],
+                "is_required": 1,
+                "is_collection": 0,
+                "is_reference": 1,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            },
+            "306152": {
+                "id": 306152,
+                "external_id": 9048,
+                "name": "Название модели",
+                "value": "Чехол  для Apple iPhone XS Max, Color",
+                "options": [],
+                "is_required": 1,
+                "is_collection": 0,
+                "is_reference": 0,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            },
+            "306138": {
+                "id": 306138,
+                "external_id": 4389,
+                "name": "Страна-изготовитель",
+                "value": "",
+                "options": [
+                    {
+                        "id": 5028066,
+                        "value": "Китай"
+                    }
+                ],
+                "is_required": 0,
+                "is_collection": 1,
+                "is_reference": 1,
+                "is_specialty": 0,
+                "description": null,
+                "type": "",
+                "chosen_count": 1,
+                "count": 265
+            },
+            "322028": {
+                "id": 322028,
+                "external_id": 8229,
+                "name": "Тип",
+                "value": "",
+                "options": [
+                    {
+                        "id": 2898873,
+                        "value": "Чехол для смартфона"
+                    }
+                ],
+                "is_required": 1,
+                "is_collection": 1,
+                "is_reference": 1,
+                "is_specialty": 0,
+                "description": null,
+                "type": "",
+                "chosen_count": 1,
+                "count": 9
+            },
+            "311647": {
+                "id": 311647,
+                "external_id": 59,
+                "name": "Цвет",
+                "value": "",
+                "options": [
+                    {
+                        "id": 666320857,
+                        "value": "черный"
+                    }
+                ],
+                "is_required": 0,
+                "is_collection": 1,
+                "is_reference": 1,
+                "is_specialty": 0,
+                "description": null,
+                "type": "",
+                "chosen_count": 1,
+                "count": 47
+            },
+            "307166": {
+                "id": 307166,
+                "external_id": 5085,
+                "name": "Материал",
+                "value": "",
+                "options": [
+                    {
+                        "id": 10931131,
+                        "value": "Полиуретан"
+                    }
+                ],
+                "is_required": 0,
+                "is_collection": 1,
+                "is_reference": 1,
+                "is_specialty": 0,
+                "description": null,
+                "type": "",
+                "chosen_count": 1,
+                "count": 153
+            },
+            "306132": {
+                "id": 306132,
+                "external_id": 4180,
+                "name": "Название",
+                "value": "Чехол (для Apple iPhone XS Max, Color, черный) Vipe VPIPXSMAXCOLBLK",
+                "options": [],
+                "is_required": 0,
+                "is_collection": 0,
+                "is_reference": 0,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            },
+            "306133": {
+                "id": 306133,
+                "external_id": 4191,
+                "name": "Аннотация",
+                "value": "Чехол (для Apple iPhone XS Max, Color, черный) Vipe VPIPXSMAXCOLBLK",
+                "options": [],
+                "is_required": 0,
+                "is_collection": 0,
+                "is_reference": 0,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            },
+            "306151": {
+                "id": 306151,
+                "external_id": 9024,
+                "name": "Артикул",
+                "value": "644-VPIPXSMAXCOLBLK",
+                "options": [],
+                "is_required": 0,
+                "is_collection": 0,
+                "is_reference": 0,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            }
+        },
+        "error_characteristics": [],
+        "recomended_characteristics": [
+            {
+                "id": 306122,
+                "name": "Бренд",
+                "external_id": 85,
+                "is_required": 1,
+                "is_collection": 0,
+                "is_reference": 1,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            },
+            {
+                "id": 316725,
+                "name": "Рекомендовано для",
+                "external_id": 5076,
+                "is_required": 0,
+                "is_collection": 1,
+                "is_reference": 1,
+                "is_specialty": 0,
+                "description": null,
+                "type": "",
+                "chosen_count": 0,
+                "count": 0
+            },
+            {
+                "id": 321252,
+                "name": "Модель устройства",
+                "external_id": 5219,
+                "is_required": 0,
+                "is_collection": 1,
+                "is_reference": 1,
+                "is_specialty": 0,
+                "description": null,
+                "type": "",
+                "chosen_count": 0,
+                "count": 0
+            },
+            {
+                "id": 322006,
+                "name": "Вид чехла",
+                "external_id": 5938,
+                "is_required": 1,
+                "is_collection": 0,
+                "is_reference": 1,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            },
+            {
+                "id": 322028,
+                "name": "Тип",
+                "external_id": 8229,
+                "is_required": 1,
+                "is_collection": 1,
+                "is_reference": 1,
+                "is_specialty": 0,
+                "description": null,
+                "type": "",
+                "chosen_count": 0,
+                "count": 9
+            },
+            {
+                "id": 306152,
+                "name": "Название модели",
+                "external_id": 9048,
+                "is_required": 1,
+                "is_collection": 0,
+                "is_reference": 0,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            },
+            {
+                "id": 306162,
+                "name": "Цвет товара",
+                "external_id": 10096,
+                "is_required": 0,
+                "is_collection": 1,
+                "is_reference": 1,
+                "is_specialty": 0,
+                "description": null,
+                "type": "",
+                "chosen_count": 0,
+                "count": 54
+            },
+            {
+                "id": 306129,
+                "name": "Серии",
+                "external_id": 88,
+                "is_required": 0,
+                "is_collection": 0,
+                "is_reference": 1,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            },
+            {
+                "id": 306130,
+                "name": "Код ролика на YouTube",
+                "external_id": 4074,
+                "is_required": 0,
+                "is_collection": 0,
+                "is_reference": 0,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            },
+            {
+                "id": 306131,
+                "name": "3D-изображение",
+                "external_id": 4080,
+                "is_required": 0,
+                "is_collection": 1,
+                "is_reference": 0,
+                "is_specialty": 0,
+                "description": null,
+                "type": "",
+                "chosen_count": 0,
+                "count": 0
+            },
+            {
+                "id": 306132,
+                "name": "Название",
+                "external_id": 4180,
+                "is_required": 0,
+                "is_collection": 0,
+                "is_reference": 0,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            },
+            {
+                "id": 306133,
+                "name": "Аннотация",
+                "external_id": 4191,
+                "is_required": 0,
+                "is_collection": 0,
+                "is_reference": 0,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            },
+            {
+                "id": 306134,
+                "name": "Изображения",
+                "external_id": 4195,
+                "is_required": 0,
+                "is_collection": 1,
+                "is_reference": 0,
+                "is_specialty": 0,
+                "description": null,
+                "type": "",
+                "chosen_count": 0,
+                "count": 0
+            },
+            {
+                "id": 307450,
+                "name": "Партномер",
+                "external_id": 4381,
+                "is_required": 0,
+                "is_collection": 0,
+                "is_reference": 0,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            },
+            {
+                "id": 306222,
+                "name": "Вес товара, г",
+                "external_id": 4383,
+                "is_required": 0,
+                "is_collection": 0,
+                "is_reference": 0,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            },
+            {
+                "id": 306135,
+                "name": "Комплектация",
+                "external_id": 4384,
+                "is_required": 0,
+                "is_collection": 0,
+                "is_reference": 0,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            },
+            {
+                "id": 306136,
+                "name": "Гарантия",
+                "external_id": 4385,
+                "is_required": 0,
+                "is_collection": 0,
+                "is_reference": 0,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            },
+            {
+                "id": 306138,
+                "name": "Страна-изготовитель",
+                "external_id": 4389,
+                "is_required": 0,
+                "is_collection": 1,
+                "is_reference": 1,
+                "is_specialty": 0,
+                "description": null,
+                "type": "",
+                "chosen_count": 0,
+                "count": 265
+            },
+            {
+                "id": 307166,
+                "name": "Материал",
+                "external_id": 5085,
+                "is_required": 0,
+                "is_collection": 1,
+                "is_reference": 1,
+                "is_specialty": 0,
+                "description": null,
+                "type": "",
+                "chosen_count": 0,
+                "count": 153
+            },
+            {
+                "id": 311013,
+                "name": "Застежка",
+                "external_id": 5940,
+                "is_required": 0,
+                "is_collection": 1,
+                "is_reference": 1,
+                "is_specialty": 0,
+                "description": null,
+                "type": "",
+                "chosen_count": 0,
+                "count": 0
+            },
+            {
+                "id": 322008,
+                "name": "Особенности",
+                "external_id": 5941,
+                "is_required": 0,
+                "is_collection": 1,
+                "is_reference": 1,
+                "is_specialty": 1,
+                "description": null,
+                "type": "",
+                "chosen_count": 0,
+                "count": 0
+            },
+            {
+                "id": 322009,
+                "name": "Внешние размеры, мм",
+                "external_id": 5942,
+                "is_required": 0,
+                "is_collection": 0,
+                "is_reference": 0,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            },
+            {
+                "id": 322010,
+                "name": "Размеры основного отделения, мм",
+                "external_id": 5943,
+                "is_required": 0,
+                "is_collection": 0,
+                "is_reference": 0,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            },
+            {
+                "id": 321842,
+                "name": "Макс. диагональ, дюймы",
+                "external_id": 8590,
+                "is_required": 0,
+                "is_collection": 0,
+                "is_reference": 0,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            },
+            {
+                "id": 321843,
+                "name": "Мин. диагональ, дюймы",
+                "external_id": 8591,
+                "is_required": 0,
+                "is_collection": 0,
+                "is_reference": 0,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            },
+            {
+                "id": 306151,
+                "name": "Артикул",
+                "external_id": 9024,
+                "is_required": 0,
+                "is_collection": 0,
+                "is_reference": 0,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            },
+            {
+                "id": 307519,
+                "name": "Модель браслета\/умных часов",
+                "external_id": 9336,
+                "is_required": 0,
+                "is_collection": 1,
+                "is_reference": 1,
+                "is_specialty": 0,
+                "description": null,
+                "type": "",
+                "chosen_count": 0,
+                "count": 279
+            },
+            {
+                "id": 306160,
+                "name": "Класс опасности товара",
+                "external_id": 9782,
+                "is_required": 0,
+                "is_collection": 0,
+                "is_reference": 1,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            },
+            {
+                "id": 306163,
+                "name": "Название цвета",
+                "external_id": 10097,
+                "is_required": 0,
+                "is_collection": 0,
+                "is_reference": 0,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            },
+            {
+                "id": 306164,
+                "name": "Образец цвета",
+                "external_id": 10098,
+                "is_required": 0,
+                "is_collection": 0,
+                "is_reference": 0,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            },
+            {
+                "id": 306128,
+                "name": "Объединить на одной карточке",
+                "external_id": 10289,
+                "is_required": 0,
+                "is_collection": 0,
+                "is_reference": 0,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            },
+            {
+                "id": 306166,
+                "name": "Rich-контент JSON",
+                "external_id": 11254,
+                "is_required": 0,
+                "is_collection": 0,
+                "is_reference": 0,
+                "is_specialty": 0,
+                "description": null,
+                "type": ""
+            }
+        ],
+        "price_recommendation_higher": true,
+        "triggers": {
+            "position": 0,
+            "photos": false,
+            "reviews": false,
+            "characteristics": null,
+            "characteristics_options": null,
+            "removedFromSale": false
+        },
+        "positions": [],
+        "recomendations": [
+            {
+                "header": "Рейтинг",
+                "text": "Для улучшения рейтинга товара до «5» необходимо еще 1 отзыв с оценкой «5»"
+            },
+            {
+                "header": "Заголовок",
+                "text": "Советуем оптимизировать заголовок в сервисе",
+                "link": "https://assistant.korgulin.ru/step-1"
+            },
+            {
+                "header": "Характеристики",
+                "text": "Для оптимизации карточки товара рекомендуем заполнить характеристики:",
+                "items": {
+                    "1": "Изображение",
+                    "2": "Рекомендовано для",
+                    "3": "Модель устройства",
+                    "4": "Вид чехла",
+                    "7": "Цвет товара",
+                    "8": "Серии",
+                    "9": "Код ролика на YouTube",
+                    "10": "3D-изображение",
+                    "13": "Изображения",
+                    "14": "Партномер",
+                    "15": "Вес товара, г",
+                    "16": "Комплектация",
+                    "17": "Гарантия",
+                    "20": "Застежка",
+                    "21": "Особенности",
+                    "22": "Внешние размеры, мм",
+                    "23": "Размеры основного отделения, мм",
+                    "24": "Макс. диагональ, дюймы",
+                    "25": "Мин. диагональ, дюймы",
+                    "26": "Название файла PDF",
+                    "27": "Документ PDF",
+                    "29": "Модель браслета\/умных часов",
+                    "31": "Класс опасности товара",
+                    "32": "Название цвета",
+                    "33": "Образец цвета",
+                    "34": "Объединить на одной карточке",
+                    "35": "Rich-контент JSON"
+                }
+            },
+            {
+                "header": "Особенности",
+                "text": "Для оптимизации этой карточки товара рекомендуем использовать следующие особенности:",
+                "items": [
+                    "Особенности"
+                ]
+            }
+        ],
+        "card_updated": 1,
+        "characteristics_updated_at": "2021-04-23 10:53:41",
+        "characteristics_updated": 1,
+        "position_updated": 0,
+        "mpstat_updated_at": null,
+        "web_category_parsed_at": null,
+        "is_advertised": 0,
+        "price_error": null,
+        "show_success_alert": 0,
+        "optimization": 80,
+        "old_price": "420.00",
+        "positions": {
+            "Электроника/Чехол/Чехол для смартфона": [
+                {
+                    "date": "2021-04-12",
+                    "position": 208
+                },
+                {
+                    "date": "2021-04-13",
+                    "position": 240
+                },
+                {
+                    "date": "2021-04-14",
+                    "position": 250
+                },
+                {
+                    "date": "2021-04-15",
+                    "position": 265
+                },
+                {
+                    "date": "2021-04-16",
+                    "position": 589
+                },
+                {
+                    "date": "2021-04-17",
+                    "position": 548
+                },
+                {
+                    "date": "2021-04-18",
+                    "position": 527
+                },
+                {
+                    "date": "2021-04-19",
+                    "position": 530
+                },
+                {
+                    "date": "2021-04-20",
+                    "position": 420
+                },
+                {
+                    "date": "2021-04-21",
+                    "position": 444
+                },
+                {
+                    "date": "2021-04-22",
+                    "position": 350
+                },
+                {
+                    "date": "2021-04-23",
+                    "position": 380
+                },
+                {
+                    "date": "2021-04-24",
+                    "position": 460
+                },
+                {
+                    "date": "2021-04-25",
+                    "position": 500
+                },
+                {
+                    "date": "2021-04-26",
+                    "position": 541
+                },
+                {
+                    "date": "2021-04-27",
+                    "position": 555
+                },
+                {
+                    "date": "2021-04-28",
+                    "position": 420
+                },
+                {
+                    "date": "2021-04-29",
+                    "position": 457
+                },
+                {
+                    "date": "2021-04-30",
+                    "position": 570
+                },
+                {
+                    "date": "2021-05-01",
+                    "position": 600
+                },
+                {
+                    "date": "2021-05-02",
+                    "position": 420
+                },
+                {
+                    "date": "2021-05-03",
+                    "position": 320
+                },
+                {
+                    "date": "2021-05-04",
+                    "position": 350
+                },
+                {
+                    "date": "2021-05-05",
+                    "position": 300
+                },
+                {
+                    "date": "2021-05-06",
+                    "position": 289
+                },
+                {
+                    "date": "2021-05-07",
+                    "position": 230
+                },
+                {
+                    "date": "2021-05-08",
+                    "position": 300
+                },
+                {
+                    "date": "2021-05-09",
+                    "position": 350
+                },
+                {
+                    "date": "2021-05-10",
+                    "position": 325
+                },
+                {
+                    "date": "2021-05-11",
+                    "position": 280
+                },
+                {
+                    "date": "2021-05-12",
+                    "position": 245
+                }
+            ]
+        }
+    }
+}

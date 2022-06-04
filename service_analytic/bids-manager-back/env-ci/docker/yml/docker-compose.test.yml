@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  #Nginx Service
+  nginx-bids:
+    build: docker/nginx
+    restart: unless-stopped
+    environment:
+      TZ: Europe/Moscow
+    volumes:
+      - .:/var/www
+      - .data/nginx/logs:/var/log/nginx
+    depends_on:
+      - octane-bids
+    links:
+      - octane-bids
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "82:80"
+    networks:
+      - web-app-back_app-network
+
+  # Redis service
+  redis-bids:
+    image: redis:6.2.5
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD}"]
+    restart: unless-stopped
+    volumes:
+      - .data/redis-data:/redis
+    networks:
+      - web-app-back_app-network
+
+  octane-bids:
+    build: docker/octane
+    environment:
+      DISABLE_DEFAULT_SERVER: 1
+      TZ: Europe/Moscow
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+      - ./docker/octane/php.ini:/usr/local/etc/php/php.ini
+      - .data/app/logs:/var/www/storage/logs
+    ports:
+      - 8082:8082
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - web-app-back_app-network
+
+  # Laravel queue service
+  queue-bids:
+    build: docker/queue
+    restart: unless-stopped
+    tty: true
+    environment:
+      TZ: Europe/Moscow
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+      - ./docker/queue/php.ini:/usr/local/etc/php/php.ini
+      - .data/app/logs:/var/www/storage/logs
+    depends_on:
+      - redis-bids
+    networks:
+      - web-app-back_app-network
+
+#Docker Networks
+networks:
+  web-app-back_app-network:
+    external: true

@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+  frontend:
+    image: registry.gitlab.korgulin.ru/root/web-app-front-eugen:${TAG:-latest}
+    restart: always
+    build:
+      context: ./
+      cache_from: ["registry.gitlab.korgulin.ru/root/web-app-front-eugen:${CACHE_FROM_TAG:-latest}"]
+    command: npm run start
+    entrypoint: ./entrypoint.production.sh
+    environment:
+      - SENTRY_DSN
+      - SERVER_API_URL
+      - CLIENT_API_URL
+      - PROXY_URL
+    volumes:
+      - nuxt:/app/nuxt_volume:delegated
+    ports:
+      - 127.0.0.1:18080:8080
+
+volumes:
+  nuxt:
+

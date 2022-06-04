@@ -1,0 +1,197 @@
+stages:
+  - deploy
+
+.before_script_prepare_env: &before_script_prepare_env
+  - mkdir docker
+  - cp -rf env-ci/docker/base/* docker/
+  - cp -rf env-ci/docker/$ENV_NAME/* docker/ || true
+  - cp -f env-ci/docker/yml/docker-compose.$ENV_NAME.yml docker-compose.yml
+  - cp -f env-ci/env/.env-$ENV_NAME .env
+
+  - sed -i s/^APP_KEY=$/APP_KEY=$APP_KEY/ .env
+  - sed -i s/^DB_PASSWORD=$/DB_PASSWORD=$DB_PASSWORD/ .env
+  - sed -i s/^MAIL_PASSWORD=$/MAIL_PASSWORD=$MAIL_PASSWORD/ .env
+  - sed -i s/^REDIS_PASSWORD=$/REDIS_PASSWORD=$REDIS_PASSWORD/ .env
+  - sed -i s/^VA_DB_PASSWORD=$/VA_DB_PASSWORD=$VA_DB_PASSWORD/ .env
+  - sed -i s/^WEB_APP_TOKEN=$/WEB_APP_TOKEN=$WEB_APP_TOKEN/ .env
+  - sed -i s/^CH_PASSWORD=$/CH_PASSWORD=$CH_PASSWORD/ .env
+  - sed -i s/^SENTRY_LARAVEL_DSN=$/SENTRY_LARAVEL_DSN=$SENTRY_LARAVEL_DSN/ .env
+  - sed -i s/^DB_OZON_PASSWORD=$/DB_OZON_PASSWORD=$DB_OZON_PASSWORD/ .env
+  - sed -i s/^DB_ANALYTICA_OZ_PASSWORD=$/DB_ANALYTICA_OZ_PASSWORD=$DB_ANALYTICA_OZ_PASSWORD/ .env
+
+
+deploy-dev:
+  stage: deploy
+  environment: develop
+  tags:
+    - dev
+  only:
+    - develop
+  variables:
+    ENV_NAME: dev
+    ENV_SUFFIX: _DEV
+    APP_KEY: $APP_KEY_DEV
+    DB_PASSWORD: $DB_PASSWORD_DEV
+    MAIL_PASSWORD: $MAIL_PASSWORD_DEV
+    REDIS_PASSWORD: $REDIS_PASSWORD_DEV
+    VA_DB_PASSWORD: $VA_DB_PASSWORD_DEV
+    WEB_APP_TOKEN: $WEB_APP_TOKEN_DEV
+    CH_PASSWORD: $CH_PASSWORD_DEV
+    SENTRY_LARAVEL_DSN: $SENTRY_LARAVEL_DSN_DEV
+    DB_OZON_PASSWORD: $DB_OZON_PASSWORD
+    DB_ANALYTICA_OZ_PASSWORD: $DB_ANALYTICA_OZ_PASSWORD
+
+    DEPLOY_PATH: "/var/www/containers/analytics"
+
+  before_script:
+    - *before_script_prepare_env
+
+  script:
+    #build
+    - composer --no-interaction --no-progress install
+    - docker-compose build
+
+    #deploy
+    - sudo rsync -rlog --delete --exclude=/.data --exclude=/env-ci --exclude=/.git --usermap=*:1000 --groupmap=*:1000 ./ $DEPLOY_PATH/
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml up -d
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-analytics ./clear_cache.sh
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml restart octane-analytics
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -u 0 -T octane-analytics service cron start
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-analytics php artisan migrate --force --database=analytica
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-analytics php artisan migrate --force --path=/database/migrations/static --database=static
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-analytics php artisan migrate --force --path=/database/migrations/ozon --database=analytica_oz
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-analytics php artisan horizon:publish
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T queue-analytics php artisan horizon:terminate
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml restart queue-analytics
+
+deploy-test:
+  stage: deploy
+  environment: testing
+  tags:
+    - test
+  only:
+    - test
+  variables:
+    ENV_NAME: test
+    ENV_SUFFIX: _TEST
+    APP_KEY: $APP_KEY_TEST
+    DB_PASSWORD: $DB_PASSWORD_TEST
+    MAIL_PASSWORD: $MAIL_PASSWORD_TEST
+    REDIS_PASSWORD: $REDIS_PASSWORD_TEST
+    VA_DB_PASSWORD: $VA_DB_PASSWORD_TEST
+    WEB_APP_TOKEN: $WEB_APP_TOKEN_TEST
+    CH_PASSWORD: $CH_PASSWORD_TEST
+    SENTRY_LARAVEL_DSN: $SENTRY_LARAVEL_DSN_TEST
+    DB_OZON_PASSWORD: $DB_OZON_PASSWORD
+    DB_ANALYTICA_OZ_PASSWORD: $DB_ANALYTICA_OZ_PASSWORD
+
+    DEPLOY_PATH: "/var/www/containers/analytics"
+
+  before_script:
+    - *before_script_prepare_env
+
+  script:
+    # build
+    - composer --no-interaction --no-progress install
+    - docker-compose build
+
+    #deploy
+    - sudo rsync -rlog --delete --exclude=/.data --exclude=/env-ci --exclude=/.git --usermap=*:1000 --groupmap=*:1000 ./ $DEPLOY_PATH/
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml up -d
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-analytics ./clear_cache.sh
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml restart octane-analytics
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -u 0 -T octane-analytics service cron start
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-analytics php artisan migrate --force --database=analytica
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-analytics php artisan migrate --force --path=/database/migrations/static --database=static
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-analytics php artisan migrate --force --path=/database/migrations/ozon --database=analytica_oz
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-analytics php artisan horizon:publish
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T queue-analytics php artisan horizon:terminate
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml restart queue-analytics
+
+deploy-prod:
+  stage: deploy
+  environment: production
+  tags:
+    - prod
+  only:
+    - master
+  variables:
+    ENV_NAME: prod
+    ENV_SUFFIX: _PROD
+    APP_KEY: $APP_KEY_PROD
+    DB_PASSWORD: $DB_PASSWORD_PROD
+    MAIL_PASSWORD: $MAIL_PASSWORD_PROD
+    VA_DB_PASSWORD: $VA_DB_PASSWORD_PROD
+    WEB_APP_TOKEN: $WEB_APP_TOKEN_PROD
+    CH_PASSWORD: $CH_PASSWORD_PROD
+    SENTRY_LARAVEL_DSN: $SENTRY_LARAVEL_DSN_PROD
+    DB_OZON_PASSWORD: $DB_OZON_PASSWORD
+    DB_ANALYTICA_OZ_PASSWORD: $DB_ANALYTICA_OZ_PASSWORD
+
+    DEPLOY_PATH: "/var/www/containers/analytics"
+
+  before_script:
+    - *before_script_prepare_env
+
+  script:
+    # build
+    - composer --no-interaction --no-progress install
+    - docker-compose build
+
+    #deploy
+    - sudo rsync -rlog --delete --exclude=/.data --exclude=/env-ci --exclude=/.git --usermap=*:1000 --groupmap=*:1000 ./ $DEPLOY_PATH/
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml up -d
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-analytics ./clear_cache.sh
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml restart octane-analytics
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -u 0 -T octane-analytics service cron start
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-analytics php artisan migrate --force --database=analytica
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-analytics php artisan migrate --force --path=/database/migrations/static --database=static
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-analytics php artisan migrate --force --path=/database/migrations/ozon --database=analytica_oz
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-analytics php artisan horizon:publish
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T queue-analytics php artisan horizon:terminate
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml restart queue-analytics
+
+
+deploy-demo:
+  stage: deploy
+  environment: demo
+  tags:
+    - demo
+  only:
+    - demo
+  variables:
+    ENV_NAME: demo
+    ENV_SUFFIX: _DEMO
+    APP_KEY: $APP_KEY_DEMO
+    DB_PASSWORD: $DB_PASSWORD_DEMO
+    MAIL_PASSWORD: $MAIL_PASSWORD_DEMO
+    VA_DB_PASSWORD: $VA_DB_PASSWORD_DEMO
+    WEB_APP_TOKEN: $WEB_APP_TOKEN_DEMO
+    CH_PASSWORD: $CH_PASSWORD_DEMO
+    SENTRY_LARAVEL_DSN: $SENTRY_LARAVEL_DSN_DEMO
+    DB_OZON_PASSWORD: $DB_OZON_PASSWORD
+    DB_ANALYTICA_OZ_PASSWORD: $DB_ANALYTICA_OZ_PASSWORD
+
+    DEPLOY_PATH: "/var/www/containers/analytics"
+
+  before_script:
+    - *before_script_prepare_env
+
+  script:
+    # build
+    - composer --no-interaction --no-progress install
+    - docker-compose build
+
+    #deploy
+    - sudo rsync -rlog --delete --exclude=/.data --exclude=/env-ci --exclude=/.git --usermap=*:1000 --groupmap=*:1000 ./ $DEPLOY_PATH/
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml up -d
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-analytics ./clear_cache.sh
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml restart octane-analytics
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -u 0 -T octane-analytics service cron start
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-analytics php artisan migrate --force --database=analytica
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-analytics php artisan migrate --force --path=/database/migrations/static --database=static
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-analytics php artisan migrate --force --path=/database/migrations/ozon --database=analytica_oz
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-analytics php artisan horizon:publish
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T queue-analytics php artisan horizon:terminate
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml restart queue-analytics
+

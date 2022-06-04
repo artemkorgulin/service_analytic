@@ -1,0 +1,389 @@
+{
+    "info": {
+        "_postman_id": "e5aa8e3f-80f9-473d-bfed-e653e831566a",
+        "name": "api",
+        "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "sign-in",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                            "const response = pm.response.json();",
+                            "pm.globals.set(\"user\", response.user);"
+                        ]
+                    }
+                }
+            ],
+            "id": "f8fb6fdf-d4ac-4929-ac18-0516bbed4741",
+            "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "urlencoded",
+                    "urlencoded": [
+                        {
+                            "key": "email",
+                            "value": "werwolf@mail.ru",
+                            "type": "text"
+                        },
+                        {
+                            "key": "password",
+                            "value": "12345678",
+                            "type": "text"
+                        }
+                    ]
+                },
+                "url": "http://127.0.0.1:81/api/v1/sign-in"
+            },
+            "response": []
+        },
+        {
+            "name": "get-all-users-and-accounts",
+            "id": "41195244-d048-4f2b-b150-e4288619e2b8",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{user}}",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "urlencoded",
+                    "urlencoded": [
+                        { "key": "user", "value": "", "type": "text" }
+                    ]
+                },
+                "url": "http://127.0.0.1:81/api/v1/get-all-users-and-accounts"
+            },
+            "response": []
+        },
+        {
+            "name": "get-all-users",
+            "id": "7a9f1a29-18e9-4991-8e08-02c331ea4097",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{user}}",
+                        "type": "text"
+                    }
+                ],
+                "url": {
+                    "raw": "http://127.0.0.1:81/api/v1/get-all-users?page=1",
+                    "protocol": "http",
+                    "host": ["127", "0", "0", "1"],
+                    "port": "81",
+                    "path": ["api", "v1", "get-all-users"],
+                    "query": [{ "key": "page", "value": "1" }]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "get-user/12",
+            "id": "82c931a7-dd8d-4784-b9fe-b18450b14708",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{user}}",
+                        "type": "text"
+                    }
+                ],
+                "url": "http://127.0.0.1:81/api/v1/get-user/12"
+            },
+            "response": []
+        },
+        {
+            "name": "get-goods-user-wb/15?page=370",
+            "id": "e24b0590-902c-4724-b821-7ec159cf6de7",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{user}}",
+                        "type": "text"
+                    }
+                ],
+                "url": {
+                    "raw": "http://127.0.0.1:81/api/v1/get-goods-user-wb/15?page=1",
+                    "protocol": "http",
+                    "host": ["127", "0", "0", "1"],
+                    "port": "81",
+                    "path": ["api", "v1", "get-goods-user-wb", "15"],
+                    "query": [{ "key": "page", "value": "1" }]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "change-active-user/15",
+            "id": "10068e5a-77a3-4866-bf62-09ba15f81131",
+            "request": {
+                "method": "PATCH",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{user}}",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "urlencoded",
+                    "urlencoded": [
+                        { "key": "isactive", "value": "1", "type": "text" }
+                    ]
+                },
+                "url": "http://127.0.0.1:81/api/v1/change-active-user/15"
+            },
+            "response": []
+        },
+        {
+            "name": "get-user-permissions/101",
+            "id": "fd70152c-055d-4107-8e78-84e2a0496f3a",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{user}}",
+                        "type": "text"
+                    }
+                ],
+                "url": "http://127.0.0.1:81/api/v1/get-user-permissions/101"
+            },
+            "response": []
+        },
+        {
+            "name": "sign-in",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                            "const response = pm.response.json();",
+                            "pm.globals.set(\"user\", response.user);"
+                        ]
+                    }
+                }
+            ],
+            "id": "9700401b-d479-4477-9319-92cfc4418a46",
+            "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "urlencoded",
+                    "urlencoded": [
+                        {
+                            "key": "email",
+                            "value": "werwolf@mail.ru",
+                            "type": "text"
+                        },
+                        {
+                            "key": "password",
+                            "value": "12345678",
+                            "type": "text"
+                        }
+                    ]
+                },
+                "url": "https://back.dev.sellerexpert.ru/api/v1/sign-in"
+            },
+            "response": []
+        },
+        {
+            "name": "campaigns",
+            "id": "7e17eb0e-3c3d-45b9-8ad6-5e014fbf5013",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{user}}",
+                        "type": "text"
+                    }
+                ],
+                "url": "https://back.dev.sellerexpert.ru/api/adm/v2/campaigns"
+            },
+            "response": []
+        },
+        {
+            "name": "get-permissions-role/4",
+            "id": "cc4257b4-c2f5-48df-93f4-42396a476bde",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{user}}",
+                        "type": "text"
+                    }
+                ],
+                "url": "http://127.0.0.1:81/api/v1/get-permissions-role/4"
+            },
+            "response": []
+        },
+        {
+            "name": "get-black-list",
+            "id": "1279e522-e7f5-4e7d-82f9-69a4a988787e",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{user}}",
+                        "type": "text"
+                    }
+                ],
+                "url": "http://127.0.0.1:81/api/v1/get-black-list"
+            },
+            "response": []
+        },
+        {
+            "name": "get-brands",
+            "id": "99775033-0828-4440-b6dd-e2446c994e44",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{user}}",
+                        "type": "text"
+                    }
+                ],
+                "url": "http://127.0.0.1:81/api/v1/get-brands/Lama"
+            },
+            "response": []
+        },
+        {
+            "name": "get-brand/2",
+            "id": "c47596aa-1a4b-4119-97a9-9ad0509b18ac",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{user}}",
+                        "type": "text"
+                    }
+                ],
+                "url": "http://127.0.0.1:81/api/v1/get-brand/2"
+            },
+            "response": []
+        },
+        {
+            "name": "set-access.Wildberries",
+            "id": "f7e31a3b-6489-4cc0-800c-0a4e6591591c",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{user}}",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "urlencoded",
+                    "urlencoded": [
+                        { "key": "platform_id", "value": "3", "type": "text" },
+                        {
+                            "key": "client_api_key",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NJRCI6ImUxMzY1NGRmLTM4NDMtNDlmMi05MTM0LWM3ZTY4YThkN2FhMCJ9.-7iNS9eF16iLz90x4hf0_EkqT-iFFf7cSyQojDmmt2w",
+                            "type": "text"
+                        }
+                    ]
+                },
+                "url": "http://127.0.0.1:81/api/v1/set-access"
+            },
+            "response": []
+        },
+        {
+            "name": "set-access.Ozon.Seller",
+            "id": "ccb78003-0708-437a-b93f-5e1c3e4b667b",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{user}}",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "urlencoded",
+                    "urlencoded": [
+                        { "key": "client_id", "value": "1608", "type": "text" },
+                        {
+                            "key": "client_api_key",
+                            "value": "9b732714-e420-416d-919e-fe7c612ddd77",
+                            "type": "text"
+                        },
+                        { "key": "platform_id", "value": "1", "type": "text" }
+                    ]
+                },
+                "url": "http://127.0.0.1:81/api/v1/set-access"
+            },
+            "response": []
+        },
+        {
+            "name": "set-access.Ozon.Performance",
+            "id": "d91ad069-ba3a-4d73-ba76-7cc255537b6f",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{user}}",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "urlencoded",
+                    "urlencoded": [
+                        {
+                            "key": "client_id",
+                            "value": "476756-1@advertising.performance.ozon.ru",
+                            "type": "text"
+                        },
+                        {
+                            "key": "client_api_key",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NJRCI6ImUxMzY1NGRmLTM4NDMtNDlmMi05MTM0LWM3ZTY4YThkN2FhMCJ9.-7iNS9eF16iLz90x4hf0_EkqT-iFFf7cSyQojDmmt2w",
+                            "type": "text"
+                        },
+                        { "key": "platform_id", "value": "2", "type": "text" }
+                    ]
+                },
+                "url": {
+                    "raw": "http://127.0.0.1:81/api/v1/set-access?client_id=476756-1@advertising.performance.ozon.ru&client_secret=b6UnXwOrTH0AuBXaGbwfNHuYv-N5cESXHaz-DuxWsZK49jJ7Miom1u9iI4yYyPLASd7MB0jtiA",
+                    "protocol": "http",
+                    "host": ["127", "0", "0", "1"],
+                    "port": "81",
+                    "path": ["api", "v1", "set-access"],
+                    "query": [
+                        {
+                            "key": "client_id",
+                            "value": "476756-1@advertising.performance.ozon.ru"
+                        },
+                        {
+                            "key": "client_secret",
+                            "value": "b6UnXwOrTH0AuBXaGbwfNHuYv-N5cESXHaz-DuxWsZK49jJ7Miom1u9iI4yYyPLASd7MB0jtiA"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        }
+    ]
+}

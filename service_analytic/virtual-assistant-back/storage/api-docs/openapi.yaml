@@ -1,0 +1,1784 @@
+openapi: 3.0.2
+info:
+  title: API Виртуальный помощник
+  description: 'API проекта Виртуальный помощник. Если конечная точка защищена, то может возвращаться ошибка с кодом 401'
+  version: 2.0.0
+servers:
+  - url: 'https://test-vpcity.itech-test.ru/backend/api/v2'
+    description: test server
+tags:
+  - name: Auth
+    description: Авторизация и т.п.
+  - name: OzProduct
+    description: Товары
+components:
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+      description: ''
+  responses:
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  http_code:
+                    type: number
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  advanced:
+                    type: array
+                    items:
+                      type: string
+          examples:
+            Example:
+              value:
+                error:
+                  http_code: 404
+                  code: 3001
+                  message: Сообщение об ошибке
+                  advanced: []
+    '422':
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  http_code:
+                    type: number
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  advanced:
+                    type: array
+                    items:
+                      type: string
+          examples:
+            Example:
+              value:
+                error:
+                  http_code: 422
+                  code: 1000
+                  message: Сообщение об ошибке
+                  advanced:
+                    - field1:
+                        Обязательное поле
+                    - field2:
+                        field2 должно быть числом
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        category:
+          type: string
+        position:
+          type: number
+        rating:
+          type: number
+        reviews:
+          type: number
+        characteristics:
+          type: string
+        updated_at:
+          type: string
+        price:
+          type: number
+        product_ozon_url:
+          type: string
+        is_advertised:
+          type: boolean
+        triggers:
+          type: object
+          properties:
+            characteristics:
+              type: integer
+            position:
+              type: boolean
+            reviews:
+              type: boolean
+      required:
+        - id
+        - name
+        - category
+        - position
+        - rating
+        - reviews
+        - characteristics
+        - updated_at
+        - price
+        - product_ozon_url
+        - triggers
+paths:
+  /api/v1/ozon-categories:
+    get:
+      tags:
+        - Auth
+      description: Получение данных по категориям товаров в Ozon
+      operationId: ozon-categories
+      parameters:
+        - schema:
+          type: string
+          default: application/json
+          in: header
+          name: content-type
+          required: true
+        - name: name
+          in: query
+          description: Поиск по полю name (используется LIKE)
+          schema:
+            type: string
+            example: шнур
+        - name: parent_id
+          in: query
+          description: Получает все вложенные группы по parent_id
+          schema:
+            type: int
+            example: 1522
+
+      responses:
+        '201':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                required:
+                  - data
+              examples:
+                Example:
+                  value:
+                    data:
+                      id:
+                        1549
+                      name:
+                        RGB контроллер для лампы
+                      external_id:
+                        73426666
+                      parent_id:
+                        1522
+                      settings:
+                        '[
+                                 {
+                                   "id": 85,
+                                   "name": "Бренд",
+                                   "type": "String",
+                                   "group_id": 0,
+                                   "group_name": "",
+                                   "description": "Укажите наименование бренда, под которым произведен товар. Если товар не имеет бренда, используйте значение \"Нет бренда\"",
+                                   "is_required": true,
+                                   "dictionary_id": 28732849,
+                                   "is_collection": false
+                                 },
+                                 {
+                                   "id": 4194,
+                                   "name": "Изображение",
+                                   "type": "ImageURL",
+                                   "group_id": 0,
+                                   "group_name": "",
+                                   "description": "Необходимо прикрепить главное фото товара, которое будет отвечать следующим требованиям:\n1) Размер изображения 1200 пикселей по большей стороне.\n2) Изображение не должно быть растянуто до 1200 пикселей из изображения меньшего разрешения.\n3) Фон на изображении должен быть белым.\n4) Товар должен занимать максимальное место в кадре, не должно быть больших пустых полей. \n5) Изображение должно быть резким.\n6) Изображение не должно содержать посторонних предметов.\n7) На фото не должно быть водяных знаков, логотипов.\n8) На фото не должно быть товаров в ассортименте (например, цветовом).\n9) Изо\u0431ражение товара должно полностью соответствовать реальному товару (комплектация, цвет, элементы дизайна).\n10) Формат изображения – .jpg (только нижним регистром, JPG - неправильно!)",
+                                   "is_required": true,
+                                   "dictionary_id": 0,
+                                   "is_collection": false
+                                 },
+                                 ...
+                               ]'
+
+  /api/v1/get-ozon-category-params:
+    get:
+      tags:
+        - Auth
+      description: Получение данных по типам товаров в Ozon (фактически конечные категории товаров)
+      operationId: get-ozon-category-params
+      parameters:
+        - schema:
+          type: string
+          default: application/json
+          in: header
+          name: content-type
+          required: true
+        - name: search
+          in: query
+          description: Поиск по полю name (используется LIKE)
+          schema:
+            type: string
+            example: шнур
+        - name: parent_id
+          in: query
+          description: Получает все вложенные группы по parent_id
+          schema:
+            type: int
+            example: 1522
+
+      responses:
+        '201':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                required:
+                  - data
+              examples:
+                Example:
+                  value:
+                    data:
+                      id:
+                        1549
+                      name:
+                        RGB контроллер для лампы
+                      external_id:
+                        73426666
+                      parent_id:
+                        1522
+                      settings:
+                        '[ {"current_page":1,"data":
+                                   {
+                                     "id": 85,
+                                     "name": "Бренд",
+                                     "type": "String",
+                                     "group_id": 0,
+                                     "group_name": "",
+                                     "description": "Укажите наименование бренда, под которым произведен товар. Если товар не имеет бренда, используйте значение \"Нет бренда\"",
+                                     "is_required": true,
+                                     "dictionary_id": 28732849,
+                                     "is_collection": false
+                                   },
+                                   {
+                                     "id": 4194,
+                                     "name": "Изображение",
+                                     "type": "ImageURL",
+                                     "group_id": 0,
+                                     "group_name": "",
+                                     "description": "Необходимо прикрепить главное фото товара, которое будет отвечать следующим требованиям:\n1) Размер изображения 1200 пикселей по большей стороне.\n2) Изображение не должно быть растянуто до 1200 пикселей из изображения меньшего разрешения.\n3) Фон на изображении должен быть белым.\n4) Товар должен занимать максимальное место в кадре, не должно быть больших пустых полей. \n5) Изображение должно быть резким.\n6) Изображение не должно содержать посторонних предметов.\n7) На фото не должно быть водяных знаков, логотипов.\n8) На фото не должно быть товаров в ассортименте (например, цветовом).\n9) Изо\u0431ражение товара должно полностью соответствовать реальному товару (комплектация, цвет, элементы дизайна).\n10) Формат изображения – .jpg (только нижним регистром, JPG - неправильно!)",
+                                     "is_required": true,
+                                     "dictionary_id": 0,
+                                     "is_collection": false
+                                   },
+                                   ...
+                                 ]'
+
+  /api/v1/get-ozon-category-params/{id}:
+    get:
+      tags:
+        - Auth
+      description: Получение данных по определенному типу товара
+      operationId: get-ozon-category-params-id
+      parameters:
+        - schema:
+            type: string
+            default: application/json
+            in: header
+            name: content-type
+            required: true
+        - name: id
+          in: query
+          description: id типа товара (в системе не id типа товара в Ozon)
+          schema:
+            type: int
+            example: 1107
+
+      responses:
+        '201':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                required:
+                  - data
+              examples:
+                Example:
+                  value:
+                    data:
+                      id:
+                        1549
+                      name:
+                        RGB контроллер для лампы
+                      external_id:
+                        73426666
+                      parent_id:
+                        1522
+                      settings:
+                        '[
+                                   {
+                                     "id": 85,
+                                     "name": "Бренд",
+                                     "type": "String",
+                                     "group_id": 0,
+                                     "group_name": "",
+                                     "description": "Укажите наименование бренда, под которым произведен товар. Если товар не имеет бренда, используйте значение \"Нет бренда\"",
+                                     "is_required": true,
+                                     "dictionary_id": 28732849,
+                                     "is_collection": false
+                                   },
+                                   {
+                                     "id": 4194,
+                                     "name": "Изображение",
+                                     "type": "ImageURL",
+                                     "group_id": 0,
+                                     "group_name": "",
+                                     "description": "Необходимо прикрепить главное фото товара, которое будет отвечать следующим требованиям:\n1) Размер изображения 1200 пикселей по большей стороне.\n2) Изображение не должно быть растянуто до 1200 пикселей из изображения меньшего разрешения.\n3) Фон на изображении должен быть белым.\n4) Товар должен занимать максимальное место в кадре, не должно быть больших пустых полей. \n5) Изображение должно быть резким.\n6) Изображение не должно содержать посторонних предметов.\n7) На фото не должно быть водяных знаков, логотипов.\n8) На фото не должно быть товаров в ассортименте (например, цветовом).\n9) Изо\u0431ражение товара должно полностью соответствовать реальному товару (комплектация, цвет, элементы дизайна).\n10) Формат изображения – .jpg (только нижним регистром, JPG - неправильно!)",
+                                     "is_required": true,
+                                     "dictionary_id": 0,
+                                     "is_collection": false
+                                   },
+                                   ...
+                                 ]'
+
+  /api/set-ozon-access:
+    post:
+      tags:
+        - Auth
+      description: Установка данных для доступа к API Ozon
+      operationId: set-ozon-access
+      parameters:
+        - schema:
+            type: string
+            default: application/json
+          in: header
+          name: Content-Type
+          description: ''
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                clientId:
+                  type: string
+                  default: 836
+                apiKey:
+                  type: string
+                  default: 0296d4f2-70a1-4c09-b507-904fd05567b9
+              required:
+                - clientId
+                - apiKey
+
+      responses:
+        '201':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                required:
+                  - data
+              examples:
+                Example:
+                  value:
+                    data:
+                      clientId:
+                        366
+                      apiKey:
+                        0296d4f2-70a1-4c09-b507-904fd05567b9
+          headers: { }
+        '422':
+          $ref: '#/components/responses/422'
+
+  /get-ozon-access:
+    get:
+      tags:
+        - Auth
+      description: Получение данных для подключения к API Ozon
+      operationId: get-ozon-access
+      security:
+        - bearer: [ ]
+      parameters:
+        - schema:
+            type: string
+            default: application/json
+          in: header
+          name: content-type
+          required: true
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  clientId:
+                    type: string
+                  apiKey:
+                    type: string
+              examples:
+                Example:
+                  value:
+                    data:
+                      clientId:
+                        366
+                      apiKey:
+                        0296d4f2-70a1-4c09-b507-904fd05567b9
+        '401':
+          $ref: '#/components/responses/401'
+
+  /set-settings:
+    post:
+      tags:
+        - Auth
+      description: Установка настроек пользователя
+      operationId: set-settings
+      parameters:
+        - schema:
+            type: string
+            default: application/json
+          in: header
+          name: Content-Type
+          description: ''
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subscription:
+                  type: boolean
+                  default: false
+              required:
+                - subscription
+      responses:
+        '201':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                required:
+                  - data
+              examples:
+                Example:
+                  value:
+                    data:
+                      subscription:
+                        false
+          headers: { }
+        '422':
+          $ref: '#/components/responses/422'
+
+  /get-settings:
+    get:
+      tags:
+        - Auth
+      description: Получение настроек пользователя
+      operationId: get-settings
+      security:
+        - bearer: [ ]
+      parameters:
+        - schema:
+            type: string
+            default: application/json
+          in: header
+          name: content-type
+          required: true
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subscription:
+                    type: boolean
+              examples:
+                Example:
+                  value:
+                    data:
+                      subscription:
+                        false
+        '401':
+          $ref: '#/components/responses/401'
+
+  /products:
+    get:
+      tags:
+        - OzProduct
+      description: Получение таблицы товаров с сортировкой и пагинацией
+      operationId: product-list
+      security:
+        - bearer: [ ]
+      parameters:
+        - schema:
+            type: string
+            default: application/json
+          in: header
+          name: content-type
+          required: true
+        - name: search
+          in: query
+          description: Поиск по строке (полям name, sku, id, external_id) всегда используется LIKE (кроме поля id)
+          schema:
+            type: string
+            example: шнур
+        - name: sortType
+          in: query
+          description: Тип сортировки desc или asc. Если параметр не указан, используется asc.
+          schema:
+            type: string
+            example: desc
+        - name: sortBy
+          in: query
+          description: Поле, по которому проходит сортировка
+          schema:
+            type: string
+            example: price
+        - name: page
+          in: query
+          description: Номер страницы. Если номер страницы больше максимального, устанавливается максимальное значение.
+          schema:
+            type: string
+            example: 1
+        - name: perPage
+          in: query
+          description: Количество товаров на странице. По умолчанию 100
+          schema:
+            type: string
+            example: 100
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Product'
+                      current_page:
+                        type: integer
+                      per_page:
+                        type: integer
+                      total:
+                        type: integer
+                      last_page:
+                        type: integer
+                      show_advert:
+                        type: boolean
+                      loaded_products:
+                        type: object
+                        properties:
+                          code:
+                            type: integer
+                          status:
+                            type: string
+                      temp_products:
+                        type: boolean
+              examples:
+                Example:
+                  value:
+                    data:
+                      items:
+                        - id: 2,
+                          name: Marvy Uchida Набор линеров-ручек для черчения и рисования (темно-коричневый, сепия) 3 шт в упаковке, 0.03 мм,
+                          category: Ручка капиллярная,
+                          position: null
+                          rating: 2,
+                          reviews: 4,
+                          characteristics: 9 из 37
+                          update_at: 2021-03-19T12:14:05.000000Z
+                          price: 383,
+                          product_ozon_url: https://www.ozon.ru/context/detail/id/241793571
+                          triggers:
+                            characteristics: false
+                            position: 2
+                            reviews: false
+                          is_advertised: 1
+                        - id: 3,
+                          name: Marvy Uchida Набор линеров-ручек для черчения и рисования (темно-коричневый, сепия) 5 шт в упаковке, 0.03 мм,
+                          category: Ручка капиллярная,
+                          position: null
+                          rating: 2,
+                          reviews: 4,
+                          characteristics: 7 из 37
+                          update_at: 2021-03-19T12:14:05.000000Z
+                          price: 383,
+                          product_ozon_url: https://www.ozon.ru/context/detail/id/241793571
+                          triggers:
+                            characteristics: false
+                            position: -2
+                            reviews: true
+                          is_advertised: 0
+                      current_page: 1,
+                      per_page: 100,
+                      total: 2,
+                      last_page: 1
+                      temp_products: true
+                      loaded_products:
+                        - sku: 248968180,
+                          code: 200
+                          status: Успешно добавлен
+                        - sku: 248968181,
+                          code: 3002
+                          status: Товар был добавлен ранее
+                        - sku: 248968181,
+                          code: 3010
+                          status: Товар добавлен в систему другим пользователем
+                        - sku: 248968189,
+                          code: 3000
+                          status: Товар не продается
+                        - sku: 248968183,
+                          code: 400
+                          status: Неверный Артикул
+                        - sku: 24896818,
+                          code: 404
+                          status: Ошибка получения данных о товаре. Проверьте, есть ли в вашей учётной записи Озон данный товар
+        '401':
+          $ref: '#/components/responses/401'
+  /products/{product-id}:
+    parameters:
+      - schema:
+          type: number
+        name: product-id
+        in: path
+        required: true
+        description: для получения шаблона отправить sample
+    get:
+      tags:
+        - OzProduct
+      description: Получение детализации товара
+      operationId: product-details
+      security:
+        - bearer: [ ]
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      name:
+                        type: string
+                      bread_crumbs:
+                        type: string
+                      web_category_name:
+                        type: string
+                      web_category_parsed_at:
+                        type: string
+                        format: datetime
+                      rating:
+                        type: string
+                      reviews:
+                        type: string
+                      photos:
+                        type: string
+                      photo_url:
+                        type: string
+                      url:
+                        type: string
+                      price:
+                        type: number
+                      status:
+                        type: string
+                      updated:
+                        type: string
+                      price_error:
+                        type: string
+                        description: в случае, если цена не применилась, здесь будут ошибки для вывода
+                      characteristics:
+                        type: object
+                        properties:
+                          id:
+                            type: object
+                            properties:
+                              id:
+                                type: number
+                              external_id:
+                                type: number
+                              name:
+                                type: string
+                              value:
+                                type: string
+                              options:
+                                type: array
+                                items:
+                                  type: object
+                              is_required:
+                                type: boolean
+                              is_collection:
+                                type: boolean
+                              is_reference:
+                                type: boolean
+                              is_specialty:
+                                type: boolean
+                      error_characteristics:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                          name:
+                            type: string
+                      recomended_characteristics:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                          name:
+                            type: string
+                          external_id:
+                            type: string
+                          is_required:
+                            type: boolean
+                          is_collection:
+                            type: boolean
+                          is_reference:
+                            type: boolean
+                          is_specialty:
+                            type: boolean
+                      triggers:
+                        type: object
+                        properties:
+                          position:
+                            type: number
+                          photos:
+                            type: number
+                          reviews:
+                            type: number
+                          characteristics:
+                            type: object
+                            properties:
+                              id:
+                                type: number
+                              name:
+                                type: string
+                              is_reference:
+                                type: boolean
+                          characteristics_options:
+                            type: object
+                            properties:
+                              id:
+                                type: object
+                                properties:
+                                  id:
+                                    type: number
+                                  name:
+                                    type: string
+                                  values:
+                                    type: string
+                          show_success_alert:
+                            type: boolean
+                      positions:
+                        type: object
+                        properties:
+                          Маникюр:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                date:
+                                  type: string
+                                position:
+                                  type: number
+                      recomendations:
+                        type: object
+                        properties:
+                          header:
+                            type: string
+                          text:
+                            type: string
+                          link:
+                            type: string
+                            format: url
+                          items:
+                            type: array
+                            items:
+                              type: string
+                      card_updated:
+                        type: boolean
+                      characteristics_updated_at:
+                        type: string
+                        format: datetime
+                      characteristics_updated:
+                        type: boolean
+                      position_updated:
+                        type: boolean
+                      mpstat_updated_at:
+                        type: string
+                        format: datetime
+              examples:
+                Example:
+                  value:
+                    data:
+                      id: 3
+                      name: Marvy Uchida Набор линеров-ручек для черчения и рисования (темно-коричневый, сепия) 3 шт в упаковке, 0.03 мм
+                      bread_crumbs: Канцелярия - Прибор для письма - Ручка капиллярная
+                      web_category_name: test
+                      rating: 0
+                      reviews: Нет данных
+                      photos: Информация о количестве фотографий не доступна
+                      url: https:\/\/www.ozon.ru\/context\/detail\/id\/241793571
+                      price: 382
+                      updated: 2001-03-23T08:11:11.000000Z
+                      characteristics:
+                        1:
+                          id: 1,
+                          name: Тип
+                          value: ''
+                          options: [
+                            {
+                              'id': 1,
+                              'value': 'test1'
+                            },
+                            {
+                              'id': 2,
+                              'value': 'test2'
+                            },
+                          ]
+                          external_id: 1597
+                          is_required: 0
+                          is_collection: 1
+                          is_reference: 1
+                          is_specialty: 0
+                        2:
+                          id: 2
+                          name: Название модели
+                          value: test
+                          options: [ ]
+                          external_id: 2049
+                          is_required: 0
+                          is_collection: 0
+                          is_reference: 0
+                          is_specialty: 0
+                        3:
+                          id: 3
+                          name: Видеоролик
+                          value: test3
+                          options: [ ]
+                          external_id: 45
+                          is_required: 0
+                          is_collection: 0
+                          is_reference: 0
+                          is_specialty: 0
+                      error_characteristics:
+                        - id: 274945
+                          name: Единиц в одном товаре
+                      recomended_characteristics:
+                        - id: 31116
+                          name: Тестовая хар-ка 1
+                          external_id: 12345
+                          is_required: 1
+                          is_collection: 0
+                          is_reference: 0
+                          is_specialty: 0
+                        - id: 31117,
+                          name: Видеоролик
+                          external_id: 15976
+                          is_required: 0
+                          is_collection: 1
+                          is_reference: 1
+                          is_specialty: 0
+                      triggers:
+                        position: 0
+                        photos: false
+                        reviews: false
+                        characteristics:
+                          - id: 1
+                            name: Тип
+                            external_id: 1
+                            is_required: 0
+                            is_collection: 1
+                            is_reference: 1
+                            is_specialty: 0
+                            count_values: 10
+                          - id: 2
+                            name: Название модели
+                            external_id: 10
+                            is_required: 0
+                            is_collection: 0
+                            is_reference: 1
+                            is_specialty: 0
+                            count_values: 20
+                        characteristics_options:
+                          5:
+                            id: 5
+                            name: Партномер
+                            values:
+                              - 3D очки
+                          6:
+                            id: 6
+                            name: Размеры, мм
+                            values:
+                              - BD-R
+                              - BD-RW
+                      positions:
+                        Красота:
+                          - date: "2000-03-23"
+                            position: 3
+                          - date: "2001-03-24"
+                            position: 2
+                          - date: "2002-03-25"
+                            position: 10
+                          - date: "2003-03-26"
+                            position: 5
+                      recomendations:
+                        - header: Рейтинг
+                          text: Для улучшения рейтинга товара необходимо еще 0 отзывов с оценкой «5»
+                        - header: Заголовок
+                          text: Советуем оптимизировать заголовок в сервисе «Виртуальный помощник»
+                          link: https://vpcity.itech-test.ru/step-1
+                        - header: Отзывы
+                          text: В карточке этого товара должно быть не менее 10 отзывов (сейчас 0)
+                        - header: Изображения
+                          text: В карточке этого товара должно быть не менее 10 фото (сейчас 0)
+                        - header: Характеристики
+                          text: Для оптимиза\u0446ии карточки товара рекомендуем заполнить характеристики
+                          items:
+                            - Тестовая хар-ка 1
+                      is_advertised: 1
+        '401':
+          $ref: '#/components/responses/401'
+
+  /products/{product-id}/reset-success-flag:
+    parameters:
+      - schema:
+          type: number
+        name: product-id
+        in: path
+        required: true
+    delete:
+      tags:
+        - OzProduct
+      description: Сброс флага отображения алерта успешной отправки данных в Ozon
+      operationId: product-reset-success-flag
+      security:
+        - bearer: [ ]
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                required:
+                  - data
+              examples:
+                Example:
+                  value:
+                    data: [ ]
+          headers: { }
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '422':
+          $ref: '#/components/responses/422'
+
+  /products/{product-id}/reset-update-flags:
+    parameters:
+      - schema:
+          type: number
+        name: product-id
+        in: path
+        required: true
+    delete:
+      tags:
+        - OzProduct
+      description: Сброс флагов обновления отслеживаемого товара
+      operationId: product-reset-update-flags
+      security:
+        - bearer: [ ]
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                required:
+                  - data
+              examples:
+                Example:
+                  value:
+                    data: [ ]
+          headers: { }
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '422':
+          $ref: '#/components/responses/422'
+
+  /products/{product-id}/search-characteristics:
+    parameters:
+      - schema:
+          type: number
+        name: product-id
+        in: path
+        required: true
+      - name: characteristic_id
+        in: query
+        description: ID характеристика.
+        required: true
+        schema:
+          type: string
+          example: 14
+      - name: value
+        in: query
+        description: Искомое значение
+        required: false
+        schema:
+          type: string
+          example: CD-R
+    get:
+      tags:
+        - OzProduct
+      description: Поиск значения характеристики товара
+      operationId: product-search-characteristics
+      security:
+        - bearer: [ ]
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+              examples:
+                Example:
+                  value:
+                    data:
+                      - 150: CD-R
+                      - 152: CD-RW
+        '401':
+          $ref: '#/components/responses/401'
+        '422':
+          $ref: '#/components/responses/401'
+
+  /products/{product-id}/modify-product:
+    parameters:
+      - schema:
+          type: number
+        name: product-id
+        in: path
+        required: true
+    put:
+      tags:
+        - OzProduct
+      description: Отправка запроса на изменение товара
+      operationId: product-modify-product
+      security:
+        - bearer: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Новое название
+                price:
+                  type: number
+                  example: Новая цена
+                characteristics:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 36116
+                      value:
+                        type: string
+                        example: Новое значение
+      responses:
+        '202':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+              examples:
+                Example:
+                  value:
+                    data: []
+        '401':
+          $ref: '#/components/responses/401'
+        '422':
+          $ref: '#/components/responses/401'
+
+  /products/{product-id}/download-pdf-recomendations:
+    parameters:
+      - schema:
+          type: number
+        name: product-id
+        in: path
+        required: true
+    get:
+      tags:
+        - OzProduct
+      description: Скачивание рекомендаций по продвижению товара в формате pdf
+      operationId: product-recomendations-download
+      security:
+        - bearer: [ ]
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    <pdf_file_for_download>
+        '401':
+          $ref: '#/components/responses/401'
+  /add-product:
+    post:
+      tags:
+        - OzProduct
+      description: Добавление товара
+      operationId: add-product
+      security:
+        - bearer: [ ]
+      parameters:
+        - schema:
+            type: string
+            default: application/json
+          in: header
+          name: Content-Type
+          description: ''
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sku:
+                  type: string
+                  default: 123456789
+              required:
+                - sku
+      responses:
+        '201':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                required:
+                  - data
+              examples:
+                Example:
+                  value:
+                    data:
+                      sku: https://www.ozon.ru/context/detail/id/123456789/
+          headers: { }
+        '401':
+          $ref: '#/components/responses/401'
+        '422':
+          $ref: '#/components/responses/422'
+  /add-products:
+    post:
+      tags:
+        - OzProduct
+      description: Добавление товаров в отслеживание
+      operationId: add-products
+      security:
+        - bearer: [ ]
+      parameters:
+        - schema:
+            type: string
+            default: application/json
+          in: header
+          name: Content-Type
+          description: ''
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                skus:
+                  type: string
+                  example: 'https://www.ozon.ru/context/detail/id/248968180 248968181'
+              required:
+                - skus
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                required:
+                  - data
+              examples:
+                Example:
+                  value:
+                    data:
+                      items:
+                        - sku: 248968180,
+                          code: 200
+                          status: Успешно добавлен
+                        - sku: 248968185,
+                          code: 3011
+                          status: Добавлен в систему без загрузки данных
+                        - sku: 248968181,
+                          code: 3002
+                          status: Товар был добавлен ранее
+                        - sku: 248968181,
+                          code: 3010
+                          status: Товар добавлен в систему другим пользователем
+                        - sku: 248968189,
+                          code: 3000
+                          status: Товар не продается
+                        - sku: 248968183,
+                          code: 400
+                          status: Неверный Артикул
+                        - sku: 24896818,
+                          code: 404
+                          status: Ошибка получения данных о товаре. Проверьте, есть ли в вашей учётной записи Озон данный товар
+          headers: { }
+        '401':
+          $ref: '#/components/responses/401'
+        '422':
+          $ref: '#/components/responses/422'
+  /verify-product:
+    post:
+      tags:
+        - OzProduct
+      description: Изменить статус на успешный после ознакомления с ошибкой
+      security:
+        - bearer: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: integer
+            examples:
+              '0':
+                value: |-
+                  {
+                      "product_id": 1
+                  }
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                required:
+                  - data
+              examples:
+                Example:
+                  value:
+                    data: [ ]
+  /update-products:
+    put:
+      tags:
+        - OzProduct
+      description: Обновление товаров (удаление и добавление) в отеживании
+      operationId: update-products
+      security:
+        - bearer: [ ]
+      parameters:
+        - schema:
+            type: string
+            default: application/json
+          in: header
+          name: Content-Type
+          description: ''
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: number
+              required:
+                - ids
+      responses:
+        '202':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                required:
+                  - data
+              examples:
+                Example:
+                  value:
+                    data:
+                      ids:
+                        - 1
+                        - 2
+          headers: { }
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '422':
+          $ref: '#/components/responses/422'
+  /remove-products:
+    delete:
+      tags:
+        - OzProduct
+      description: Удаление товаров
+      operationId: remove-products
+      security:
+        - bearer: [ ]
+      parameters:
+        - schema:
+            type: string
+            default: application/json
+          in: header
+          name: Content-Type
+          description: ''
+          required: true
+      responses:
+        '203':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                required:
+                  - data
+              examples:
+                Example:
+                  value:
+                    data:
+                      ids:
+                        - 1
+                        - 2
+          headers: { }
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '422':
+          $ref: '#/components/responses/422'
+
+  /products/{product-id}/clear-all-triggers:
+    parameters:
+      - schema:
+          type: number
+        name: product-id
+        in: path
+        required: true
+    delete:
+      tags:
+        - OzProduct
+      description: Сброс всех триггеров
+      operationId: clear-all-triggers
+      security:
+        - bearer: [ ]
+      responses:
+        '203':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                required:
+                  - data
+              examples:
+                Example:
+                  value:
+                    data: []
+          headers: { }
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '422':
+          $ref: '#/components/responses/422'
+  /products/{product-id}/clear-photo-triggers:
+    parameters:
+      - schema:
+          type: number
+        name: product-id
+        in: path
+        required: true
+    delete:
+      tags:
+        - OzProduct
+      description: Сброс триггеров фотографий
+      operationId: clear-photo-triggers
+      security:
+        - bearer: [ ]
+      responses:
+        '203':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                required:
+                  - data
+              examples:
+                Example:
+                  value:
+                    data: []
+          headers: { }
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '422':
+          $ref: '#/components/responses/422'
+  /products/{product-id}/clear-review-triggers:
+    parameters:
+      - schema:
+          type: number
+        name: product-id
+        in: path
+        required: true
+    delete:
+      tags:
+        - OzProduct
+      description: Сброс триггеров отзывов
+      operationId: clear-review-triggers
+      security:
+        - bearer: [ ]
+      responses:
+        '203':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                required:
+                  - data
+              examples:
+                Example:
+                  value:
+                    data: []
+          headers: { }
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '422':
+          $ref: '#/components/responses/422'
+  /products/{product-id}/clear-position-triggers:
+    parameters:
+      - schema:
+          type: number
+        name: product-id
+        in: path
+        required: true
+    delete:
+      tags:
+        - OzProduct
+      description: Сброс триггеров позиций
+      operationId: clear-position-triggers
+      security:
+        - bearer: [ ]
+      responses:
+        '203':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                required:
+                  - data
+              examples:
+                Example:
+                  value:
+                    data: []
+          headers: { }
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '422':
+          $ref: '#/components/responses/422'
+  /products/{product-id}/clear-feature-triggers:
+    parameters:
+      - schema:
+          type: number
+        name: product-id
+        in: path
+        required: true
+    delete:
+      tags:
+        - OzProduct
+      description: Сброс триггеров характеристик
+      operationId: clear-feature-triggers
+      security:
+        - bearer: [ ]
+      responses:
+        '203':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                required:
+                  - data
+              examples:
+                Example:
+                  value:
+                    data: []
+          headers: { }
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '422':
+          $ref: '#/components/responses/422'
+  /products/{product-id}/clear-feature-options-triggers:
+    parameters:
+      - schema:
+          type: number
+        name: product-id
+        in: path
+        required: true
+    delete:
+      tags:
+        - OzProduct
+      description: Сброс триггеров значений характеристик
+      operationId: clear-feature-options-triggers
+      security:
+        - bearer: [ ]
+      responses:
+        '203':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                required:
+                  - data
+              examples:
+                Example:
+                  value:
+                    data: []
+          headers: { }
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '422':
+          $ref: '#/components/responses/422'
+  /products/{product-id}/clear-remove-from-sale-triggers:
+    parameters:
+      - schema:
+          type: number
+        name: product-id
+        in: path
+        required: true
+    delete:
+      tags:
+        - OzProduct
+      description: Сброс триггеров снятия с продажи
+      operationId: clear-remove-from-sale-triggers
+      security:
+        - bearer: [ ]
+      responses:
+        '203':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                required:
+                  - data
+              examples:
+                Example:
+                  value:
+                    data: []
+          headers: { }
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '422':
+          $ref: '#/components/responses/422'
+  /export/product-characteristics/{product-id}:
+    parameters:
+      - schema:
+          type: number
+        name: product-id
+        in: path
+        required: true
+      - schema:
+          type: string
+          enum:
+            - filled
+            - all
+        name: type
+        in: query
+        required: true
+    get:
+      tags:
+        - Export
+      description: Выгрузка характеристик товара
+      operationId: export-product-characteristics
+      security:
+        - bearer: [ ]
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/vnd.ms-excel:
+              schema:
+                type: string
+                format: binary
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+
+  /reports/ozon/analytics-data:
+    post:
+      tags:
+        - Export
+      description: Получение информации по данным аналитики продуктов в Ozon
+      operationId: export-product-characteristics
+      security:
+        - bearer: [ ]
+      parameters:
+        - schema:
+            type: string
+            default: application/json
+          in: header
+          name: Content-Type
+          description: ''
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              product_id:
+                type: string
+              date_from:
+                type: string
+              date_to:
+                type: string
+              required:
+                - product_id
+                - date_from
+                - date_to
+      responses:
+        '201':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                required:
+                  - data
+              examples:
+                Example:
+                  value:
+                    data:
+                      sku: https://www.ozon.ru/context/detail/id/123456789/
+          headers: { }
+        '401':
+          $ref: '#/components/responses/401'
+        '422':
+          $ref: '#/components/responses/422'

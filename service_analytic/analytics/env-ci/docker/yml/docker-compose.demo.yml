@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  #Nginx Service
+  nginx-analytics:
+    build:
+      context: docker/nginx
+    restart: unless-stopped
+    hostname: host.docker.internal
+    environment:
+      TZ: Europe/Moscow
+    volumes:
+      - .:/var/www
+      - ./.data/nginx/logs:/var/log/nginx
+    depends_on:
+      - octane-analytics
+    links:
+      - octane-analytics
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - 127.0.0.1:85:80
+    networks:
+      - web-app-back_app-network
+
+  # Redis service
+  redis-analytics:
+    image: redis:6.2.5
+    command: [ "redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD}" ]
+    restart: unless-stopped
+    environment:
+      TZ: Europe/Moscow
+    volumes:
+      - .data/redis-data:/data
+    networks:
+      - web-app-back_app-network
+
+  octane-analytics:
+    build: docker/octane
+    environment:
+      DISABLE_DEFAULT_SERVER: 1
+      TZ: Europe/Moscow
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+      - ./docker/octane/php.ini:/usr/local/etc/php/php.ini
+      - .data/app/logs:/var/www/storage/logs
+    ports:
+      - 8085:8085
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - web-app-back_app-network
+
+  # Laravel queue service
+  queue-analytics:
+    build: docker/queue
+    restart: unless-stopped
+    tty: true
+    environment:
+      TZ: Europe/Moscow
+    volumes:
+      - .:/var/www
+      - ./docker/queue/php.ini:/usr/local/etc/php/php.ini
+      - .data/app/logs:/var/www/storage/logs
+    depends_on:
+      - redis-analytics
+    networks:
+      - web-app-back_app-network
+
+#Docker Networks
+networks:
+  web-app-back_app-network:
+    external: true
+

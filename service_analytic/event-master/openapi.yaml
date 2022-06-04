@@ -1,0 +1,776 @@
+openapi: 3.0.0
+servers:
+  - url: 'http://localhost:84'
+    description: Тестовый стенд event-master
+    variables: {}
+info:
+  version: 3.0 СЯ
+  title: AnalyticPlatform event-master
+  description: API проекта Система оповещений
+  termsOfService: ''
+  contact: {}
+  license:
+    name: 'AnalyticPlatform'
+security:
+  - bearer: []
+  - noauth: []
+paths:
+  /api/v1/notification_types:
+    get:
+      summary: Справочник типов
+      description: Все типы
+      operationId: notification_types
+      parameters: [ ]
+      responses:
+        '200':
+          description: example
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/200'
+              example:
+                - id: 1
+                  name: Тест1
+                - id: 2
+                  name: Тест2
+      tags:
+        - Справочники
+
+  /api/v1/notification_subtypes:
+    get:
+      summary: Справочник подтипов
+      description: Все подтипы
+      operationId: notification_subtypes
+      parameters: [ ]
+      responses:
+        '200':
+          description: example
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/200'
+              example:
+                - id: 1
+                  code: 123
+                  type_id: 1
+                  name: Тест1
+                - id: 2
+                  code: 123
+                  type_id: 1
+                  name: Тест2
+      tags:
+        - Справочники
+
+  /api/v1/notification_templates:
+    get:
+      summary: Получить шаблоны пользователя
+      description: Все шаблоны пользователя
+      operationId: notification_templates
+      parameters: [ ]
+      responses:
+        '200':
+          description: example
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/200'
+              example:
+                - id: 1
+                  template: Hello {{fio}} 123
+                  lang: ru
+                  subtype_id: 1
+                  created_at: 2021-10-06T15:49:13.000000Z
+                  updated_at: 2021-10-06T15:49:13.000000Z
+                  deleted_at: null
+      tags:
+        - Методы для работы с шаблоном оповещения
+
+  /api/v1/notification_templates/store:
+    post:
+      summary: Создать шаблон пользователя
+      description: Создать шаблон пользователя
+      operationId: notification_templates
+      parameters:
+        - name: template
+          in: query
+          required: true
+          description: Шаблон
+          style: form
+          schema:
+            type: string
+            example: Здравствуйте {{fio}}!!!
+        - name: lang
+          in: query
+          required: true
+          description: Язык шаблона
+          style: form
+          schema:
+            type: string
+            example: ru
+        - $ref: '#/components/parameters/notification_subtypes'
+      responses:
+        '200':
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: {
+                  "keyword_id": 15906
+                }
+                errors: [ ]
+      tags:
+        - Методы для работы с шаблоном оповещения
+
+  /api/v1/notification_templates/{template_id}/modify-template:
+    parameters:
+      - schema:
+          type: number
+        name: template_id
+        in: path
+        required: true
+    put:
+      summary: Редактировать шаблон пользователя
+      tags:
+        - Методы для работы с шаблоном оповещения
+      description: Отправка запроса на изменение шаблона
+      operationId: notification_templates
+      parameters:
+        - name: template
+          in: query
+          required: true
+          description: Шаблон
+          style: form
+          schema:
+            type: string
+            example: Здравствуйте {{fio}}!!!
+        - name: lang
+          in: query
+          required: true
+          description: Язык шаблона
+          style: form
+          schema:
+            type: string
+            example: ru
+        - $ref: '#/components/parameters/notification_subtypes'
+      responses:
+        '202':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+              examples:
+                Example:
+                  value:
+                    data: [ ]
+
+  /api/v1/notification_templates/{template_id}/delete:
+    parameters:
+      - schema:
+          type: number
+        name: template_id
+        in: path
+        required: true
+    delete:
+      summary: Удалить шаблон пользователя
+      tags:
+        - Методы для работы с шаблоном оповещения
+      description: Отправка запроса на удаление шаблона
+      operationId: notification_templates
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                required:
+                  - data
+              examples:
+                Example:
+                  value:
+                    data: [ ]
+  /api/v1/notification_templates/{template_id}:
+    get:
+      summary: Получить шаблон
+      description: Отправка запроса на получение шаблона
+      operationId: notification_templates
+      parameters:
+        - schema:
+            type: number
+          name: template_id
+          in: path
+          required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: [
+                    "group": {
+                      "id": 1,
+                      "template": "Hello {{fio}} 123",
+                      "lang": "ru",
+                      "subtype_id": 1,
+                      "created_at": "2021-10-06T09:08:26.000000Z",
+                      "updated_at": "2021-10-06T09:08:26.000000Z",
+                      "deleted_at": null
+                    }
+                ]
+                errors: [ ]
+        '400':
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+              example:
+                success: false
+                data: [ ]
+      tags:
+        - Методы для работы с шаблоном оповещения
+  /api/v1/notification_schemas:
+    get:
+      summary: Все схемы пользователя
+      description: Все схемы пользователя
+      operationId: notification_schemas
+      parameters: [ ]
+      responses:
+        '200':
+          description: example
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/200'
+              example:
+                - id: 1
+                  user_id: 1
+                  type_id: 1
+                  way_code: email
+                  user_ip: 127.0.0.7
+                  delete_user_ip: 127.0.0.7
+                  created_at: 2021-10-06T15:49:13.000000Z
+                  updated_at: 2021-10-06T15:49:13.000000Z
+                  deleted_at: null
+      tags:
+        - Методы работы со схемой пользователя
+
+  /api/v1/notification_schemas/store:
+    post:
+      summary: Создать схему пользователя
+      description: Создать схему пользователя
+      operationId: notification_schemas
+      parameters:
+        - name: type_id
+          in: query
+          required: true
+          description: id типа
+          style: form
+          schema:
+            type: number
+            example: 1
+        - name: way_code
+          in: query
+          required: true
+          description: Способ доставки сообщения
+          style: form
+          schema:
+            type: string
+            example: email
+        - name: user_ip
+          in: query
+          required: true
+          description: ip пользователя
+          style: form
+          schema:
+           type: string
+           example: 127.0.0.7
+        - name: deleted
+          in: query
+          required: false
+          description: удалить настройку пользователя
+          style: form
+          schema:
+            type: boolean
+            example: true
+      responses:
+        '200':
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: {
+                }
+                errors: [ ]
+      tags:
+        - Методы работы со схемой пользователя
+
+  /api/v1/notifications:
+    get:
+      summary: Все оповещения пользователя
+      description: Все оповещения пользователя
+      operationId: notifications
+      parameters: [ ]
+      responses:
+        '200':
+          description: example
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/200'
+              example:
+                - id: 1
+                  template_id: 1
+                  message: Hello q1Petrovvv2 123
+                  type_id: 1
+                  subtype_id: 1
+                  created_at: 2021-10-13 13:33:39
+                  deleted_at: null
+      tags:
+        - Методы работы с оповещениями
+
+  /api/v1/notifications/store:
+    post:
+      summary: Создать оповещение пользователям
+      description: Создать оповещение пользователям
+      operationId: notification_templates
+      parameters:
+        - name: event_code
+          in: query
+          required: true
+          description: id шаблона
+          style: form
+          schema:
+            type: string
+            example: technical.system_update
+        - name: users
+          in: query
+          required: true
+          description: Язык шаблона
+          style: form
+          schema:
+            type: array
+            example: [ "id": 1, "email": test@test.com, "lang": ru ]
+      responses:
+        '200':
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: {
+                  "keyword_id": 15906
+                }
+                errors: [ ]
+      tags:
+        - Методы работы с оповещениями
+
+  /api/v1/notification_make_read:
+    post:
+      summary: Сделать оповещение пользователя прочитанным
+      description: Сделать оповещение пользователя прочитанным
+      operationId: notification_make_read
+      parameters:
+        - name: user_id
+          in: query
+          required: true
+          description: id юзера
+          style: form
+          schema:
+            type: number
+            example: 1
+        - name: notification_id
+          in: query
+          required: true
+          description: id оповещения
+          style: form
+          schema:
+            type: number
+            example: 1
+      responses:
+        '200':
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: {
+                  "keyword_id": 15906
+                }
+                errors: [ ]
+      tags:
+        - Методы работы с оповещениями
+
+  /api/event/v1/telegram-bot-start-link:
+    get:
+      summary: Ссылка на телеграм-бота
+      description: Получить ссылку на регистрацию телеграм-бота для текущего пользователя
+      servers:
+        - url: 'http://localhost:81'
+          description: Тестовый стенд web-app-back
+          variables: { }
+      operationId: telegram-bot-start-link
+      responses:
+        '200':
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: {
+                  "link": "https://t.me/seller_expert_telegram?start=RSanEzbqk7HFysyP0VpYw9NzbUbkHSugtRiUQgokmCg7rq9kY7DT7OfjXTlG"
+                }
+                errors: [ ]
+      tags:
+        - Методы работы с оповещениями
+
+  /api/v1/news:
+    get:
+      summary: Получить все новости
+      description: Получить все новости
+      operationId: news
+      parameters: [ ]
+      responses:
+        '200':
+          description: example
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/200'
+              example:
+                - id: 1
+                  author_id: 1
+                  title: Главная новость
+                  text: Произошло невероятное событие
+                  created_at: 2021-10-06T15:49:13.000000Z
+                  updated_at: 2021-10-06T15:49:13.000000Z
+                  deleted_at: null
+      tags:
+        - Методы для работы с новостями
+
+  /api/v1/news/store:
+    post:
+      summary: Создать новость
+      description: Создать новость
+      operationId: news
+      parameters:
+        - name: author_id
+          in: query
+          required: true
+          description: id автора
+          style: form
+          schema:
+            type: number
+            example: 1
+        - name: title
+          in: query
+          required: true
+          description: Заголовок новости
+          style: form
+          schema:
+            type: string
+            example: Заголовок новости
+        - name: text
+          in: query
+          required: true
+          description: Текст новости
+          style: form
+          schema:
+            type: string
+            example: Текст новости
+      responses:
+        '200':
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: {
+                  "keyword_id": 15906
+                }
+                errors: [ ]
+      tags:
+        - Методы для работы с новостями
+
+  /api/v1/news/{new_id}/modify-template:
+    parameters:
+      - schema:
+          type: number
+        name: new_id
+        in: path
+        required: true
+    put:
+      summary: Редактировать новость
+      tags:
+        - Методы для работы с новостями
+      description: Отправка запроса на изменение новости
+      operationId: news
+      parameters:
+        - $ref: '#/components/parameters/news'
+        - name: title
+          in: query
+          required: false
+          description: Заголовок новости
+          style: form
+          schema:
+            type: string
+            example: Заголовок новости
+        - name: text
+          in: query
+          required: false
+          description: Текст новости
+          style: form
+          schema:
+            type: string
+            example: Текст новости
+      responses:
+        '202':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+              examples:
+                Example:
+                  value:
+                    data: [ ]
+
+  /api/v1/news/{new_id}/delete:
+    parameters:
+      - schema:
+          type: number
+        name: new_id
+        in: path
+        required: true
+    delete:
+      summary: Удалить новость
+      tags:
+        - Методы для работы с новостями
+      description: Отправка запроса на удаление новости
+      operationId: news
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                required:
+                  - data
+              examples:
+                Example:
+                  value:
+                    data: [ ]
+  /api/v1/news/{new_id}:
+    get:
+      summary: Получить новость
+      description: Отправка запроса на получение новости
+      operationId: news
+      parameters:
+        - schema:
+            type: number
+          name: new_id
+          in: path
+          required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/200'
+              example:
+                success: true
+                data: [
+                    "group": {
+                      "id": 1,
+                      "author_id": 1,
+                      "title": "Заголовок",
+                      "text": "Новая новость",
+                      "created_at": "2021-10-06T09:08:26.000000Z",
+                      "updated_at": "2021-10-06T09:08:26.000000Z",
+                      "deleted_at": null
+                    }
+                ]
+                errors: [ ]
+        '400':
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+              example:
+                success: false
+                data: [ ]
+      tags:
+        - Методы для работы с новостями
+
+components:
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+    noauth:
+      type: http
+      scheme: noauth
+  schemas:
+    '200':
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: 'Успешно или нет выполнился запрос'
+          default: true
+        data:
+          type: object
+          items: { }
+        errors:
+          type: array
+          items:
+            type: string
+    '201':
+      type: object
+      properties:
+        data:
+          type: object
+          properties: { }
+    '202':
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: 'Успешно или нет выполнился запрос'
+          default: true
+    '400':
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            http_code:
+              type: integer
+              description: 'Код ответа HTTP'
+              default: 400
+            service:
+              type: string
+              description: 'Код сервиса'
+              default: bids_manager
+            title:
+              type: string
+              description: 'Ошибка'
+            message:
+              type: string
+              description: 'Некорректный запрос'
+    '403':
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            http_code:
+              type: integer
+              description: 'Код ответа HTTP'
+              default: 403
+            service:
+              type: string
+              description: 'Код сервиса'
+              default: bids_manager
+            title:
+              type: string
+              description: 'Ошибка'
+            message:
+              type: string
+              description: 'Описание ошибки'
+    '422':
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            http_code:
+              type: integer
+              description: 'Код ответа HTTP'
+              default: 403
+            service:
+              type: string
+              description: 'Код сервиса'
+              default: bids_manager
+            title:
+              type: string
+              description: 'Ошибка'
+            message:
+              type: string
+              description: 'Описание ошибки'
+  parameters:
+    notification_subtypes:
+      name: subtype_id
+      in: query
+      required: true
+      description: ID подтипа
+      style: form
+      schema:
+        type: integer
+        example: 1
+    news:
+      name: author_id
+      in: query
+      required: true
+      description: ID автора
+      style: form
+      schema:
+        type: integer
+        example: 1

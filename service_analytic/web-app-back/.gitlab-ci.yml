@@ -1,0 +1,260 @@
+stages:
+  - deploy
+
+.before_script_prepare_env: &before_script_prepare_env
+  - mkdir docker
+  - cp -rf env-ci/docker/base/* docker/
+  - cp -rf env-ci/docker/$ENV_NAME/* docker/ || true
+  - cp -f env-ci/docker/yml/docker-compose.$ENV_NAME.yml docker-compose.yml
+  - cp -f env-ci/env/.env-$ENV_NAME .env
+
+  - sed -i s/^ADM_DB_PASSWORD=$/ADM_DB_PASSWORD=$ADM_DB_PASSWORD/ .env
+  - sed -i s/^ADM_TOKEN=$/ADM_TOKEN=$ADM_TOKEN/ .env
+  - sed -i s/^ANALYTICS_TOKEN=$/ANALYTICS_TOKEN=$ANALYTICS_TOKEN/ .env
+  - sed -i s/^APP_KEY=$/APP_KEY=$APP_KEY/ .env
+  - sed -i s/^DB_PASSWORD=$/DB_PASSWORD=$DB_PASSWORD/ .env
+  - sed -i s/^EVENT_DB_PASSWORD=$/EVENT_DB_PASSWORD=$EVENT_DB_PASSWORD/ .env
+  - sed -i s/^EVENT_MASTER_TOKEN=$/EVENT_MASTER_TOKEN=$EVENT_MASTER_TOKEN/ .env
+  - sed -i s/^FTP_PASSWORD=$/FTP_PASSWORD=$FTP_PASSWORD/ .env
+  - sed -i s/^FTP_USERNAME=$/FTP_USERNAME=$FTP_USERNAME/ .env
+  - sed -i s/^JWT_SECRET=$/JWT_SECRET=$JWT_SECRET/ .env
+  - sed -i s/^MAIL_PASSWORD=$/MAIL_PASSWORD=$MAIL_PASSWORD/ .env
+  - sed -i s/^OZON_SELLER_SERVICE_API_KEY=$/OZON_SELLER_SERVICE_API_KEY=$OZON_SELLER_SERVICE_API_KEY/ .env
+  - sed -i s/^OZON_SELLER_SERVICE_CLIENT_ID=$/OZON_SELLER_SERVICE_CLIENT_ID=$OZON_SELLER_SERVICE_CLIENT_ID/ .env
+  - sed -i s/^REDIS_PASSWORD=$/REDIS_PASSWORD=$REDIS_PASSWORD/ .env
+  - sed -i s/^SLAVE_APP_TOKEN=$/SLAVE_APP_TOKEN=$SLAVE_APP_TOKEN/ .env
+  - sed -i s/^VA_DB_PASSWORD=$/VA_DB_PASSWORD=$VA_DB_PASSWORD/ .env
+  - sed -i s/^VIRTUAL_ASSISTANT_TOKEN=$/VIRTUAL_ASSISTANT_TOKEN=$VIRTUAL_ASSISTANT_TOKEN/ .env
+  - sed -i s/^YOOKASSA_SECRET_KEY=$/YOOKASSA_SECRET_KEY=$YOOKASSA_SECRET_KEY/ .env
+  - sed -i s/^YOOKASSA_SHOP_ID=$/YOOKASSA_SHOP_ID=$YOOKASSA_SHOP_ID/ .env
+  - sed -i s/^SENTRY_LARAVEL_DSN=$/SENTRY_LARAVEL_DSN=$SENTRY_LARAVEL_DSN/ .env
+  - sed -i s/^FEATURE_PHONE_LOGIN=$/FEATURE_PHONE_LOGIN=$FEATURE_PHONE_LOGIN/ .env
+
+
+deploy-dev:
+  stage: deploy
+  environment: develop
+  tags:
+    - dev
+  only:
+    - develop
+
+  variables:
+    ENV_NAME: dev
+    ENV_SUFFIX: _DEV
+
+    ADM_DB_PASSWORD: $ADM_DB_PASSWORD_DEV
+    ADM_TOKEN: $ADM_TOKEN_DEV
+    ANALYTICS_TOKEN: $ANALYTICS_TOKEN_DEV
+    APP_KEY: $APP_KEY_DEV
+    DB_PASSWORD: $DB_PASSWORD_DEV
+    EVENT_DB_PASSWORD: $EVENT_DB_PASSWORD_DEV
+    EVENT_MASTER_TOKEN: $EVENT_MASTER_TOKEN_DEV
+    FTP_PASSWORD: $FTP_PASSWORD_DEV
+    FTP_USERNAME: $FTP_USERNAME_DEV
+    JWT_SECRET: $JWT_SECRET_DEV
+    MAIL_PASSWORD: $MAIL_PASSWORD_DEV
+    OZON_SELLER_SERVICE_API_KEY: $OZON_SELLER_SERVICE_API_KEY_DEV
+    OZON_SELLER_SERVICE_CLIENT_ID: $OZON_SELLER_SERVICE_CLIENT_ID_DEV
+    REDIS_PASSWORD: $REDIS_PASSWORD_DEV
+    SLAVE_APP_TOKEN: $SLAVE_APP_TOKEN_DEV
+    VA_DB_PASSWORD: $VA_DB_PASSWORD_DEV
+    VIRTUAL_ASSISTANT_TOKEN: $VIRTUAL_ASSISTANT_TOKEN_DEV
+    YOOKASSA_SECRET_KEY: $YOOKASSA_SECRET_KEY_DEV
+    YOOKASSA_SHOP_ID: $YOOKASSA_SHOP_ID_DEV
+    SENTRY_LARAVEL_DSN: $SENTRY_LARAVEL_DSN_DEV
+    FEATURE_PHONE_LOGIN: $FEATURE_PHONE_LOGIN_DEV
+
+    DEPLOY_PATH: "/var/www/containers/web-app-back"
+
+  before_script:
+    - *before_script_prepare_env
+
+  script:
+    #build
+    - composer --no-interaction --no-progress install
+    - npm install
+    - npm update
+    - npm run dev
+    - docker-compose build
+
+    #deploy
+    - sudo rsync -rlog --delete --exclude=/.data --exclude=/env-ci --exclude=/.git --usermap=*:1000 --groupmap=*:1000 ./ $DEPLOY_PATH/
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml up -d
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-web-app ./clear_cache.sh
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml restart octane-web-app
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-web-app php artisan migrate
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -u 0 -T octane-web-app service cron start
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-web-app php artisan horizon:publish
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T queue-web-app php artisan horizon:terminate
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml restart queue-web-app
+
+
+deploy-test:
+  stage: deploy
+  environment: testing
+  tags:
+    - test
+  only:
+    - test
+  variables:
+    ENV_NAME: test
+    ENV_SUFFIX: _TEST
+    ADM_DB_PASSWORD: $ADM_DB_PASSWORD_TEST
+    ADM_TOKEN: $ADM_TOKEN_TEST
+    ANALYTICS_TOKEN: $ANALYTICS_TOKEN_TEST
+    APP_KEY: $APP_KEY_TEST
+    DB_PASSWORD: $DB_PASSWORD_TEST
+    EVENT_DB_PASSWORD: $EVENT_DB_PASSWORD_TEST
+    EVENT_MASTER_TOKEN: $EVENT_MASTER_TOKEN_TEST
+    FTP_PASSWORD: $FTP_PASSWORD_TEST
+    FTP_USERNAME: $FTP_USERNAME_TEST
+    JWT_SECRET: $JWT_SECRET_TEST
+    MAIL_PASSWORD: $MAIL_PASSWORD_TEST
+    OZON_SELLER_SERVICE_API_KEY: $OZON_SELLER_SERVICE_API_KEY_TEST
+    OZON_SELLER_SERVICE_CLIENT_ID: $OZON_SELLER_SERVICE_CLIENT_ID_TEST
+    REDIS_PASSWORD: $REDIS_PASSWORD_TEST
+    SLAVE_APP_TOKEN: $SLAVE_APP_TOKEN_TEST
+    VA_DB_PASSWORD: $VA_DB_PASSWORD_TEST
+    VIRTUAL_ASSISTANT_TOKEN: $VIRTUAL_ASSISTANT_TOKEN_TEST
+    YOOKASSA_SECRET_KEY: $YOOKASSA_SECRET_KEY_TEST
+    YOOKASSA_SHOP_ID: $YOOKASSA_SHOP_ID_TEST
+    SENTRY_LARAVEL_DSN: $SENTRY_LARAVEL_DSN_TEST
+    FEATURE_PHONE_LOGIN: $FEATURE_PHONE_LOGIN_TEST
+
+    DEPLOY_PATH: "/var/www/containers/web-app-back"
+
+  before_script:
+    - *before_script_prepare_env
+
+  script:
+    # build
+    - composer --no-interaction --no-progress install
+    - npm install
+    - npm update
+    - npm run prod
+    - docker-compose build
+
+    #deploy
+    - sudo rsync -rlog --delete --exclude=/.data --exclude=/env-ci --exclude=/.git --usermap=*:1000 --groupmap=*:1000 ./ $DEPLOY_PATH/
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml up -d
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-web-app ./clear_cache.sh
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml restart octane-web-app
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-web-app php artisan migrate --force
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -u 0 -T octane-web-app service cron start
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-web-app php artisan horizon:publish
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T queue-web-app php artisan horizon:terminate
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml restart queue-web-app
+
+deploy-prod:
+  stage: deploy
+  environment: production
+  tags:
+    - prod
+  only:
+    - master
+  variables:
+    ENV_NAME: prod
+    ENV_SUFFIX: _PROD
+    ADM_DB_PASSWORD: $ADM_DB_PASSWORD_PROD
+    ADM_TOKEN: $ADM_TOKEN_PROD
+    ANALYTICS_TOKEN: $ANALYTICS_TOKEN_PROD
+    APP_KEY: $APP_KEY_PROD
+    EVENT_DB_PASSWORD: $EVENT_DB_PASSWORD_PROD
+    DB_PASSWORD: $DB_PASSWORD_PROD
+    EVENT_MASTER_TOKEN: $EVENT_MASTER_TOKEN_PROD
+    FTP_PASSWORD: $FTP_PASSWORD_PROD
+    FTP_USERNAME: $FTP_USERNAME_PROD
+    JWT_SECRET: $JWT_SECRET_PROD
+    MAIL_PASSWORD: $MAIL_PASSWORD_PROD
+    OZON_SELLER_SERVICE_API_KEY: $OZON_SELLER_SERVICE_API_KEY_PROD
+    OZON_SELLER_SERVICE_CLIENT_ID: $OZON_SELLER_SERVICE_CLIENT_ID_PROD
+    REDIS_PASSWORD: $REDIS_PASSWORD_PROD
+    SLAVE_APP_TOKEN: $SLAVE_APP_TOKEN_PROD
+    VA_DB_PASSWORD: $VA_DB_PASSWORD_PROD
+    VIRTUAL_ASSISTANT_TOKEN: $VIRTUAL_ASSISTANT_TOKEN_PROD
+    YOOKASSA_SECRET_KEY: $YOOKASSA_SECRET_KEY_PROD
+    YOOKASSA_SHOP_ID: $YOOKASSA_SHOP_ID_PROD
+    SENTRY_LARAVEL_DSN: $SENTRY_LARAVEL_DSN_PROD
+    FEATURE_PHONE_LOGIN: $FEATURE_PHONE_LOGIN_PROD
+
+    DEPLOY_PATH: "/var/www/containers/web-app-back"
+
+  before_script:
+    - *before_script_prepare_env
+
+  script:
+    # build
+    - composer --no-interaction --no-progress install
+    - npm install
+    - npm update
+    - npm run prod
+    - docker-compose build
+
+    #deploy
+    - sudo rsync -rlog --delete --exclude=/.data --exclude=/env-ci --exclude=/.git --usermap=*:1000 --groupmap=*:1000 ./ $DEPLOY_PATH/
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml up -d
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-web-app ./clear_cache.sh
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml restart octane-web-app
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-web-app php artisan migrate --force
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -u 0 -T octane-web-app service cron start
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-web-app php artisan horizon:publish
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T queue-web-app php artisan horizon:terminate
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml restart queue-web-app
+
+
+deploy-demo:
+  stage: deploy
+  environment: demo
+  tags:
+    - demo
+  only:
+    - demo
+  variables:
+    ENV_NAME: demo
+    ENV_SUFFIX: _DEMO
+    ADM_DB_PASSWORD: $ADM_DB_PASSWORD_DEMO
+    ADM_TOKEN: $ADM_TOKEN_DEMO
+    ANALYTICS_TOKEN: $ANALYTICS_TOKEN_DEMO
+    APP_KEY: $APP_KEY_DEMO
+    DB_PASSWORD: $DB_PASSWORD_DEMO
+    EVENT_DB_PASSWORD: $EVENT_DB_PASSWORD_DEMO
+    EVENT_MASTER_TOKEN: $EVENT_MASTER_TOKEN_DEMO
+    FTP_PASSWORD: $FTP_PASSWORD_DEMO
+    FTP_USERNAME: $FTP_USERNAME_DEMO
+    JWT_SECRET: $JWT_SECRET_DEMO
+    MAIL_PASSWORD: $MAIL_PASSWORD_DEMO
+    OZON_SELLER_SERVICE_API_KEY: $OZON_SELLER_SERVICE_API_KEY_DEMO
+    OZON_SELLER_SERVICE_CLIENT_ID: $OZON_SELLER_SERVICE_CLIENT_ID_DEMO
+    REDIS_PASSWORD: $REDIS_PASSWORD_DEMO
+    SLAVE_APP_TOKEN: $SLAVE_APP_TOKEN_DEMO
+    VA_DB_PASSWORD: $VA_DB_PASSWORD_DEMO
+    VIRTUAL_ASSISTANT_TOKEN: $VIRTUAL_ASSISTANT_TOKEN_DEMO
+    YOOKASSA_SECRET_KEY: $YOOKASSA_SECRET_KEY_DEMO
+    YOOKASSA_SHOP_ID: $YOOKASSA_SHOP_ID_DEMO
+    SENTRY_LARAVEL_DSN: $SENTRY_LARAVEL_DSN_DEMO
+    FEATURE_PHONE_LOGIN: $FEATURE_PHONE_LOGIN_DEMO
+
+    DEPLOY_PATH: "/var/www/containers/web-app-back"
+
+  before_script:
+    - *before_script_prepare_env
+
+  script:
+    # build
+    - composer --no-interaction --no-progress install
+    - npm install
+    - npm update
+    - npm run prod
+    - docker-compose build
+
+    #deploy
+    - sudo rsync -rlog --delete --exclude=/.data --exclude=/env-ci --exclude=/.git --usermap=*:1000 --groupmap=*:1000 ./ $DEPLOY_PATH/
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml up -d
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-web-app ./clear_cache.sh
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml restart octane-web-app
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-web-app php artisan migrate --force
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -u 0 -T octane-web-app service cron start
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T octane-web-app php artisan horizon:publish
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml exec -T queue-web-app php artisan horizon:terminate
+    - docker-compose -f $DEPLOY_PATH/docker-compose.yml restart queue-web-app

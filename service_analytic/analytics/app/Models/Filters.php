@@ -1,0 +1,16 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Filters extends Model
+{
+    use HasFactory;
+
+    /**
+     * id по которому выбираем категории
+     */
+    const SUBCATEGORY_ID = 3;
+}

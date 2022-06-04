@@ -1,0 +1,30 @@
+{
+    "name": "analyticplatform/user-statistics",
+    "description": "User statistics datatable.",
+    "keywords": [
+        "laravel",
+        "nova",
+        "analyticplatform"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "AnalyticPlatform\\UserStatistics\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "AnalyticPlatform\\UserStatistics\\ToolServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
